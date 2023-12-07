@@ -5,21 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66fef858-a139-43ad-b031-7a7e0e340156" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/apps/display/DisplayApp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/RequestHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/Server.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/ServerApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/HttpMethod.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Request.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Response.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/HttpMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uml/server_classes.puml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/HttpContentType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/HttpContentType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/HttpStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/HttpStatus.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,8 +18,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -49,21 +37,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Marvin Kosmider/FH Technikum Wien/Lehre/X 2023 WS/Software Lifecycle Management/coding/calculator&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "features/http__expansion",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Flo FH/3Semester/SWEN/Projekte/MonsterTradingCardGame",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.technikum.Main" />
@@ -100,6 +96,7 @@
       <workItem from="1699359612552" duration="8614000" />
       <workItem from="1699459774398" duration="36000" />
       <workItem from="1699535023475" duration="5256000" />
+      <workItem from="1701958158946" duration="1968000" />
     </task>
     <servers />
   </component>
