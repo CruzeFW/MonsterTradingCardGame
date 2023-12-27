@@ -34,8 +34,7 @@ public class TaskController extends Controller {
                 case "POST": return create(request);
             }
 
-            // THOUGHT: better 405
-            return status(HttpStatus.BAD_REQUEST);
+            return status(HttpStatus.METHOD_NOT_ALLOWED);
         }
 
         // get id e.g. from /tasks/1
@@ -49,7 +48,7 @@ public class TaskController extends Controller {
         }
 
         // THOUGHT: better 405
-        return status(HttpStatus.BAD_REQUEST);
+        return status(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     public Response create(Request request) {
@@ -75,7 +74,7 @@ public class TaskController extends Controller {
 
         Response response = new Response();
         // THOUGHT: better status 201 Created
-        response.setStatus(HttpStatus.OK);
+        response.setStatus(HttpStatus.CREATED);
         response.setContentType(HttpContentType.APPLICATION_JSON);
         response.setBody(taskJson);
 
@@ -99,8 +98,7 @@ public class TaskController extends Controller {
         // Object to JSON coming soon
 
         Response response = new Response();
-        // THOUGHT: better status 201 Created
-        response.setStatus(HttpStatus.OK);
+        response.setStatus(HttpStatus.CREATED);
         response.setContentType(HttpContentType.APPLICATION_JSON);
         response.setBody(tasksJson);
 

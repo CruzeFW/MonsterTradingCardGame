@@ -11,3 +11,5 @@ CREATE TABLE IF NOT EXISTS task (
 );
 
 DROP TABLE task;
+
+SELECT * FROM task;
