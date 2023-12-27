@@ -47,7 +47,6 @@ public class TaskController extends Controller {
             case "DELETE": return delete(taskId, request);
         }
 
-        // THOUGHT: better 405
         return status(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -73,7 +72,6 @@ public class TaskController extends Controller {
         }
 
         Response response = new Response();
-        // THOUGHT: better status 201 Created
         response.setStatus(HttpStatus.CREATED);
         response.setContentType(HttpContentType.APPLICATION_JSON);
         response.setBody(taskJson);
@@ -98,7 +96,7 @@ public class TaskController extends Controller {
         // Object to JSON coming soon
 
         Response response = new Response();
-        response.setStatus(HttpStatus.CREATED);
+        response.setStatus(HttpStatus.OK);
         response.setContentType(HttpContentType.APPLICATION_JSON);
         response.setBody(tasksJson);
 
