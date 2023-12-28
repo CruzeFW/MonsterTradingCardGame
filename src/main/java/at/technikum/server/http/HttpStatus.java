@@ -8,7 +8,9 @@ public enum HttpStatus {
     UNAUTHORIZED(401, "Unauthorized"),
     FORBIDDEN(403, "Forbidden"),
     NOT_FOUND(404, "Not Found"),
-    METHOD_NOT_ALLOWED(405, "Method Not Allowed");
+    METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
+    //primarily thought to be a debug info, delete before hand-in
+    NOT_ACCEPTABLE(406, "Not Acceptable");
 
     private final int code;
     private final String message;
