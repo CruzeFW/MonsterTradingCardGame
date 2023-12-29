@@ -28,7 +28,7 @@ public class SessionController implements Controller{
 
     @Override
     public Response handle(Request request) {
-        if(request.getRoute().equals("/sessions") && request.getMethod().equals("POST")){
+        if(request.getRoute().equals("/sessions") && request.getMethod().equals("POST")) {
             ObjectMapper objectMapper = new ObjectMapper();
             TokenRequest tokenRequest = null;
             try {
@@ -38,21 +38,32 @@ public class SessionController implements Controller{
             }
             boolean found = sessionService.validateToken(tokenRequest);
             token.setExists(found);
-        }
-        if(token.getExists()){
-            Response response = new Response();
-            response.setStatus(HttpStatus.OK);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("User login successful");
 
-            return response;
-        }else{
-            Response response = new Response();
-            response.setStatus(HttpStatus.UNAUTHORIZED);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Invalid username/password provided");
 
-            return response;
+            if (token.getExists()) {
+                token.setToken(tokenRequest.getUsername() + "-mtcgToken");
+                sessionService.addTokenToUser(token, tokenRequest);
+
+                Response response = new Response();
+                response.setStatus(HttpStatus.OK);
+                response.setContentType(HttpContentType.TEXT_PLAIN);
+                response.setBody("User login successful");
+
+                return response;
+            } else {
+                Response response = new Response();
+                response.setStatus(HttpStatus.UNAUTHORIZED);
+                response.setContentType(HttpContentType.TEXT_PLAIN);
+                response.setBody("Invalid username/password provided");
+
+                return response;
+            }
         }
+        Response response = new Response();
+        response.setStatus(HttpStatus.BAD_REQUEST);
+        response.setContentType(HttpContentType.TEXT_PLAIN);
+        response.setBody("How did i get here?");
+
+        return response;
     }
 }
