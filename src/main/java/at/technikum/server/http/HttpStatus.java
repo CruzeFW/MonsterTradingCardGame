@@ -10,7 +10,8 @@ public enum HttpStatus {
     NOT_FOUND(404, "Not Found"),
     METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
     //primarily thought to be a debug info, delete before hand-in
-    NOT_ACCEPTABLE(406, "Not Acceptable");
+    NOT_ACCEPTABLE(406, "Not Acceptable"),
+    CONFLICT(409, "Conflict");
 
     private final int code;
     private final String message;

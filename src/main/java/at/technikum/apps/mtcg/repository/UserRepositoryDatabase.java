@@ -16,6 +16,8 @@ import java.util.Optional;
 public class UserRepositoryDatabase {
     private final String FIND_ALL_SQL = "SELECT * FROM users";
 
+    private final String FIND_ONE = "SELECT * FROM users WHERE username = ?";
+
     private final String SAVE_SQL = "INSERT INTO users(id, username, password, elo, coins) VALUES(?, ?, ?, ?, ?)";
 
     private final String DELETE_TOKEN = "UPDATE users SET token = NULL";
@@ -46,7 +48,25 @@ public class UserRepositoryDatabase {
     }
 
     //find one user given by its username
-    public Optional<User> find(int id) {
+    public Optional<User> find(User user) {
+        User userToReturn = new User();
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(FIND_ONE);
+        ){
+            pstmt.setString(1, user.getUsername());
+
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                userToReturn.setId(rs.getString("id"));
+                userToReturn.setUsername(rs.getString("username"));
+                userToReturn.setPassword(rs.getString("password"));
+                return Optional.of(userToReturn);
+            }
+        }catch (SQLException e){
+            e.getErrorCode();
+        }
+
         return Optional.empty();
     }
 

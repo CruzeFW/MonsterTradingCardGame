@@ -23,40 +23,22 @@ public class UserController implements Controller {
         return route.matches("/users/\\w+") || route.equals("/users");
     }
 
+    //check for the route and method and return the corresponding response
     @Override
     public Response handle(Request request) {
 
         if(request.getRoute().equals("/users")) {
             if(request.getMethod().equals("POST")) {
-                //TODO change the response to the correct response
-                //TODO check if the user already exists and if so don't add it!!
                 return create(request);
-            } else {
-                //TODO change the response to the correct response
-                Response response = new Response();
-                response.setStatus(HttpStatus.BAD_REQUEST);
-                response.setContentType(HttpContentType.TEXT_PLAIN);
-                response.setBody("Method not allowed");
-
-                return response;
             }
         }
 
-        //TODO add "/users/"
         if(request.getRoute().matches("/users/\\w+")){
             //TODO change the response to the correct response
             switch(request.getMethod()){
-                case "GET": return find(request);
+                case "GET": return searchForUser(request);
                 case "PUT": return update(request);
             }
-        }else{
-            //TODO change the response to the correct response
-            Response response = new Response();
-            response.setStatus(HttpStatus.BAD_REQUEST);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Method not allowed");
-
-            return response;
         }
 
         //TODO delete this response, code should never come here
@@ -67,7 +49,7 @@ public class UserController implements Controller {
         return response;
     }
 
-    // create a user in the database
+    // create a user in the database and checks if it doesn't already exists
     public Response create(Request request) {
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -78,35 +60,70 @@ public class UserController implements Controller {
             throw new RuntimeException(e);
         }
 
-        user = userService.save(user);
+        Optional<User> user1 = userService.find(user);
+        if(user1.isPresent()){
+            Response response = new Response();
+            response.setStatus(HttpStatus.CONFLICT);
+            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setBody("User with same username already registered");
+            return response;
+        }else{
 
-        String userJson = null;
-        try {
-            userJson = objectMapper.writeValueAsString(user);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            userService.save(user);
+
+            Response response = new Response();
+            response.setStatus(HttpStatus.CREATED);
+            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setBody("User successfully created");
+            return response;
         }
-
-        Response response = new Response();
-        response.setStatus(HttpStatus.CREATED);
-        response.setContentType(HttpContentType.APPLICATION_JSON);
-        response.setBody(userJson);
-
-        return response;
     }
 
-    //TODO implement the correct function, needs token/sessions
-    public Response find(Request request){
-        Response response = new Response();
-        response.setStatus(HttpStatus.NOT_ACCEPTABLE);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("Not yet implemented");
+    public Response searchForUser(Request request){
+        //TODO firstly check if admin oder valid user
+        //TODO ACHTUNG WEGEN TOKEN DER DA MITGEGEBEN WIRD
+        ObjectMapper objectMapper = new ObjectMapper();
+        User user = new User();
+        user.setUsername(request.getRoute().split("/")[2]);
 
-        return response;
+        Optional<User> returnedUser = null;
+        returnedUser = userService.find(user);
+
+        if(returnedUser.isPresent()){
+            User finalUser = null;
+            finalUser = returnedUser.get();
+            String userJson = null;
+            try {
+                userJson = objectMapper.writeValueAsString(finalUser);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            Response response = new Response();
+            response.setStatus(HttpStatus.OK);
+            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setBody(userJson);
+            //TODO ask Prof wegen der "Description" in der API
+
+            return response;
+
+        }else{
+            Response response = new Response();
+            response.setStatus(HttpStatus.NOT_FOUND);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("User not found.");
+
+            return response;
+        }
     }
 
     //TODO implement the correct function, needs token/sessions
     public Response update(Request request){
+        //TODO firstly check if admin oder valid user
+        //TODO ACHTUNG WEGEN TOKEN DER DA MITGEGEBEN WIRD
+
+
+
         Response response = new Response();
         response.setStatus(HttpStatus.NOT_ACCEPTABLE);
         response.setContentType(HttpContentType.TEXT_PLAIN);

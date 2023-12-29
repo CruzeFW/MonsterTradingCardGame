@@ -13,8 +13,8 @@ public class UserService {
         this.userRepositoryDatabase = userRepositoryDatabase;
     }
 
-    public Optional<User> find(int id) {
-        return Optional.empty();
+    public Optional<User> find(User user) {
+        return userRepositoryDatabase.find(user);
     }
 
     public User save(User user){
