@@ -7,6 +7,7 @@ import at.technikum.server.http.Response;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//TODO aufteilen in request und response, und für mehr http header also zB autherize auch notwendig?
 // THOUGHT: Maybe divide the HttpMatter into two classes (single responsibility)
 // THOUGHT: Dont use static methods (non-static is better for testing)
 public class HttpMapper {
