@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="postgres@localhost">
-  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.49">
+  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.51">
     <root id="1">
       <DateStyle>mdy</DateStyle>
       <IntrospectionStateNumber>772</IntrospectionStateNumber>
@@ -4834,8 +4834,7 @@ false posixrules
       <Comment>standard public schema</Comment>
       <Current>1</Current>
       <IntrospectionStateNumber>763</IntrospectionStateNumber>
-      <IntrospectionTimestamp>2023-12-07.15:54:14.213</IntrospectionTimestamp>
-      <LocalIntrospectionTimestamp>2023-12-07.14:54:15</LocalIntrospectionTimestamp>
+      <LastIntrospectionLocalTimestamp>2023-12-07.14:54:15</LastIntrospectionLocalTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>524</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
@@ -8192,8 +8191,7 @@ false posixrules
       <Comment>standard public schema</Comment>
       <Current>1</Current>
       <IntrospectionStateNumber>772</IntrospectionStateNumber>
-      <IntrospectionTimestamp>2023-12-07.15:55:23.490</IntrospectionTimestamp>
-      <LocalIntrospectionTimestamp>2023-12-07.14:55:24</LocalIntrospectionTimestamp>
+      <LastIntrospectionLocalTimestamp>2023-12-07.14:55:24</LastIntrospectionLocalTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>524</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
