@@ -70,3 +70,5 @@ CREATE TABLE IF NOT EXISTS transactions (
 
 SELECT * FROM users;
 
+DELETE FROM users WHERE username ='kienboec'
+

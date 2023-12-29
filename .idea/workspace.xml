@@ -5,9 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66fef858-a139-43ad-b031-7a7e0e340156" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/controller/SessionController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/dto/TokenRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/dto/TokenResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/entity/Token.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/repository/TokenRepositoryDatabase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/service/SessionService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/at/technikum/apps/mtcg/repository/TokenRepositoryDatabaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1/storage_v2/_src_/database/taskdb.w_R-yw/schema/information_schema.FNRwLQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1/storage_v2/_src_/database/taskdb.w_R-yw/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1/storage_v2/_src_/database/taskdb.w_R-yw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1/storage_v2/_src_/database/taskdb.w_R-yw/schema/pg_catalog.0S1ZNQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1/storage_v2/_src_/database/taskdb.w_R-yw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d102cc4a-0580-43b4-83a2-e990024b43a1/storage_v2/_src_/database/taskdb.w_R-yw/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/HttpContentType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/HttpContentType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/HttpStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/HttpStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/MonsterTradingCards.exercise.curl.bat" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/MonsterTradingCards.exercise.curl.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql/mtcg_app.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/mtcg_app.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/MtcgApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/MtcgApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/apps/mtcg/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/HttpMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/HttpMapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,12 +39,16 @@
         <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -40,17 +63,25 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.Main.executor": "Run",
+    "JUnit.TokenRepositoryDatabaseTest.tokenRequest_searchDBforUser_returnBoolAsResult.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "features/http__expansion",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "features/session",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Flo FH/3Semester/SWEN/Projekte/MonsterTradingCardGame",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/Stuff/FHTechnikum/3Semester/SWEN/MonsterTradingCardGame",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
   },
@@ -60,7 +91,15 @@
     ]
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="at.technikum.apps.mtcg.repository" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.technikum.Main" />
       <module name="server-application" />
@@ -74,11 +113,35 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TokenRepositoryDatabaseTest.tokenRequest_searchDBforUser_returnBoolAsResult" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="server-application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="at.technikum.apps.mtcg.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="at.technikum.apps.mtcg.repository" />
+      <option name="MAIN_CLASS_NAME" value="at.technikum.apps.mtcg.repository.TokenRepositoryDatabaseTest" />
+      <option name="METHOD_NAME" value="tokenRequest_searchDBforUser_returnBoolAsResult" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.TokenRepositoryDatabaseTest.tokenRequest_searchDBforUser_returnBoolAsResult" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.1-openjdk-21.0.1-3183f394aec4-7d648f2c" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -97,11 +160,24 @@
       <workItem from="1699459774398" duration="36000" />
       <workItem from="1699535023475" duration="5256000" />
       <workItem from="1701958158946" duration="1968000" />
+      <workItem from="1703088636027" duration="1454000" />
+      <workItem from="1703093762192" duration="909000" />
+      <workItem from="1703098233005" duration="264000" />
+      <workItem from="1703684587195" duration="1141000" />
+      <workItem from="1703686110778" duration="5393000" />
+      <workItem from="1703693124261" duration="10732000" />
+      <workItem from="1703760703072" duration="11923000" />
+      <workItem from="1703797167101" duration="8544000" />
+      <workItem from="1703806002882" duration="417000" />
+      <workItem from="1703848724347" duration="4360000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.bat" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
