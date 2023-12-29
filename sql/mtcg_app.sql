@@ -12,11 +12,13 @@ CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    token VARCHAR(255),
     bio VARCHAR(255),
     image VARCHAR(255),
     elo INT NOT NULL,
     coins INT NOT NULL
-    );
+);
+
 
 CREATE TABLE IF NOT EXISTS packages (
     id VARCHAR(255) PRIMARY KEY,
@@ -68,7 +70,13 @@ CREATE TABLE IF NOT EXISTS transactions (
 );
 
 
+
+
 SELECT * FROM users;
 
-DELETE FROM users WHERE username ='kienboec'
+DELETE FROM users WHERE username ='kienboec';
+
+UPDATE users SET token = 'roof' WHERE username = 'hans';
+
+UPDATE users SET token = NULL;
 

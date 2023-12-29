@@ -27,7 +27,9 @@ public class SessionService {
         return tokenRepositoryDatabase.find(tokenRequest);
     }
 
-
+    public void addTokenToUser(Token token, TokenRequest tokenRequest){
+        tokenRepositoryDatabase.addToken(token, tokenRequest);
+    }
 
 
 }

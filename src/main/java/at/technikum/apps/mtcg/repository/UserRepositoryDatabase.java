@@ -18,6 +18,8 @@ public class UserRepositoryDatabase {
 
     private final String SAVE_SQL = "INSERT INTO users(id, username, password, elo, coins) VALUES(?, ?, ?, ?, ?)";
 
+    private final String DELETE_TOKEN = "UPDATE users SET token = NULL";
+
     private final Database database = new Database();
 
     public List<User> findAll() {
@@ -72,5 +74,17 @@ public class UserRepositoryDatabase {
 
     public User delete(User user) {
         return null;
+    }
+
+    public void deleteToken(){
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(DELETE_TOKEN)
+        ) {
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            e.getErrorCode();
+        }
     }
 }

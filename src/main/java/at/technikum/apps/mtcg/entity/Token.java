@@ -4,14 +4,22 @@ import java.util.UUID;
 
 public class Token {
 
-    private final String token;
+    private String token;
 
     private boolean exists;
 
     //TODO change string into string from the .bat file
     public Token(){
-        this.token = UUID.randomUUID().toString();
+        this.token = null;
         this.exists = false;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public boolean getExists() {

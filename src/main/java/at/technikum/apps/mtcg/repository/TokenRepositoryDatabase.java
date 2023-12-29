@@ -1,6 +1,7 @@
 package at.technikum.apps.mtcg.repository;
 
 import at.technikum.apps.mtcg.dto.TokenRequest;
+import at.technikum.apps.mtcg.entity.Token;
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.data.Database;
 
@@ -20,6 +21,8 @@ public class TokenRepositoryDatabase {
     private final String SAVE_SQL = "INSERT INTO users(id, username, password, elo, coins) VALUES(?, ?, ?, ?, ?)";
 
     private final String FIND_ONE = "SELECT * FROM users WHERE username = ? AND password = ?";
+
+    private final String ADD_TOKEN = "UPDATE users SET token = ? WHERE username = ? AND password = ?";
 
     private final Database database = new Database();
 
@@ -69,6 +72,23 @@ public class TokenRepositoryDatabase {
         }
         return found;
     }
+
+    public void addToken(Token token, TokenRequest tokenRequest){
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(ADD_TOKEN);
+        ){
+            pstmt.setString(1, token.getToken());
+            pstmt.setString(2, tokenRequest.getUsername());
+            pstmt.setString(3, tokenRequest.getPassword());
+
+            pstmt.execute();
+        } catch(SQLException e){
+            e.getErrorCode();
+        }
+    }
+
+
 
 //    //creates a new user with custom values id, username and password, as well as default elo and default coins
 //    public User save(User user) {

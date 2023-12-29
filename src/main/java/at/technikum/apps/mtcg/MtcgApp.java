@@ -3,6 +3,7 @@ package at.technikum.apps.mtcg;
 import at.technikum.apps.mtcg.controller.Controller;
 import at.technikum.apps.mtcg.controller.SessionController;
 import at.technikum.apps.mtcg.controller.UserController;
+import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.server.ServerApplication;
 import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;
@@ -19,6 +20,10 @@ public class MtcgApp implements ServerApplication {
     public MtcgApp() {
         controllers.add(new UserController());
         controllers.add(new SessionController());
+
+        //TODO decide if this is the correct place for that
+        UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
+        userRepositoryDatabase.deleteToken();
     }
 
     @Override
