@@ -29,6 +29,7 @@ public class UserController implements Controller {
         if(request.getRoute().equals("/users")) {
             if(request.getMethod().equals("POST")) {
                 //TODO change the response to the correct response
+                //TODO check if the user already exists and if so don't add it!!
                 return create(request);
             } else {
                 //TODO change the response to the correct response
