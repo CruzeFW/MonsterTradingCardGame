@@ -10,6 +10,8 @@ public class Request {
 
     private String host;
 
+    private String authorization;
+
     // application/json, text/plain
     private String contentType;
 
@@ -41,6 +43,14 @@ public class Request {
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public String getAuthorization() {
+        return authorization;
+    }
+
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
     }
 
     public String getContentType() {
