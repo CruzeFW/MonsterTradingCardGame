@@ -4,6 +4,6 @@ Added a function into the constructor of the mtcgApp to remove all tokens inside
 
 
 added user route: /users implemented, /users/ not yet
-added token: added random UUID and boolean to create custom token, created validateToken function
+added token: added random UUID and boolean to create custom token, created validateToken function, thought about tokenRequest and tokenResponse
 adapted httpMapper to take "Authorize:.. "-Header
-reworked token to accept the correct input and save it into db - see comments about problem/thoughts
+reworked token to accept the correct input and save it into db - see comments about problem/thoughts; tokenResponse seems not needed, leaving it in atm

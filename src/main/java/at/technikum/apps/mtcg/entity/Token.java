@@ -8,7 +8,6 @@ public class Token {
 
     private boolean exists;
 
-    //TODO change string into string from the .bat file
     public Token(){
         this.token = null;
         this.exists = false;
