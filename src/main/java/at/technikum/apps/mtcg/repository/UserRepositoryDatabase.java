@@ -61,6 +61,7 @@ public class UserRepositoryDatabase {
                 userToReturn.setId(rs.getString("id"));
                 userToReturn.setUsername(rs.getString("username"));
                 userToReturn.setPassword(rs.getString("password"));
+                userToReturn.setAuthorization(rs.getString("token"));
                 return Optional.of(userToReturn);
             }
         }catch (SQLException e){

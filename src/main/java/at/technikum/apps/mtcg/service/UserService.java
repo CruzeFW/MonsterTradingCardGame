@@ -26,4 +26,10 @@ public class UserService {
     public User update(int updateId, User updatedUser) {
         return null;
     }
+
+    public boolean checkIfAuthorized(User user, User foundUser){
+        if(user.getAuthorization().equals(foundUser.getAuthorization())){
+            return true;
+        }else return user.getAuthorization().equals("admin-mtcgToken");
+    }
 }

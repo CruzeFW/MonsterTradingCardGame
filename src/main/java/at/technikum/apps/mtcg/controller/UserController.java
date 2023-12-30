@@ -10,6 +10,7 @@ import at.technikum.apps.mtcg.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class UserController implements Controller {
@@ -53,7 +54,7 @@ public class UserController implements Controller {
     public Response create(Request request) {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        User user = null;
+        User user;
         try {
             user = objectMapper.readValue(request.getBody(), User.class);
         } catch (JsonProcessingException e) {
@@ -79,33 +80,42 @@ public class UserController implements Controller {
         }
     }
 
-    public Response searchForUser(Request request){
-        //TODO firstly check if admin oder valid user
-        //TODO ACHTUNG WEGEN TOKEN DER DA MITGEGEBEN WIRD
+
+    public Response searchForUser(Request request) {
         ObjectMapper objectMapper = new ObjectMapper();
         User user = new User();
         user.setUsername(request.getRoute().split("/")[2]);
+        user.setAuthorization(request.getAuthorization());
 
-        Optional<User> returnedUser = null;
+        Optional<User> returnedUser;
         returnedUser = userService.find(user);
 
         if(returnedUser.isPresent()){
-            User finalUser = null;
-            finalUser = returnedUser.get();
-            String userJson = null;
-            try {
-                userJson = objectMapper.writeValueAsString(finalUser);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+            User foundUser = returnedUser.get();
+            boolean authorized = userService.checkIfAuthorized(user, foundUser);
+            if(authorized){
+                String userJson;
+                try {
+                    userJson = objectMapper.writeValueAsString(foundUser);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
+                Response response = new Response();
+                response.setStatus(HttpStatus.OK);
+                response.setContentType(HttpContentType.APPLICATION_JSON);
+                response.setBody(userJson);
+                //TODO ask Prof wegen der "Description" in der API
+
+                return response;
+            } else {
+                Response response = new Response();
+                response.setStatus(HttpStatus.UNAUTHORIZED);
+                response.setContentType(HttpContentType.TEXT_PLAIN);
+                response.setBody("Unauthorized request");
+
+                return response;
             }
-
-            Response response = new Response();
-            response.setStatus(HttpStatus.OK);
-            response.setContentType(HttpContentType.APPLICATION_JSON);
-            response.setBody(userJson);
-            //TODO ask Prof wegen der "Description" in der API
-
-            return response;
 
         }else{
             Response response = new Response();
@@ -116,6 +126,7 @@ public class UserController implements Controller {
             return response;
         }
     }
+
 
     //TODO implement the correct function, needs token/sessions
     public Response update(Request request){
