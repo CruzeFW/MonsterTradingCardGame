@@ -11,7 +11,7 @@ import at.technikum.server.http.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class SessionController implements Controller{
+public class SessionController extends Controller{
 
     private final SessionService sessionService;
     private final Token token;
@@ -26,6 +26,8 @@ public class SessionController implements Controller{
         return route.equals("/sessions");
     }
 
+
+    //TODO rework - logic into sessionService
     @Override
     public Response handle(Request request) {
         if(request.getRoute().equals("/sessions") && request.getMethod().equals("POST")) {

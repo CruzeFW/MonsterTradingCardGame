@@ -1,5 +1,8 @@
+Problems:
 Problems with token: unsure where to save, how to persist, security kinda bad if its saved in db, currently no threading so not possible to save locally
 Added a function into the constructor of the mtcgApp to remove all tokens inside the db so it can be simulated that users login
+
+unsure where to check for admin credentials in user put/get, no such call in .bat
 
 
 
@@ -7,3 +10,5 @@ added user route: /users implemented, /users/ not yet
 added token: added random UUID and boolean to create custom token, created validateToken function, thought about tokenRequest and tokenResponse
 adapted httpMapper to take "Authorize:.. "-Header
 reworked token to accept the correct input and save it into db - see comments about problem/thoughts; tokenResponse seems not needed, leaving it in atm
+reworked User to fit the logic in the service and out of the controller
+reworked authentication process in User

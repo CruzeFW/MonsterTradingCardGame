@@ -15,10 +15,12 @@ import java.util.Optional;
 
 public class UserRepositoryDatabase {
     private final String FIND_ALL_SQL = "SELECT * FROM users";
-
+    private final String FIND_ONE = "SELECT * FROM users WHERE username = ?";
+    private final String FIND_ONE_TOKEN = "SELECT * FROM users WHERE token = ?";
     private final String SAVE_SQL = "INSERT INTO users(id, username, password, elo, coins) VALUES(?, ?, ?, ?, ?)";
-
     private final String DELETE_TOKEN = "UPDATE users SET token = NULL";
+    private final String UPDATE = "UPDATE users SET username = ?, password = ?, bio = ?, image = ? WHERE token = ?";
+
 
     private final Database database = new Database();
 
@@ -45,12 +47,59 @@ public class UserRepositoryDatabase {
         }
     }
 
-    //find one user given by its username
-    public Optional<User> find(int id) {
+    // find user by its username
+    public Optional<User> find(User user) {
+        User userToReturn = new User();
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(FIND_ONE);
+        ){
+            pstmt.setString(1, user.getUsername());
+
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                userToReturn.setId(rs.getString("id"));
+                userToReturn.setUsername(rs.getString("username"));
+                userToReturn.setPassword(rs.getString("password"));
+                userToReturn.setAuthorization(rs.getString("token"));
+                userToReturn.setBio(rs.getString("bio"));
+                userToReturn.setImage(rs.getString("image"));
+                return Optional.of(userToReturn);
+            }
+        }catch (SQLException e){
+            e.getErrorCode();
+        }
+
         return Optional.empty();
     }
 
-    //creates a new user with custom values id, username and password, as well as default elo and default coins
+    // find user by its token
+    public Optional<User> findWithToken(User user) {
+        User userToReturn = new User();
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(FIND_ONE_TOKEN);
+        ){
+            pstmt.setString(1, user.getAuthorization());
+
+            // save returned value into rs
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                userToReturn.setId(rs.getString("id"));
+                userToReturn.setUsername(rs.getString("username"));
+                userToReturn.setPassword(rs.getString("password"));
+                userToReturn.setAuthorization(rs.getString("token"));
+                userToReturn.setBio(rs.getString("bio"));
+                userToReturn.setImage(rs.getString("image"));
+                return Optional.of(userToReturn);
+            }
+        }catch (SQLException e){
+            e.getErrorCode();
+        }
+        return Optional.empty();
+    }
+
+    // creates a new user with custom values id, username and password, as well as default elo and default coins
     public User save(User user) {
         try (
                 Connection con = database.getConnection();
@@ -72,10 +121,12 @@ public class UserRepositoryDatabase {
         return user;
     }
 
+    //NOT IN USE
     public User delete(User user) {
         return null;
     }
 
+    //deletes token in database for all users
     public void deleteToken(){
         try (
                 Connection con = database.getConnection();
@@ -86,5 +137,26 @@ public class UserRepositoryDatabase {
         } catch (SQLException e) {
             e.getErrorCode();
         }
+    }
+
+    // update user in DB
+    //TODO maybe change return type, see other todo in usage
+    public User update(User user){
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(UPDATE)
+        ) {
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setString(3, user.getBio());
+            pstmt.setString(4, user.getImage());
+            pstmt.setString(5, user.getAuthorization());
+
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            e.getErrorCode();
+        }
+        return user;
     }
 }

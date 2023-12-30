@@ -10,9 +10,10 @@ import at.technikum.apps.mtcg.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Objects;
 import java.util.Optional;
 
-public class UserController implements Controller {
+public class UserController extends Controller {
 
     private final UserService userService;
     public UserController(){
@@ -23,40 +24,21 @@ public class UserController implements Controller {
         return route.matches("/users/\\w+") || route.equals("/users");
     }
 
+    // check for the route and method, call the correct next function
     @Override
     public Response handle(Request request) {
 
         if(request.getRoute().equals("/users")) {
             if(request.getMethod().equals("POST")) {
-                //TODO change the response to the correct response
-                //TODO check if the user already exists and if so don't add it!!
                 return create(request);
-            } else {
-                //TODO change the response to the correct response
-                Response response = new Response();
-                response.setStatus(HttpStatus.BAD_REQUEST);
-                response.setContentType(HttpContentType.TEXT_PLAIN);
-                response.setBody("Method not allowed");
-
-                return response;
             }
         }
 
-        //TODO add "/users/"
         if(request.getRoute().matches("/users/\\w+")){
-            //TODO change the response to the correct response
             switch(request.getMethod()){
-                case "GET": return find(request);
+                case "GET": return searchForUser(request);
                 case "PUT": return update(request);
             }
-        }else{
-            //TODO change the response to the correct response
-            Response response = new Response();
-            response.setStatus(HttpStatus.BAD_REQUEST);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Method not allowed");
-
-            return response;
         }
 
         //TODO delete this response, code should never come here
@@ -67,51 +49,69 @@ public class UserController implements Controller {
         return response;
     }
 
-    // create a user in the database
+    // create a user in the database and checks if it doesn't already exist
     public Response create(Request request) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        User user = null;
-        try {
-            user = objectMapper.readValue(request.getBody(), User.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
-        user = userService.save(user);
-
-        String userJson = null;
-        try {
-            userJson = objectMapper.writeValueAsString(user);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        int responseType = userService.postMethodCalled(request);
 
         Response response = new Response();
-        response.setStatus(HttpStatus.CREATED);
-        response.setContentType(HttpContentType.APPLICATION_JSON);
-        response.setBody(userJson);
-
+        if(responseType == 1){
+            response.setStatus(HttpStatus.CONFLICT);
+            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setBody("User with same username already registered");
+        }else{
+            response.setStatus(HttpStatus.CREATED);
+            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setBody("User successfully created");
+        }
         return response;
     }
 
-    //TODO implement the correct function, needs token/sessions
-    public Response find(Request request){
-        Response response = new Response();
-        response.setStatus(HttpStatus.NOT_ACCEPTABLE);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("Not yet implemented");
+    // searches for user in database
+    public Response searchForUser(Request request) {
 
+        Object[] arr = userService.getMethodCalled(request);
+
+        Response response = new Response();
+        if(arr[0].equals(0)){
+                response.setStatus(HttpStatus.OK);
+                response.setContentType(HttpContentType.APPLICATION_JSON);
+                response.setBody((String) arr[1]);
+                //TODO ask Prof wegen der "Description" in der API
+
+        } else if (arr[0].equals(1)){
+            response.setStatus(HttpStatus.NOT_FOUND);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("User not found.");
+        }else{
+            response.setStatus(HttpStatus.UNAUTHORIZED);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("Unauthorized request");
+        }
         return response;
     }
 
-    //TODO implement the correct function, needs token/sessions
+    // update user in database
     public Response update(Request request){
-        Response response = new Response();
-        response.setStatus(HttpStatus.NOT_ACCEPTABLE);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("Not yet implemented");
+        int responseType = userService.putMethodCalled(request);
 
+        Response response = new Response();
+        if(responseType == 0) {
+            response.setStatus(HttpStatus.OK);
+            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setBody("User successfully updated.");
+
+        } else if (responseType == 1) {
+            response.setStatus(HttpStatus.NOT_FOUND);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("User not found.");
+
+        } else {
+            response.setStatus(HttpStatus.UNAUTHORIZED);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("Unauthorized request");
+        }
         return response;
     }
+
 }

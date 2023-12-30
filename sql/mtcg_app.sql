@@ -8,6 +8,7 @@ CREATE DATABASE mtcg_db;
     DROP TABLE transactions;
 */
 
+
 CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
@@ -75,6 +76,10 @@ CREATE TABLE IF NOT EXISTS transactions (
 SELECT * FROM users;
 
 DELETE FROM users WHERE username ='kienboec';
+DELETE FROM users WHERE username ='altenhof';
+DELETE FROM users WHERE username ='admin';
+DELETE FROM users;
+
 
 UPDATE users SET token = 'roof' WHERE username = 'hans';
 
