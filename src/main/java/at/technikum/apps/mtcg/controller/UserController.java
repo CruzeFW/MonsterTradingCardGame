@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Objects;
 import java.util.Optional;
 
-public class UserController implements Controller {
+public class UserController extends Controller {
 
     private final UserService userService;
     public UserController(){
@@ -24,7 +24,7 @@ public class UserController implements Controller {
         return route.matches("/users/\\w+") || route.equals("/users");
     }
 
-    //check for the route and method and return the corresponding response
+    // check for the route and method, call the correct next function
     @Override
     public Response handle(Request request) {
 
@@ -35,7 +35,6 @@ public class UserController implements Controller {
         }
 
         if(request.getRoute().matches("/users/\\w+")){
-            //TODO change the response to the correct response
             switch(request.getMethod()){
                 case "GET": return searchForUser(request);
                 case "PUT": return update(request);
@@ -50,96 +49,69 @@ public class UserController implements Controller {
         return response;
     }
 
-    // create a user in the database and checks if it doesn't already exists
+    // create a user in the database and checks if it doesn't already exist
     public Response create(Request request) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        User user;
-        try {
-            user = objectMapper.readValue(request.getBody(), User.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        int responseType = userService.postMethodCalled(request);
 
-        Optional<User> user1 = userService.find(user);
-        if(user1.isPresent()){
-            Response response = new Response();
+        Response response = new Response();
+        if(responseType == 1){
             response.setStatus(HttpStatus.CONFLICT);
             response.setContentType(HttpContentType.APPLICATION_JSON);
             response.setBody("User with same username already registered");
-            return response;
         }else{
-
-            userService.save(user);
-
-            Response response = new Response();
             response.setStatus(HttpStatus.CREATED);
             response.setContentType(HttpContentType.APPLICATION_JSON);
             response.setBody("User successfully created");
-            return response;
         }
+        return response;
     }
 
-
+    // searches for user in database
     public Response searchForUser(Request request) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        User user = new User();
-        user.setUsername(request.getRoute().split("/")[2]);
-        user.setAuthorization(request.getAuthorization());
 
-        Optional<User> returnedUser;
-        returnedUser = userService.find(user);
+        Object[] arr = userService.getMethodCalled(request);
 
-        if(returnedUser.isPresent()){
-            User foundUser = returnedUser.get();
-            boolean authorized = userService.checkIfAuthorized(user, foundUser);
-            if(authorized){
-                String userJson;
-                try {
-                    userJson = objectMapper.writeValueAsString(foundUser);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-
-                Response response = new Response();
+        Response response = new Response();
+        if(arr[0].equals(0)){
                 response.setStatus(HttpStatus.OK);
                 response.setContentType(HttpContentType.APPLICATION_JSON);
-                response.setBody(userJson);
+                response.setBody((String) arr[1]);
                 //TODO ask Prof wegen der "Description" in der API
 
-                return response;
-            } else {
-                Response response = new Response();
-                response.setStatus(HttpStatus.UNAUTHORIZED);
-                response.setContentType(HttpContentType.TEXT_PLAIN);
-                response.setBody("Unauthorized request");
-
-                return response;
-            }
-
+        } else if (arr[0].equals(1)){
+            response.setStatus(HttpStatus.NOT_FOUND);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("User not found.");
         }else{
-            Response response = new Response();
+            response.setStatus(HttpStatus.UNAUTHORIZED);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("Unauthorized request");
+        }
+        return response;
+    }
+
+    // update user in database
+    public Response update(Request request){
+        int responseType = userService.putMethodCalled(request);
+
+        Response response = new Response();
+        if(responseType == 0) {
+            response.setStatus(HttpStatus.OK);
+            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setBody("User successfully updated.");
+
+        } else if (responseType == 1) {
             response.setStatus(HttpStatus.NOT_FOUND);
             response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("User not found.");
 
-            return response;
+        } else {
+            response.setStatus(HttpStatus.UNAUTHORIZED);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("Unauthorized request");
         }
-    }
-
-
-    //TODO implement the correct function, needs token/sessions
-    public Response update(Request request){
-        //TODO firstly check if admin oder valid user
-        //TODO ACHTUNG WEGEN TOKEN DER DA MITGEGEBEN WIRD
-
-
-
-        Response response = new Response();
-        response.setStatus(HttpStatus.NOT_ACCEPTABLE);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("Not yet implemented");
-
         return response;
     }
+
 }

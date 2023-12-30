@@ -7,7 +7,15 @@ Current todos:
 
 Think about it:
     1. Tokens aus der db löschen? so gespeichert lassen? im thread speichern?
-
+    2.
+    3.
 
 
     x. Threads
+
+
+Fragen:
+    - schau die TODO an
+    - API: Zeile 104: soll wirklich bei der fehlerhaften die response ausführlich sein?
+    - API: Zeile 51: response + data? was soll ausgegeben werden?
+    - API: Zeile 222: sollte eigentlich nicht gehen weil der username neu ist?

@@ -75,7 +75,11 @@ CREATE TABLE IF NOT EXISTS transactions (
 
 SELECT * FROM users;
 
+DELETE FROM users WHERE username ='kienboec';
+DELETE FROM users WHERE username ='altenhof';
 DELETE FROM users WHERE username ='admin';
+DELETE FROM users;
+
 
 UPDATE users SET token = 'roof' WHERE username = 'hans';
 

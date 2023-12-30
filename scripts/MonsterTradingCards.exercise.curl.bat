@@ -17,12 +17,16 @@ echo.
 curl -X POST http://localhost:10001/users --header "Content-Type: application/json" -d "{\"username\":\"admin\", \"password\":\"istrator\"}"
 echo.
 
+pause
+
 echo should fail:
 curl -X POST http://localhost:10001/users --header "Content-Type: application/json" -d "{\"username\":\"kienboec\", \"password\":\"daniel\"}"
 echo.
 curl -X POST http://localhost:10001/users --header "Content-Type: application/json" -d "{\"username\":\"kienboec\", \"password\":\"different\"}"
 echo. 
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 2) Login Users
@@ -33,10 +37,14 @@ echo.
 curl -X POST http://localhost:10001/sessions --header "Content-Type: application/json" -d "{\"username\":\"admin\",    \"password\":\"istrator\"}"
 echo.
 
+pause
+
 echo should fail:
 curl -X POST http://localhost:10001/sessions --header "Content-Type: application/json" -d "{\"username\":\"kienboec\", \"password\":\"different\"}"
 echo.
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 3) create packages (done by "admin")
@@ -54,6 +62,8 @@ curl -X POST http://localhost:10001/packages --header "Content-Type: application
 echo.
 echo.
 
+pause
+
 REM --------------------------------------------------
 echo 4) acquire packages kienboec
 curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d ""
@@ -64,10 +74,15 @@ curl -X POST http://localhost:10001/transactions/packages --header "Content-Type
 echo.
 curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d ""
 echo.
+
+pause
+
 echo should fail (no money):
 curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d ""
 echo.
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 5) acquire packages altenhof
@@ -75,10 +90,15 @@ curl -X POST http://localhost:10001/transactions/packages --header "Content-Type
 echo.
 curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d ""
 echo.
+
+pause
+
 echo should fail (no package):
 curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d ""
 echo.
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 6) add new packages
@@ -90,16 +110,23 @@ curl -X POST http://localhost:10001/packages --header "Content-Type: application
 echo.
 echo.
 
+pause
+
 REM --------------------------------------------------
 echo 7) acquire newly created packages altenhof
 curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d ""
 echo.
 curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d ""
 echo.
+
+pause
+
 echo should fail (no money):
 curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d ""
 echo.
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 8) show all acquired cards kienboec
@@ -109,11 +136,15 @@ curl -X GET http://localhost:10001/cards
 echo.
 echo.
 
+pause
+
 REM --------------------------------------------------
 echo 9) show all acquired cards altenhof
 curl -X GET http://localhost:10001/cards --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 10) show unconfigured deck
@@ -122,6 +153,8 @@ echo.
 curl -X GET http://localhost:10001/deck --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 11) configure deck
@@ -134,16 +167,23 @@ echo.
 curl -X GET http://localhost:10001/deck --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
 echo.
+
+pause
+
 echo should fail and show original from before:
 curl -X PUT http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d "[\"845f0dc7-37d0-426e-994e-43fc3ac83c08\", \"99f8f8dc-e25e-4a95-aa2c-782823f36e2a\", \"e85e3976-7c86-4d06-9a80-641c2019a79f\", \"171f6076-4eb5-4a7d-b3f2-2d650cc3d237\"]"
 echo.
 curl -X GET http://localhost:10001/deck --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
 echo.
+
+pause
+
 echo should fail ... only 3 cards set
 curl -X PUT http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d "[\"aa9999a0-734c-49c6-8f4a-651864b14e62\", \"d6e9c720-9b5a-40c7-a6b2-bc34752e3463\", \"d60e23cf-2238-4d49-844f-c7589ee5342e\"]"
 echo.
 
+pause
 
 REM --------------------------------------------------
 echo 12) show configured deck 
@@ -152,6 +192,8 @@ echo.
 curl -X GET http://localhost:10001/deck --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 13) show configured deck different representation
@@ -164,6 +206,8 @@ curl -X GET http://localhost:10001/deck?format=plain --header "Authorization: Be
 echo.
 echo.
 
+pause
+
 REM --------------------------------------------------
 echo 14) edit user data
 echo.
@@ -171,27 +215,32 @@ curl -X GET http://localhost:10001/users/kienboec --header "Authorization: Beare
 echo.
 curl -X GET http://localhost:10001/users/altenhof --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
-curl -X PUT http://localhost:10001/users/kienboec --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d "{\"name\": \"Kienboeck\",  \"bio\": \"me playin...\", \"image\": \":-)\"}"
+curl -X PUT http://localhost:10001/users/kienboec --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d "{\"username\": \"Kienboeck\",  \"bio\": \"me playin...\", \"image\": \":-)\"}"
 echo.
-curl -X PUT http://localhost:10001/users/altenhof --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d "{\"name\": \"Altenhofer\", \"bio\": \"me codin...\",  \"image\": \":-D\"}"
+curl -X PUT http://localhost:10001/users/altenhof --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d "{\"username\": \"Altenhofer\", \"bio\": \"me codin...\",  \"image\": \":-D\"}"
 echo.
 curl -X GET http://localhost:10001/users/kienboec --header "Authorization: Bearer kienboec-mtcgToken"
 echo.
 curl -X GET http://localhost:10001/users/altenhof --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
 echo.
+
+pause
+
 echo should fail:
 curl -X GET http://localhost:10001/users/altenhof --header "Authorization: Bearer kienboec-mtcgToken"
 echo.
 curl -X GET http://localhost:10001/users/kienboec --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
-curl -X PUT http://localhost:10001/users/kienboec --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d "{\"name\": \"Hoax\",  \"bio\": \"me playin...\", \"image\": \":-)\"}"
+curl -X PUT http://localhost:10001/users/kienboec --header "Content-Type: application/json" --header "Authorization: Bearer altenhof-mtcgToken" -d "{\"username\": \"Hoax\",  \"bio\": \"me playin...\", \"image\": \":-)\"}"
 echo.
-curl -X PUT http://localhost:10001/users/altenhof --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d "{\"name\": \"Hoax\", \"bio\": \"me codin...\",  \"image\": \":-D\"}"
+curl -X PUT http://localhost:10001/users/altenhof --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d "{\"username\": \"Hoax\", \"bio\": \"me codin...\",  \"image\": \":-D\"}"
 echo.
 curl -X GET http://localhost:10001/users/someGuy  --header "Authorization: Bearer kienboec-mtcgToken"
 echo.
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 15) stats
@@ -201,17 +250,23 @@ curl -X GET http://localhost:10001/stats --header "Authorization: Bearer altenho
 echo.
 echo.
 
+pause
+
 REM --------------------------------------------------
 echo 16) scoreboard
 curl -X GET http://localhost:10001/scoreboard --header "Authorization: Bearer kienboec-mtcgToken"
 echo.
 echo.
 
+pause
+
 REM --------------------------------------------------
 echo 17) battle
 start /b "kienboec battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer kienboec-mtcgToken"
 start /b "altenhof battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer altenhof-mtcgToken"
 ping localhost -n 10 >NUL 2>NUL
+
+pause
 
 REM --------------------------------------------------
 echo 18) Stats 
@@ -223,11 +278,15 @@ curl -X GET http://localhost:10001/stats --header "Authorization: Bearer altenho
 echo.
 echo.
 
+pause
+
 REM --------------------------------------------------
 echo 19) scoreboard
 curl -X GET http://localhost:10001/scoreboard --header "Authorization: Bearer kienboec-mtcgToken"
 echo.
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo 20) trade
@@ -247,6 +306,8 @@ curl -X DELETE http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921fa
 echo.
 echo.
 
+pause
+
 REM --------------------------------------------------
 echo 21) check trading deals
 curl -X GET http://localhost:10001/tradings  --header "Authorization: Bearer kienboec-mtcgToken"
@@ -257,6 +318,9 @@ curl -X GET http://localhost:10001/tradings  --header "Authorization: Bearer kie
 echo.
 curl -X GET http://localhost:10001/tradings  --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
+
+pause
+
 echo try to trade with yourself (should fail)
 curl -X POST http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d "\"4ec8b269-0dfa-4f97-809a-2c63fe2a0025\""
 echo.
@@ -268,6 +332,8 @@ curl -X GET http://localhost:10001/tradings --header "Authorization: Bearer kien
 echo.
 curl -X GET http://localhost:10001/tradings --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
+
+pause
 
 REM --------------------------------------------------
 echo end...
