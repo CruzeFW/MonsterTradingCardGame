@@ -1,9 +1,5 @@
 Current todos:
-    1. Edit token to be in the style of the curl call
-    2. parse token with username
-    3. call db to check if user exists
-    4. if user exists set token to the correct value
-    5. where to save the token...
+    1. TODO Check if save and find package do what they should do
 
 Think about it:
     1. Tokens aus der db löschen? so gespeichert lassen? im thread speichern?

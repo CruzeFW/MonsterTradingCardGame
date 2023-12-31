@@ -4,6 +4,7 @@ Added a function into the constructor of the mtcgApp to remove all tokens inside
 
 unsure where to check for admin credentials in user put/get, no such call in .bat
 
+unsure about the 409 error for packages where single cards already exist - decided to add all the other cards
 
 
 added user route: /users implemented, /users/ not yet
@@ -12,3 +13,6 @@ adapted httpMapper to take "Authorize:.. "-Header
 reworked token to accept the correct input and save it into db - see comments about problem/thoughts; tokenResponse seems not needed, leaving it in atm
 reworked User to fit the logic in the service and out of the controller
 reworked authentication process in User
+added Package+ /service /controller /repo, and Card class
+reworked package and card repository (split into two)
+added package and card save/delete/find in DB, works
