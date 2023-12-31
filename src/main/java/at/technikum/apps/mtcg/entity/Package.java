@@ -5,8 +5,10 @@ import java.util.UUID;
 public class Package {
 
     public String packageId;
+    public boolean bought;
     public Package(){
         packageId = createPackageId();
+        bought = false;
     };
 
     public String getPackageId() {
@@ -15,5 +17,13 @@ public class Package {
 
     private String createPackageId(){
         return UUID.randomUUID().toString();
+    }
+
+    public boolean isBought() {
+        return bought;
+    }
+
+    public void setBought(boolean bought) {
+        this.bought = bought;
     }
 }

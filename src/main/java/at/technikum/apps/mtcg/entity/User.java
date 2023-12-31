@@ -7,6 +7,7 @@ public class User {
     private String authorization;
     private String bio;
     private String image;
+    private String coins;
 
     public User(){ }
     public User(String id, String username, String password) {
@@ -50,5 +51,11 @@ public class User {
     }
     public void setImage(String image) {
         this.image = image;
+    }
+    public String getCoins() {
+        return coins;
+    }
+    public void setCoins(String coins) {
+        this.coins = coins;
     }
 }

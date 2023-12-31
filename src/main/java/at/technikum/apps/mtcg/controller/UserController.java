@@ -57,11 +57,11 @@ public class UserController extends Controller {
         Response response = new Response();
         if(responseType == 1){
             response.setStatus(HttpStatus.CONFLICT);
-            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("User with same username already registered");
         }else{
             response.setStatus(HttpStatus.CREATED);
-            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("User successfully created");
         }
         return response;
@@ -86,7 +86,7 @@ public class UserController extends Controller {
         }else{
             response.setStatus(HttpStatus.UNAUTHORIZED);
             response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Unauthorized request");
+            response.setBody("Unauthorized request.");
         }
         return response;
     }

@@ -16,3 +16,4 @@ reworked authentication process in User
 added Package+ /service /controller /repo, and Card class
 reworked package and card repository (split into two)
 added package and card save/delete/find in DB, works
+added transaction service/controller/database, added user coins
