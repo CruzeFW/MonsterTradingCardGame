@@ -1,5 +1,6 @@
 package at.technikum.apps.mtcg.controller;
 
+import at.technikum.apps.mtcg.repository.CardRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.PackageRepositoryDatabase;
 import at.technikum.apps.mtcg.service.PackageService;
 
@@ -11,14 +12,16 @@ import at.technikum.server.http.Response;
 public class PackageController extends Controller{
 
     private final PackageService packageService;
+
     public PackageController(){
-        this.packageService = new PackageService(new PackageRepositoryDatabase());
+        this.packageService = new PackageService(new PackageRepositoryDatabase(), new CardRepositoryDatabase());
     }
     @Override
     public boolean supports(String route) {
         return route.equals("/packages");
     }
 
+    // handle post request on /packages
     @Override
     public Response handle(Request request) {
         if(request.getRoute().equals("/packages")){

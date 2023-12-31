@@ -14,3 +14,5 @@ reworked token to accept the correct input and save it into db - see comments ab
 reworked User to fit the logic in the service and out of the controller
 reworked authentication process in User
 added Package+ /service /controller /repo, and Card class
+reworked package and card repository (split into two)
+added package and card save/delete/find in DB, works
