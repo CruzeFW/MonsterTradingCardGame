@@ -52,7 +52,7 @@ public class UserRepositoryDatabase {
         User userToReturn = new User();
         try (
                 Connection con = database.getConnection();
-                PreparedStatement pstmt = con.prepareStatement(FIND_ONE);
+                PreparedStatement pstmt = con.prepareStatement(FIND_ONE)
         ){
             pstmt.setString(1, user.getUsername());
 
@@ -78,7 +78,7 @@ public class UserRepositoryDatabase {
         User userToReturn = new User();
         try (
                 Connection con = database.getConnection();
-                PreparedStatement pstmt = con.prepareStatement(FIND_ONE_TOKEN);
+                PreparedStatement pstmt = con.prepareStatement(FIND_ONE_TOKEN)
         ){
             pstmt.setString(1, user.getAuthorization());
 
