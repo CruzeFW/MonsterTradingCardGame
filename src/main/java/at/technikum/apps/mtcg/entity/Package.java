@@ -15,6 +15,10 @@ public class Package {
         return packageId;
     }
 
+    public void setPackageId(String packageId) {
+        this.packageId = packageId;
+    }
+
     private String createPackageId(){
         return UUID.randomUUID().toString();
     }

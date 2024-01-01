@@ -1,5 +1,6 @@
 Current todos:
-    1. TODO Check if save and find package do what they should do
+    1. TODO Check transactions with script
+    2. TODO Comment transactions code
 
 Think about it:
     1. Tokens aus der db löschen? so gespeichert lassen? im thread speichern?

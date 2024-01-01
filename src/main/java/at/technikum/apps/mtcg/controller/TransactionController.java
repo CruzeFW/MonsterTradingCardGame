@@ -39,7 +39,7 @@ public class TransactionController extends Controller{
         if(arr[0].equals(0)){
             response.setStatus(HttpStatus.OK);
             response.setContentType(HttpContentType.APPLICATION_JSON);
-            response.setBody("GET PACKAGE IN HERE"); // ADD PACKAGE AS RESPONSE
+            response.setBody((String) arr[1]); // ADD PACKAGE AS RESPONSE
         }else if(arr[0].equals(1)){
             response.setStatus(HttpStatus.UNAUTHORIZED);
             response.setContentType(HttpContentType.TEXT_PLAIN);

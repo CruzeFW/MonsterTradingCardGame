@@ -6,6 +6,7 @@ unsure where to check for admin credentials in user put/get, no such call in .ba
 
 unsure about the 409 error for packages where single cards already exist - decided to add all the other cards
 
+unsure about necessity of package DB, wouldn't it be sufficient to add to the cards a package id, and if they are sold set it to null?
 
 added user route: /users implemented, /users/ not yet
 added token: added random UUID and boolean to create custom token, created validateToken function, thought about tokenRequest and tokenResponse
@@ -17,3 +18,6 @@ added Package+ /service /controller /repo, and Card class
 reworked package and card repository (split into two)
 added package and card save/delete/find in DB, works
 added transaction service/controller/database, added user coins
+reworked sql statements for dependencies in DB
+added possibility to buy package, set it to bought, add to user and remove coins from user
+finalised transactions, need testing and comments!!

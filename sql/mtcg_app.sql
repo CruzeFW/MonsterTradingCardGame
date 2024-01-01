@@ -35,7 +35,12 @@ CREATE TABLE IF NOT EXISTS cards (
     CONSTRAINT fk_packages
         FOREIGN KEY (packageid)
         REFERENCES packages(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_users
+        FOREIGN KEY (owner)
+        REFERENCES users(id)
         ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS battles (
@@ -56,22 +61,20 @@ CREATE TABLE IF NOT EXISTS battles (
 );
 
 CREATE TABLE IF NOT EXISTS transactions (
-    id VARCHAR(255) PRIMARY KEY,
-    buyer VARCHAR(255) NOT NULL,
-    packageid VARCHAR(255) NOT NULL,
-    completed boolean NOT NULL,
+    id SERIAL PRIMARY KEY,
+    buyer VARCHAR(255),
+    packageid VARCHAR(255),
     CONSTRAINT fk_user
         FOREIGN KEY (buyer)
         REFERENCES users(id)
-        ON DELETE CASCADE,
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT fk_package
         FOREIGN KEY (packageid)
         REFERENCES packages(id)
         ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
-
-
-
 
 SELECT * FROM users;
 

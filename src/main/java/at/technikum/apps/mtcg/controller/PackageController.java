@@ -28,7 +28,6 @@ public class PackageController extends Controller{
             return create(request);
         }
 
-
         //TODO delete this response, code should never come here
         Response response = new Response();
         response.setStatus(HttpStatus.NOT_ACCEPTABLE);
