@@ -70,7 +70,6 @@ public class PackageService {
     }
 
     // check if a token is given and if it's the admin token
-
     private Integer checkToken(Request request) {
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
         if (request.getAuthorization() == null) {

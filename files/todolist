@@ -1,11 +1,13 @@
 Current todos:
-    1. TODO Check transactions with script
-    2. TODO Comment transactions code
+    1.
+
 
 Think about it:
     1. Tokens aus der db löschen? so gespeichert lassen? im thread speichern?
     2. is die Packages db so wie sie is notwendig?
-    3.
+    3. reposition checkToken() (inside Package- AND CardService) to UserService?
+        -maybe not? eines liefert int, anderes Optional<User>
+    4. rework alles wo ein Card[] retour gegeben wird oder lass es so? (consistency)
 
 
     x. Threads
@@ -15,4 +17,5 @@ Fragen:
     - schau die TODO an
     - API: Zeile 51: response + data? was soll ausgegeben werden?
     - API: Zeile 104: soll wirklich bei der fehlerhaften die response ausführlich sein?
+    - API: Teile 138: soll das dann erstellt werden oder nicht?
     - API: Zeile 222: sollte eigentlich nicht gehen weil der username neu ist?
