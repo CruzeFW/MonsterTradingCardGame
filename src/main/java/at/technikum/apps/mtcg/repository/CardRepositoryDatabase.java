@@ -34,6 +34,7 @@ public class CardRepositoryDatabase {
                 cardToReturn.setDamage(rs.getFloat("damage"));
                 cardToReturn.setOwner(rs.getString("owner"));
                 cardToReturn.setPackageid(rs.getString("packageid"));
+                cardToReturn.setDeckid(rs.getInt("deckid"));
                 return Optional.of(cardToReturn);
             }
         }catch (SQLException e){

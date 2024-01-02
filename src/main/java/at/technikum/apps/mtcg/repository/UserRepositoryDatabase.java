@@ -184,7 +184,8 @@ public class UserRepositoryDatabase {
                             rs.getString("name"),
                             rs.getFloat("damage"),
                             rs.getString("owner"),
-                            rs.getString("packageid")
+                            rs.getString("packageid"),
+                            rs.getInt("deckid")
                     );
                     foundCardsA.add(card);
                 }while (rs.next());

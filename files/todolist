@@ -1,5 +1,22 @@
 Current todos:
-    1.
+    1. Deck: TODO 1
+        - controller
+            - support
+            - handle
+                PUT
+                GET
+
+        - service TODO 2
+            - show deck
+            - configure deck
+                - bekommt karten mitgegeben
+                - müssen 4 karten sein
+            - validate user
+                - return user
+            -
+        - repo TODO 3
+
+    x. Delete all TODO "NOT_ACCEPTABLE" response uses or change to "NOT_ALLOWED" or something
 
 
 Think about it:
@@ -15,7 +32,14 @@ Think about it:
 
 Fragen:
     - schau die TODO an
-    - API: Zeile 51: response + data? was soll ausgegeben werden?
-    - API: Zeile 104: soll wirklich bei der fehlerhaften die response ausführlich sein?
-    - API: Teile 138: soll das dann erstellt werden oder nicht?
-    - API: Zeile 222: sollte eigentlich nicht gehen weil der username neu ist?
+    - Deck Table - ja oder nein? lieber viele felder mit <null> oder eine "unnötige tabelle"?
+    - wenn ich mehrere db connections in einer funktion hab (weil mehrere sachen gelesen/geschrieben werden), kann man das einfacher machen?
+        - performance relevant?
+
+
+    API:
+        - Zeile 51: response + data? was soll ausgegeben werden?
+        - Zeile 104: soll wirklich bei der fehlerhaften die response ausführlich sein?
+        - Zeile 138: soll das dann erstellt werden oder nicht?
+        - Zeile 222: sollte eigentlich nicht gehen weil der username neu ist?
+        - Zeile 205-210: was soll dann die response sein?

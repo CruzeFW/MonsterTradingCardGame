@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS cards (
     damage FLOAT NOT NULL,
     owner VARCHAR(255),
     packageid VARCHAR(255),
+    deckid INTEGER,
     CONSTRAINT fk_packages
         FOREIGN KEY (packageid)
         REFERENCES packages(id)
