@@ -20,6 +20,7 @@ public class MtcgApp implements ServerApplication {
         controllers.add(new SessionController());
         controllers.add(new PackageController());
         controllers.add(new TransactionController());
+        controllers.add(new CardController());
 
         //TODO decide if this is the correct place for that
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();

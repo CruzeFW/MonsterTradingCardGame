@@ -1,7 +1,7 @@
 CREATE DATABASE mtcg_db;
-
+/*
     DROP DATABASE mtcg_db;
-
+*/
     DROP TABLE packages CASCADE ;
     DROP TABLE users CASCADE;
     DROP TABLE cards CASCADE;
@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS users (
     elo INT NOT NULL,
     coins INT NOT NULL
 );
-
 
 CREATE TABLE IF NOT EXISTS packages (
     id VARCHAR(255) PRIMARY KEY,
@@ -76,6 +75,7 @@ CREATE TABLE IF NOT EXISTS transactions (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
 
 SELECT * FROM users;
 

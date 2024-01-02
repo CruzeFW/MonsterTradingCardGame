@@ -21,3 +21,5 @@ reworked sql statements for dependencies in DB
 added possibility to buy package, set it to bought, add to user and remove coins from user
 finalised transactions, need testing and comments!!
 finished transactions, workaround present, see Problem 6, fully commented and pushed
+added cards controller/service, uses UserRepoDB because it's user specific(?!), used ArrayList<Card> instead of Card[]
+    - thinking about reworking the other ones as well but maybe in the end

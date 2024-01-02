@@ -1,5 +1,6 @@
 package at.technikum.apps.mtcg.repository;
 
+import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.data.Database;
 
@@ -14,15 +15,16 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserRepositoryDatabase {
+
+    private final Database database = new Database();
     private final String FIND_ALL_SQL = "SELECT * FROM users";
     private final String FIND_ONE = "SELECT * FROM users WHERE username = ?";
     private final String FIND_ONE_TOKEN = "SELECT * FROM users WHERE token = ?";
     private final String SAVE_SQL = "INSERT INTO users(id, username, password, elo, coins) VALUES(?, ?, ?, ?, ?)";
     private final String DELETE_TOKEN = "UPDATE users SET token = NULL";
     private final String UPDATE = "UPDATE users SET username = ?, password = ?, bio = ?, image = ? WHERE token = ?";
+    private final String FIND_ALL_CARDS = "SELECT * FROM cards WHERE owner = ?";
 
-
-    private final Database database = new Database();
 
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
@@ -162,5 +164,35 @@ public class UserRepositoryDatabase {
             e.getErrorCode();
         }
         return user;
+    }
+
+    // search for cards in DB, returns Optional<ArrayList<Card>>
+    public Optional<ArrayList<Card>> findAllCards(User user){
+        Optional<ArrayList<Card>> cardList = Optional.empty();
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(FIND_ALL_CARDS)
+        ) {
+            pstmt.setString(1, user.getId());
+            ResultSet rs = pstmt.executeQuery();
+
+            if(rs.next()){
+                ArrayList<Card> foundCardsA = new ArrayList<>();
+                do {
+                    Card card = new Card(
+                            rs.getString("id"),
+                            rs.getString("name"),
+                            rs.getFloat("damage"),
+                            rs.getString("owner"),
+                            rs.getString("packageid")
+                    );
+                    foundCardsA.add(card);
+                }while (rs.next());
+                return Optional.of(foundCardsA);
+            }
+        } catch (SQLException e) {
+            e.getErrorCode();
+        }
+        return cardList;
     }
 }

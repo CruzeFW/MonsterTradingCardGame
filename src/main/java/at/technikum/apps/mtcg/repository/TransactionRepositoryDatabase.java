@@ -85,7 +85,7 @@ public class TransactionRepositoryDatabase {
         }
     }
 
-    // find all cards in one package, returns an Card[]
+    // find all cards in one package, returns a Card[]
     public Card[] getAllCardsFromOnePackage(User foundUser, String packageId) {
         Card[] cards = new Card[5];
 
