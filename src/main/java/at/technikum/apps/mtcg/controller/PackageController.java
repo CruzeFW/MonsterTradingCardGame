@@ -24,10 +24,8 @@ public class PackageController extends Controller{
     // handle post request on /packages
     @Override
     public Response handle(Request request) {
-        if(request.getRoute().equals("/packages")){
-            if(request.getMethod().equals("POST")){
-                return create(request);
-            }
+        if(request.getMethod().equals("POST")){
+            return create(request);
         }
 
         //TODO delete this response, code should never come here

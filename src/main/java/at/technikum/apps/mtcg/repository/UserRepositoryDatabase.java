@@ -64,6 +64,8 @@ public class UserRepositoryDatabase {
                 userToReturn.setAuthorization(rs.getString("token"));
                 userToReturn.setBio(rs.getString("bio"));
                 userToReturn.setImage(rs.getString("image"));
+                userToReturn.setElo((rs.getInt("elo")));
+                userToReturn.setCoins((rs.getInt("coins")));
                 return Optional.of(userToReturn);
             }
         }catch (SQLException e){
@@ -91,6 +93,8 @@ public class UserRepositoryDatabase {
                 userToReturn.setAuthorization(rs.getString("token"));
                 userToReturn.setBio(rs.getString("bio"));
                 userToReturn.setImage(rs.getString("image"));
+                userToReturn.setElo((rs.getInt("elo")));
+                userToReturn.setCoins((rs.getInt("coins")));
                 return Optional.of(userToReturn);
             }
         }catch (SQLException e){

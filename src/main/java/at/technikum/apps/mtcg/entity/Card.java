@@ -10,10 +10,12 @@ public class Card {
 
     public Card(){};
 
-    public Card(String id, String name, float damage){
+    public Card(String id, String name, float damage, String owner, String packageid){
         this.id = id;
         this.name = name;
         this.damage = damage;
+        this.owner = owner;
+        this.packageid = packageid;
     }
 
     public String getId() {

@@ -7,6 +7,9 @@ public class User {
     private String authorization;
     private String bio;
     private String image;
+    private int elo;
+    private int coins;
+
 
     public User(){ }
     public User(String id, String username, String password) {
@@ -50,5 +53,17 @@ public class User {
     }
     public void setImage(String image) {
         this.image = image;
+    }
+    public int getElo() {
+        return elo;
+    }
+    public void setElo(int elo) {
+        this.elo = elo;
+    }
+    public Integer getCoins() {
+        return coins;
+    }
+    public void setCoins(Integer coins) {
+        this.coins = coins;
     }
 }

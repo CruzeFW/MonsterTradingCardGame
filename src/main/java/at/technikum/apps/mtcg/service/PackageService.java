@@ -2,8 +2,10 @@ package at.technikum.apps.mtcg.service;
 
 import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.Package;
+import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.CardRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.PackageRepositoryDatabase;
+import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -25,7 +27,7 @@ public class PackageService {
         int i = checkToken(request);
         if( i == 1){                // no token
             return 1;
-        } else if (i == 2) {        // not admin
+        } else if (i == 2) {        // user not found/not logged in
             return 2;
         }
 
@@ -40,6 +42,7 @@ public class PackageService {
         }
         // create a new Package
         Package pack = new Package();
+        pack.setPackageId(pack.createPackageId());
         packageRepositoryDatabase.save(pack.getPackageId());
 
         // check if cards are already in db, otherwise add it to db
@@ -66,14 +69,21 @@ public class PackageService {
         }
     }
 
-    // check if a token is given and if its the admin token
-    //TODO QUESTION: maybe add get token for admin from DB? security risk?
-    private Integer checkToken(Request request){
-        if(request.getAuthorization() == null){
+    // check if a token is given and if it's the admin token
+
+    private Integer checkToken(Request request) {
+        UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
+        if (request.getAuthorization() == null) {
             return 1;           // no token
-        } else if(!request.getAuthorization().split("-")[0].equals("admin")) {
-            return 2;           // no header
+        } else {
+            User findUser = new User();
+            findUser.setAuthorization(request.getAuthorization());
+            Optional <User> user = userRepositoryDatabase.findWithToken(findUser);
+
+            if(user.isEmpty()){
+                return 2;       // no user with that token exists
+            }
+            return 0;           // correct authentication
         }
-        return 0;               // correct header admin-mtcgToken
     }
 }
