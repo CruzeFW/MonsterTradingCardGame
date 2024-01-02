@@ -19,46 +19,61 @@ public class TransactionService {
         this.transactionRepositoryDatabase = transactionRepositoryDatabase;
     }
 
+    // creates array with response regarding the outcome of the transaction
     public Object[] acquire(Request request){
         Object[] arr = new Object[2];
+        // check if user is in logged in/exists
         Optional<User> user = validateUser(request);
         if(user.isEmpty()){
             arr[0] = 1;                 // user not found
             return arr;
         }
 
-        User foundUser = user.get();
-        if(foundUser.getCoins() >= 5){
-            Optional<Package> pack = findAvailablePackage();
-            if(pack.isEmpty()){
-                arr[0] = 1;             // no package available/
-                return arr;
-            }
-            Package foundPack = pack.get();
-            boolean success = transactionRepositoryDatabase.assignPackageToUser(foundUser, foundPack);
-            if(success){
-                transactionRepositoryDatabase.packageIsBought(foundPack);
-                transactionRepositoryDatabase.removeCoins(foundUser);
-                transactionRepositoryDatabase.saveTransaction(foundUser, foundPack.getPackageId());
-                arr[0] = 0;
-                Card[] cards = getAllCardsFromOnePackage(foundUser, foundPack.getPackageId());
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    JsonNode jsonNode = objectMapper.valueToTree(cards);
-                    String jsonString = objectMapper.writeValueAsString(jsonNode);
-                    arr[1]= jsonString;
-                }catch(JsonProcessingException e){
-                    throw new RuntimeException(e);
-                }
-                return arr;
-            }
-
+        Optional<Package> pack = findAvailablePackage();
+        //das sollte klappen aber tuts nicht weil kein optional returned wird (siehe TransRepoDB todo l 26)
+        if(pack.isEmpty()){
+            arr[0] = 3;             // no package available/
+            return arr;
+        }
+        //current workaround...
+        Package newPack = pack.get();
+        if(newPack.getPackageId() == null){
+            arr[0] = 3;             // no package available/
+            return arr;
         }
 
+        User foundUser = user.get();
+        // check if enough coins are available
+        if(foundUser.getCoins() >= 5){
+            Package foundPack = pack.get();
+            // assign package/cards to user
+            boolean success = transactionRepositoryDatabase.assignCardsToUser(foundUser, foundPack);
+            if(success){
+                transactionRepositoryDatabase.packageIsBought(foundPack);                               // set package bought to true
+                transactionRepositoryDatabase.removeCoins(foundUser);                                   // deduct coins from user
+                transactionRepositoryDatabase.saveTransaction(foundUser, foundPack.getPackageId());     // create transaction in DB
+                // set response and cards in arr to return
+                arr[0] = 0;
+                Card[] cards = getAllCardsFromOnePackage(foundUser, foundPack.getPackageId());
+                //check if first element returned is not default constructor
+                if(cards[0] != null){   //nicht schön aber sonst muss ich ein optinal array zurück geben and i don't want to
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        JsonNode jsonNode = objectMapper.valueToTree(cards);
+                        String jsonString = objectMapper.writeValueAsString(jsonNode);
+                        arr[1]= jsonString;
+                    }catch(JsonProcessingException e){
+                        throw new RuntimeException(e);
+                    }
+                    return arr;
+                }
+            }
+        }
         arr[0] = 2;                     // not enough coins
         return arr;
     }
 
+    // search for User in userRepositoryDatabase and return Optional<User>
     private Optional<User> validateUser(Request request){
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
         Optional<User> foundUser;
@@ -70,10 +85,12 @@ public class TransactionService {
         return foundUser;
     }
 
+    // calls transactionRepositoryDatabase and returns Package
     private Optional <Package> findAvailablePackage(){
         return transactionRepositoryDatabase.findAvailablePackage();
     }
 
+    // calls transactionRepositoryDatabase and returns Card[]
     private Card[] getAllCardsFromOnePackage(User foundUser, String packageId){
         return transactionRepositoryDatabase.getAllCardsFromOnePackage(foundUser, packageId);
     }

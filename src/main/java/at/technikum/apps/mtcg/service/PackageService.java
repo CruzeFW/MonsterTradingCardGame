@@ -42,6 +42,7 @@ public class PackageService {
         }
         // create a new Package
         Package pack = new Package();
+        pack.setPackageId(pack.createPackageId());
         packageRepositoryDatabase.save(pack.getPackageId());
 
         // check if cards are already in db, otherwise add it to db
@@ -68,7 +69,7 @@ public class PackageService {
         }
     }
 
-    // check if a token is given and if its the admin token
+    // check if a token is given and if it's the admin token
 
     private Integer checkToken(Request request) {
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();

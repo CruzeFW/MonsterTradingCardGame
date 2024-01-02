@@ -1,12 +1,10 @@
 Problems:
-Problems with token: unsure where to save, how to persist, security kinda bad if its saved in db, currently no threading so not possible to save locally
-Added a function into the constructor of the mtcgApp to remove all tokens inside the db so it can be simulated that users login
-
-unsure where to check for admin credentials in user put/get, no such call in .bat
-
-unsure about the 409 error for packages where single cards already exist - decided to add all the other cards
-
-unsure about necessity of package DB, wouldn't it be sufficient to add to the cards a package id, and if they are sold set it to null?
+1) Problems with token: unsure where to save, how to persist, security kinda bad if its saved in db, currently no threading so not possible to save locally
+2) Added a function into the constructor of the mtcgApp to remove all tokens inside the db so it can be simulated that users login
+3) unsure where to check for admin credentials in user put/get, no such call in .bat
+4) unsure about the 409 error for packages where single cards already exist - decided to add all the other cards
+5) unsure about necessity of package DB, wouldn't it be sufficient to add to the cards a package id, and if they are sold set it to null?
+6) unsure how to return a real optional of Package as a boolean is present and that is always false?
 
 added user route: /users implemented, /users/ not yet
 added token: added random UUID and boolean to create custom token, created validateToken function, thought about tokenRequest and tokenResponse
@@ -14,6 +12,7 @@ adapted httpMapper to take "Authorize:.. "-Header
 reworked token to accept the correct input and save it into db - see comments about problem/thoughts; tokenResponse seems not needed, leaving it in atm
 reworked User to fit the logic in the service and out of the controller
 reworked authentication process in User
+reworked .bat file to fit db fields
 added Package+ /service /controller /repo, and Card class
 reworked package and card repository (split into two)
 added package and card save/delete/find in DB, works
@@ -21,3 +20,4 @@ added transaction service/controller/database, added user coins
 reworked sql statements for dependencies in DB
 added possibility to buy package, set it to bought, add to user and remove coins from user
 finalised transactions, need testing and comments!!
+finished transactions, workaround present, see Problem 6, fully commented and pushed

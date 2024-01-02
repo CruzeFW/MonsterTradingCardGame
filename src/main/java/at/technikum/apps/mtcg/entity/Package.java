@@ -7,7 +7,7 @@ public class Package {
     public String packageId;
     public boolean bought;
     public Package(){
-        packageId = createPackageId();
+        packageId = null;
         bought = false;
     };
 
@@ -19,7 +19,7 @@ public class Package {
         this.packageId = packageId;
     }
 
-    private String createPackageId(){
+    public String createPackageId(){
         return UUID.randomUUID().toString();
     }
 

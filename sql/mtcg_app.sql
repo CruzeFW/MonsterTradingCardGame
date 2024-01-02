@@ -1,12 +1,13 @@
 CREATE DATABASE mtcg_db;
-/*
+
     DROP DATABASE mtcg_db;
-    DROP TABLE users;
-    DROP TABLE packages;
-    DROP TABLE cards;
+
+    DROP TABLE packages CASCADE ;
+    DROP TABLE users CASCADE;
+    DROP TABLE cards CASCADE;
     DROP TABLE battles;
     DROP TABLE transactions;
-*/
+
 
 
 CREATE TABLE IF NOT EXISTS users (

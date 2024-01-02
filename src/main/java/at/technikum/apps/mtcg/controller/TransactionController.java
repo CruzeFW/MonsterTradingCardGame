@@ -18,6 +18,7 @@ public class TransactionController extends Controller{
         return route.equals("/transactions/packages");
     }
 
+    // handle POST request on /transactions/packages
     @Override
     public Response handle(Request request) {
         if(request.getMethod().equals("POST")){
@@ -32,6 +33,7 @@ public class TransactionController extends Controller{
         return response;
     }
 
+    // create new transaction and add packages to user
     public Response acquire(Request request){
         Object[] arr =  transactionService.acquire(request);
 
@@ -39,7 +41,7 @@ public class TransactionController extends Controller{
         if(arr[0].equals(0)){
             response.setStatus(HttpStatus.OK);
             response.setContentType(HttpContentType.APPLICATION_JSON);
-            response.setBody((String) arr[1]); // ADD PACKAGE AS RESPONSE
+            response.setBody((String) arr[1]); // prints cards as the response body
         }else if(arr[0].equals(1)){
             response.setStatus(HttpStatus.UNAUTHORIZED);
             response.setContentType(HttpContentType.TEXT_PLAIN);

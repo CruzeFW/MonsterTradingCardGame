@@ -8,21 +8,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class TransactionRepositoryDatabase {
 
     private final Database database = new Database();
-
     private final String FIND_ALL_AVAILABLE = "SELECT * FROM packages WHERE bought = false LIMIT 1";
-    private final String ASSIGN_PACKAGE_TO_USER = "UPDATE cards SET owner = ? WHERE packageid = ?";
+    private final String ASSIGN_CARDS_TO_USER = "UPDATE cards SET owner = ? WHERE packageid = ?";
     private final String SET_BOUGHT_TO_TRUE = "UPDATE packages SET bought = true WHERE id = ?";
     private final String SET_COINS = "UPDATE users SET coins = ? WHERE id = ?";
     private final String FIND_ALL_CARDS_IN_ONE_PACKAGE = "SELECT * FROM cards WHERE packageid = ? AND owner = ?";
     private final String SET_TRANSACTION = "INSERT INTO transactions(buyer, packageid) VALUES (?,?)";
 
+    // finds first Package where bought = false
+    //TODO QUESTION: how do i return a real optional, because here every time i return foundPack is the bool = false and so it is not optional
     public Optional<Package> findAvailablePackage(){
         Package foundPack = new Package();
         try(
@@ -40,10 +39,11 @@ public class TransactionRepositoryDatabase {
         return Optional.of(foundPack);
     }
 
-    public boolean assignPackageToUser(User foundUser, Package foundPack){
+    // set user id and package id in cards DB
+    public boolean assignCardsToUser(User foundUser, Package foundPack){
         try(
                 Connection con = database.getConnection();
-                PreparedStatement pstmt = con.prepareStatement(ASSIGN_PACKAGE_TO_USER)
+                PreparedStatement pstmt = con.prepareStatement(ASSIGN_CARDS_TO_USER)
         ){
             pstmt.setString(1, foundUser.getId());
             pstmt.setString(2, foundPack.getPackageId());
@@ -56,6 +56,7 @@ public class TransactionRepositoryDatabase {
         return true;
     }
 
+    // set boolean to true
     public void packageIsBought(Package foundPack){
         try(
                 Connection con = database.getConnection();
@@ -69,6 +70,7 @@ public class TransactionRepositoryDatabase {
         }
     }
 
+    // deduct coins of user for transaction
     public void removeCoins(User foundUser){
         try(
                 Connection con = database.getConnection();
@@ -82,6 +84,8 @@ public class TransactionRepositoryDatabase {
             e.getErrorCode();
         }
     }
+
+    // find all cards in one package, returns an Card[]
     public Card[] getAllCardsFromOnePackage(User foundUser, String packageId) {
         Card[] cards = new Card[5];
 
@@ -113,6 +117,7 @@ public class TransactionRepositoryDatabase {
         return cards;
     }
 
+    // add transaction into transaction table
     public void saveTransaction(User foundUser, String packageid){
         try(
                 Connection con = database.getConnection();

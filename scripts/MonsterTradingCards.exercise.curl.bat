@@ -131,6 +131,10 @@ pause
 REM --------------------------------------------------
 echo 8) show all acquired cards kienboec
 curl -X GET http://localhost:10001/cards --header "Authorization: Bearer kienboec-mtcgToken"
+echo.
+
+pause
+
 echo should fail (no token)
 curl -X GET http://localhost:10001/cards 
 echo.
