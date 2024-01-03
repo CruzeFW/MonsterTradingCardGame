@@ -61,7 +61,7 @@ public class DeckController extends Controller{
         } else {
             response.setStatus(HttpStatus.BAD_REQUEST);             //TODO QUESTION: if I use NO_CONTENT then the printed response is empty...
             response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Deck has no cards.");
+            response.setBody("The request was fine, but the deck doesn't have any cards.");
         }
         return response;
     }

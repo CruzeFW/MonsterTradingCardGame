@@ -31,3 +31,5 @@ added cards controller/service, uses UserRepoDB because it's user specific(?!), 
 added deck controller/service/repo, added both routes, different representation and all responses except "No Content" as it takes no body
 reworked cards service using userRepo to CardsRepo, added functions from UserRepo to CardsRepo
 finished deck, commented and pushed
+added stats controller/service/repo and entity,
+finished stats, commented and pushed; will be reused in scoreboard
