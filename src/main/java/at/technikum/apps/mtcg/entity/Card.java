@@ -7,15 +7,22 @@ public class Card {
     public float damage;
     public String owner;
     public String packageid;
+    public int deckid;
 
     public Card(){};
 
-    public Card(String id, String name, float damage, String owner, String packageid){
+    // created for deck/only used for deck atm
+    public Card(String id){
+        this.id = id;
+    }
+
+    public Card(String id, String name, float damage, String owner, String packageid, Integer deckid){
         this.id = id;
         this.name = name;
         this.damage = damage;
         this.owner = owner;
         this.packageid = packageid;
+        this.deckid = deckid;
     }
 
     public String getId() {
@@ -47,5 +54,11 @@ public class Card {
     }
     public void setPackageid(String packageid) {
         this.packageid = packageid;
+    }
+    public int getDeckid() {
+        return deckid;
+    }
+    public void setDeckid(int deckid) {
+        this.deckid = deckid;
     }
 }

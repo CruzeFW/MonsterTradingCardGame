@@ -17,37 +17,36 @@ import java.util.Optional;
 public class UserRepositoryDatabase {
 
     private final Database database = new Database();
-    private final String FIND_ALL_SQL = "SELECT * FROM users";
+    //private final String FIND_ALL_SQL = "SELECT * FROM users";
     private final String FIND_ONE = "SELECT * FROM users WHERE username = ?";
     private final String FIND_ONE_TOKEN = "SELECT * FROM users WHERE token = ?";
     private final String SAVE_SQL = "INSERT INTO users(id, username, password, elo, coins) VALUES(?, ?, ?, ?, ?)";
     private final String DELETE_TOKEN = "UPDATE users SET token = NULL";
     private final String UPDATE = "UPDATE users SET username = ?, password = ?, bio = ?, image = ? WHERE token = ?";
-    private final String FIND_ALL_CARDS = "SELECT * FROM cards WHERE owner = ?";
 
 
-    public List<User> findAll() {
-        List<User> users = new ArrayList<>();
-
-        try (
-                Connection con = database.getConnection();
-                PreparedStatement pstmt = con.prepareStatement(FIND_ALL_SQL);
-                ResultSet rs = pstmt.executeQuery()
-        ) {
-            while (rs.next()) {
-                User user = new User(
-                        rs.getString("id"),
-                        rs.getString("username"),
-                        rs.getString("password")
-                );
-                users.add(user);
-            }
-
-            return users;
-        } catch (SQLException e) {
-            return users;
-        }
-    }
+//    public List<User> findAll() {
+//        List<User> users = new ArrayList<>();
+//
+//        try (
+//                Connection con = database.getConnection();
+//                PreparedStatement pstmt = con.prepareStatement(FIND_ALL_SQL);
+//                ResultSet rs = pstmt.executeQuery()
+//        ) {
+//            while (rs.next()) {
+//                User user = new User(
+//                        rs.getString("id"),
+//                        rs.getString("username"),
+//                        rs.getString("password")
+//                );
+//                users.add(user);
+//            }
+//
+//            return users;
+//        } catch (SQLException e) {
+//            return users;
+//        }
+//    }
 
     // find user by its username
     public Optional<User> find(User user) {
@@ -128,9 +127,9 @@ public class UserRepositoryDatabase {
     }
 
     //NOT IN USE
-    public User delete(User user) {
-        return null;
-    }
+//    public User delete(User user) {
+//        return null;
+//    }
 
     //deletes token in database for all users
     public void deleteToken(){
@@ -166,33 +165,4 @@ public class UserRepositoryDatabase {
         return user;
     }
 
-    // search for cards in DB, returns Optional<ArrayList<Card>>
-    public Optional<ArrayList<Card>> findAllCards(User user){
-        Optional<ArrayList<Card>> cardList = Optional.empty();
-        try (
-                Connection con = database.getConnection();
-                PreparedStatement pstmt = con.prepareStatement(FIND_ALL_CARDS)
-        ) {
-            pstmt.setString(1, user.getId());
-            ResultSet rs = pstmt.executeQuery();
-
-            if(rs.next()){
-                ArrayList<Card> foundCardsA = new ArrayList<>();
-                do {
-                    Card card = new Card(
-                            rs.getString("id"),
-                            rs.getString("name"),
-                            rs.getFloat("damage"),
-                            rs.getString("owner"),
-                            rs.getString("packageid")
-                    );
-                    foundCardsA.add(card);
-                }while (rs.next());
-                return Optional.of(foundCardsA);
-            }
-        } catch (SQLException e) {
-            e.getErrorCode();
-        }
-        return cardList;
-    }
 }

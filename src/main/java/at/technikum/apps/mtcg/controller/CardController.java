@@ -1,5 +1,6 @@
 package at.technikum.apps.mtcg.controller;
 
+import at.technikum.apps.mtcg.repository.CardRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.apps.mtcg.service.CardService;
 import at.technikum.server.http.HttpContentType;
@@ -12,7 +13,7 @@ public class CardController extends Controller{
     private final CardService cardService;
 
     public CardController(){
-        this.cardService = new CardService(new UserRepositoryDatabase());
+        this.cardService = new CardService(new UserRepositoryDatabase(), new CardRepositoryDatabase());
     }
     @Override
     public boolean supports(String route) {
@@ -22,21 +23,28 @@ public class CardController extends Controller{
     // show all cards a user has
     @Override
     public Response handle(Request request) {
-        Object[] arr = cardService.showAllAcquiredCards(request);
-
         Response response = new Response();
-        if(arr[0].equals(0)){
-            response.setStatus(HttpStatus.OK);
-            response.setContentType(HttpContentType.APPLICATION_JSON);
-            response.setBody((String) arr[1]); // prints cards as the response body
-        }else if(arr[0].equals(1)){
-            response.setStatus(HttpStatus.UNAUTHORIZED);
+        if(request.getMethod().equals("GET")){
+            Object[] arr = cardService.showAllAcquiredCards(request);
+
+            if(arr[0].equals(0)){
+                response.setStatus(HttpStatus.OK);
+                response.setContentType(HttpContentType.APPLICATION_JSON);
+                response.setBody((String) arr[1]); // prints cards as the response body
+            }else if(arr[0].equals(1)){
+                response.setStatus(HttpStatus.UNAUTHORIZED);
+                response.setContentType(HttpContentType.TEXT_PLAIN);
+                response.setBody("Unauthorized request.");
+            } else {
+                response.setStatus(HttpStatus.NO_CONTENT);
+                response.setContentType(HttpContentType.TEXT_PLAIN);
+                response.setBody("User has no cards.");
+            }
+        }else{
+            //TODO delete this response, code should never come here
+            response.setStatus(HttpStatus.NOT_ACCEPTABLE);
             response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Unauthorized request.");
-        } else {
-            response.setStatus(HttpStatus.NO_CONTENT);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("User has no cards.");
+            response.setBody("End of CardController response handle reached");
         }
         return response;
     }

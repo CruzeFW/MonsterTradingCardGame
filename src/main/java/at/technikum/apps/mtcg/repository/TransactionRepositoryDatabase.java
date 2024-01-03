@@ -106,7 +106,8 @@ public class TransactionRepositoryDatabase {
                         rs.getString("name"),
                         rs.getFloat("damage"),
                         rs.getString("owner"),
-                        rs.getString("packageid")
+                        rs.getString("packageid"),
+                        rs.getInt("deckid")
                 );
                 cards[counter] = card;
                 counter++;

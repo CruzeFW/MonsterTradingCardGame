@@ -5,6 +5,11 @@ Problems:
 4) unsure about the 409 error for packages where single cards already exist - decided to add all the other cards
 5) unsure about necessity of package DB, wouldn't it be sufficient to add to the cards a package id, and if they are sold set it to null?
 6) unsure how to return a real optional of Package as a boolean is present and that is always false?
+7) deckid in user DB: unsure about value, if I use a bool i have the same problem as with the package that i can't initialize a null object of a card as a bool is always false/true
+    - using int is not intuitive for someone reading the DB and needs to be hard coded in the service..
+    - still using int for now..
+   -> decided to keep int, using it like a bool so if a card is in a deck it's deckid is 1 -> stupid but works atm
+
 
 added user route: /users implemented, /users/ not yet
 added token: added random UUID and boolean to create custom token, created validateToken function, thought about tokenRequest and tokenResponse
@@ -23,3 +28,6 @@ finalised transactions, need testing and comments!!
 finished transactions, workaround present, see Problem 6, fully commented and pushed
 added cards controller/service, uses UserRepoDB because it's user specific(?!), used ArrayList<Card> instead of Card[]
     - thinking about reworking the other ones as well but maybe in the end
+added deck controller/service/repo, added both routes, different representation and all responses except "No Content" as it takes no body
+reworked cards service using userRepo to CardsRepo, added functions from UserRepo to CardsRepo
+finished deck, commented and pushed

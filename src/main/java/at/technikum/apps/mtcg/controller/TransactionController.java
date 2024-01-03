@@ -29,7 +29,7 @@ public class TransactionController extends Controller{
         Response response = new Response();
         response.setStatus(HttpStatus.NOT_ACCEPTABLE);
         response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("End of UserController response handle reached");
+        response.setBody("End of TransactionController response handle reached");
         return response;
     }
 
