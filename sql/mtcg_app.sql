@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS cards (
 );
 
 CREATE TABLE IF NOT EXISTS battles (
-    id VARCHAR(255) PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     user1 VARCHAR(255) NOT NULL,
     user2 VARCHAR(255),
     winner VARCHAR(255),
@@ -56,9 +56,17 @@ CREATE TABLE IF NOT EXISTS battles (
         REFERENCES users(id)
         ON DELETE CASCADE,
     CONSTRAINT fk_user2
-        FOREIGN KEY (user1)
+        FOREIGN KEY (user2)
         REFERENCES users(id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_user3
+        FOREIGN KEY (winner)
+            REFERENCES users(id)
+            ON DELETE CASCADE,
+    CONSTRAINT fk_user4
+        FOREIGN KEY (loser)
+            REFERENCES users(id)
+            ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS transactions (
@@ -91,3 +99,7 @@ UPDATE users SET token = NULL;
 DELETE FROM users;
 DELETE FROM cards;
 DELETE FROM packages;
+
+INSERT INTO battles (user1, user2, winner, loser) VALUES ('25e2906a-ee48-4009-991f-9e3c458204e7', '7378f36c-ef43-4653-afa3-ce60201a2990', '25e2906a-ee48-4009-991f-9e3c458204e7', '7378f36c-ef43-4653-afa3-ce60201a2990');
+INSERT INTO battles (user1, user2, winner, loser) VALUES ('5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d', '7378f36c-ef43-4653-afa3-ce60201a2990', '25e2906a-ee48-4009-991f-9e3c458204e7', '5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d');
+INSERT INTO battles (user1, user2, winner, loser) VALUES ('5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d', '7378f36c-ef43-4653-afa3-ce60201a2990', '5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d', '25e2906a-ee48-4009-991f-9e3c458204e7')

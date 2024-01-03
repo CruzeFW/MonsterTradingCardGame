@@ -90,7 +90,7 @@ public class DeckService {
     }
 
     // check if a given token is connected to a user
-    //TODO maybe auslagern? doppelt in CardService
+    //TODO maybe auslagern? tripplet in CardService + StatsService
     private Optional<User> checkToken(Request request) {
         Optional<User> foundUser = Optional.empty();
         if (request.getAuthorization() == null) {

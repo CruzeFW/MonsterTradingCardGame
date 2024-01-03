@@ -5,6 +5,7 @@ Current todos:
 
 
 Think about it:
+    new1: Schau dir an das die Funktionen die öfter vorkommen in eine eigene klasse kommen, evtl in zB mapper / util / authentication etc
     1. Tokens aus der db löschen? so gespeichert lassen? im thread speichern?
     2. is die Packages db so wie sie is notwendig?
     3. reposition checkToken() (inside Package- AND CardService) to UserService?
