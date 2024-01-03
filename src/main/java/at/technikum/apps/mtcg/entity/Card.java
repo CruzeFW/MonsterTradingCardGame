@@ -11,6 +11,11 @@ public class Card {
 
     public Card(){};
 
+    // created for deck/only used for deck atm
+    public Card(String id){
+        this.id = id;
+    }
+
     public Card(String id, String name, float damage, String owner, String packageid, Integer deckid){
         this.id = id;
         this.name = name;

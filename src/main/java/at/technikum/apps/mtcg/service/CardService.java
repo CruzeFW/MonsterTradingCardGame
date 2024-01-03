@@ -2,6 +2,7 @@ package at.technikum.apps.mtcg.service;
 
 import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.User;
+import at.technikum.apps.mtcg.repository.CardRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,9 +15,11 @@ import java.util.Optional;
 public class CardService {
 
     private final UserRepositoryDatabase userRepositoryDatabase;
+    private final CardRepositoryDatabase cardRepositoryDatabase;
 
-    public CardService(UserRepositoryDatabase userRepositoryDatabase){
+    public CardService(UserRepositoryDatabase userRepositoryDatabase, CardRepositoryDatabase cardRepositoryDatabase){
         this.userRepositoryDatabase = userRepositoryDatabase;
+        this.cardRepositoryDatabase = cardRepositoryDatabase;
     }
 
     // checks for user credentials and then for all cards connected to that user
@@ -29,7 +32,7 @@ public class CardService {
         }
         User foundUser = user.get();
         Optional<ArrayList<Card>> cards;
-        cards = userRepositoryDatabase.findAllCards(foundUser);
+        cards = cardRepositoryDatabase.findAllCards(foundUser);
         if(cards.isEmpty()){
             arr[0] = 2;
             return arr;
@@ -49,6 +52,7 @@ public class CardService {
     }
 
     // check if a given token is connected to a user
+    //TODO maybe auslagern? doppelt in DeckService
     private Optional<User> checkToken(Request request) {
         Optional<User> foundUser = Optional.empty();
         if (request.getAuthorization() == null) {

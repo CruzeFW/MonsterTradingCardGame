@@ -1,6 +1,7 @@
 package at.technikum.apps.mtcg.controller;
 
 import at.technikum.apps.mtcg.repository.DeckRepositoryDatabase;
+import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.apps.mtcg.service.DeckService;
 import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;
@@ -14,48 +15,60 @@ public class DeckController extends Controller{
     private final DeckService deckService;
 
     public DeckController(){
-        this.deckService = new DeckService(new DeckRepositoryDatabase());
+        this.deckService = new DeckService(new DeckRepositoryDatabase(), new UserRepositoryDatabase());
     }
 
     @Override
     public boolean supports(String route) {
-        return route.equals("/deck");
+        return route.equals("/deck") || route.matches("/deck\\?format=plain");
     }
 
     @Override
     public Response handle(Request request) {
         if(request.getMethod().equals("GET")){
             return showDeck(request);
-        }else if(request.getMethod().equals("PUT")){
+        }else if(request.getMethod().equals("PUT")) {
             return updateDeck(request);
         }
-        return null;
+
+        //TODO delete this response, code should never come here
+        Response response = new Response();
+        response.setStatus(HttpStatus.NOT_ACCEPTABLE);
+        response.setContentType(HttpContentType.TEXT_PLAIN);
+        response.setBody("End of DeckController response handle reached");
+        return response;
     }
 
-    //TODO needs text/plain response, maybe add new input to arr to determine?
+    // creates response to GET call on /deck or /deck?format=plain
     public Response showDeck(Request request){
-        Response response = new Response();
         Object[] arr = deckService.getDeck(request);
 
+        Response response = new Response();
         if(arr[0].equals(0)){
-            response.setStatus(HttpStatus.OK);
-            response.setContentType(HttpContentType.APPLICATION_JSON);
-            response.setBody((String) arr[1]); // prints cards as the response body
+            if(request.getRoute().equals("/deck")) {
+                response.setStatus(HttpStatus.OK);
+                response.setContentType(HttpContentType.APPLICATION_JSON);
+                response.setBody((String) arr[1]); // prints deck as the response body
+            }else{
+                response.setStatus(HttpStatus.OK);
+                response.setContentType(HttpContentType.TEXT_PLAIN);
+                response.setBody(deckService.parseBody(arr)); // prints deck in plain format as the response body
+            }
         }else if(arr[0].equals(1)){
             response.setStatus(HttpStatus.UNAUTHORIZED);
             response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("Unauthorized request.");
         } else {
-            response.setStatus(HttpStatus.NO_CONTENT);
+            response.setStatus(HttpStatus.BAD_REQUEST);             //TODO QUESTION: if I use NO_CONTENT then the printed response is empty...
             response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("Deck has no cards.");
         }
-
         return response;
     }
 
+    // creates response for PUT on /deck
     public Response updateDeck(Request request){
-        int responseType = deckService.updateDeck(request);
+        int responseType = deckService.createDeck(request);
 
         Response response = new Response();
         if(responseType == 0){
@@ -75,7 +88,7 @@ public class DeckController extends Controller{
             response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("Unauthorized request.");
         }
-
         return response;
     }
+
 }

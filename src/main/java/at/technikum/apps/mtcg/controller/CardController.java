@@ -1,5 +1,6 @@
 package at.technikum.apps.mtcg.controller;
 
+import at.technikum.apps.mtcg.repository.CardRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.apps.mtcg.service.CardService;
 import at.technikum.server.http.HttpContentType;
@@ -12,7 +13,7 @@ public class CardController extends Controller{
     private final CardService cardService;
 
     public CardController(){
-        this.cardService = new CardService(new UserRepositoryDatabase());
+        this.cardService = new CardService(new UserRepositoryDatabase(), new CardRepositoryDatabase());
     }
     @Override
     public boolean supports(String route) {

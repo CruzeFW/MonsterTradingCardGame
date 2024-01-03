@@ -1,20 +1,5 @@
 Current todos:
-    1. Deck: TODO 1
-        - controller
-            - support
-            - handle
-                PUT
-                GET
-
-        - service TODO 2
-            - show deck
-            - configure deck
-                - bekommt karten mitgegeben
-                - müssen 4 karten sein
-            - validate user
-                - return user
-            -
-        - repo TODO 3
+    1. /stats
 
     x. Delete all TODO "NOT_ACCEPTABLE" response uses or change to "NOT_ALLOWED" or something
 
@@ -25,6 +10,7 @@ Think about it:
     3. reposition checkToken() (inside Package- AND CardService) to UserService?
         -maybe not? eines liefert int, anderes Optional<User>
     4. rework alles wo ein Card[] retour gegeben wird oder lass es so? (consistency)
+    5. int für deckid in userDB is bad - siehe protocol problem 7)
 
 
     x. Threads
@@ -33,6 +19,7 @@ Think about it:
 Fragen:
     - schau die TODO an
     - Deck Table - ja oder nein? lieber viele felder mit <null> oder eine "unnötige tabelle"?
+        - int für deckid in userDB is bad - siehe protocol problem 7)
     - wenn ich mehrere db connections in einer funktion hab (weil mehrere sachen gelesen/geschrieben werden), kann man das einfacher machen?
         - performance relevant?
 
@@ -43,3 +30,4 @@ Fragen:
         - Zeile 138: soll das dann erstellt werden oder nicht?
         - Zeile 222: sollte eigentlich nicht gehen weil der username neu ist?
         - Zeile 205-210: was soll dann die response sein?
+        - Zeile 514: siehe to do in DeckController Z. 56
