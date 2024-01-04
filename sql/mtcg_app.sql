@@ -102,4 +102,6 @@ DELETE FROM packages;
 
 INSERT INTO battles (user1, user2, winner, loser) VALUES ('25e2906a-ee48-4009-991f-9e3c458204e7', '7378f36c-ef43-4653-afa3-ce60201a2990', '25e2906a-ee48-4009-991f-9e3c458204e7', '7378f36c-ef43-4653-afa3-ce60201a2990');
 INSERT INTO battles (user1, user2, winner, loser) VALUES ('5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d', '7378f36c-ef43-4653-afa3-ce60201a2990', '25e2906a-ee48-4009-991f-9e3c458204e7', '5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d');
-INSERT INTO battles (user1, user2, winner, loser) VALUES ('5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d', '7378f36c-ef43-4653-afa3-ce60201a2990', '5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d', '25e2906a-ee48-4009-991f-9e3c458204e7')
+INSERT INTO battles (user1, user2, winner, loser) VALUES ('5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d', '7378f36c-ef43-4653-afa3-ce60201a2990', '5146fe1c-6e8c-4b6c-aa6d-df06bd0fe14d', '25e2906a-ee48-4009-991f-9e3c458204e7');
+
+UPDATE users SET elo = 400 WHERE id = '25e2906a-ee48-4009-991f-9e3c458204e7';
