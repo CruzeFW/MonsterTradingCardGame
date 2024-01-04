@@ -12,6 +12,11 @@ public class User {
 
 
     public User(){ }
+    public User(String id, String username, Integer elo){
+        this.id = id;
+        this.username = username;
+        this.elo = elo;
+    }
     public User(String id, String username, String password) {
         this.id = id;
         this.username = username;

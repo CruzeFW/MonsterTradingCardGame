@@ -10,6 +10,8 @@ Problems:
     - still using int for now..
    -> decided to keep int, using it like a bool so if a card is in a deck it's deckid is 1 -> stupid but works atm
 
+x) reusability and centering of some functions.. need to rewrite a lot of code i think (~ 8 days in .. >.>)
+
 
 added user route: /users implemented, /users/ not yet
 added token: added random UUID and boolean to create custom token, created validateToken function, thought about tokenRequest and tokenResponse
@@ -33,3 +35,6 @@ reworked cards service using userRepo to CardsRepo, added functions from UserRep
 finished deck, commented and pushed
 added stats controller/service/repo and entity,
 finished stats, commented and pushed; will be reused in scoreboard
+added scoreboard controller/service/repo
+added user constructor with id/username/elo
+finished scoreboard, tested/commented/pushed

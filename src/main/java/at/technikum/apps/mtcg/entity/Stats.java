@@ -1,6 +1,6 @@
 package at.technikum.apps.mtcg.entity;
 
-public class Stats {
+public class Stats implements Comparable<Stats>{
 
     public Stats(){};
 
@@ -39,5 +39,11 @@ public class Stats {
     }
     public void setLosses(int losses) {
         this.losses = losses;
+    }
+
+    // used in scoreboardService to create Ranking
+    @Override
+    public int compareTo(Stats other) {
+        return Integer.compare(other.elo, this.elo);
     }
 }
