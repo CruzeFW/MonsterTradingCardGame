@@ -52,7 +52,7 @@ public class CardService {
     }
 
     // check if a given token is connected to a user
-    //TODO maybe auslagern? quartet in DeckService + StatsService + ScoreboardService
+    //TODO maybe auslagern? quintet in DeckService + StatsService + ScoreboardService + BattleService
     private Optional<User> checkToken(Request request) {
         Optional<User> foundUser = Optional.empty();
         if (request.getAuthorization() == null) {

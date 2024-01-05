@@ -8,11 +8,15 @@ Think about it:
     new1: Schau dir an das die Funktionen die öfter vorkommen in eine eigene klasse kommen, evtl in zB mapper / util / authentication etc
     1. Tokens aus der db löschen? so gespeichert lassen? im thread speichern?
     2. is die Packages db so wie sie is notwendig?
-    3. reposition checkToken() (inside Package- AND CardService) to UserService?
+    3. reposition checkToken() (inside Package- AND CardService AND AND AND) to UserService?
         -maybe not? eines liefert int, anderes Optional<User>
     4. rework alles wo ein Card[] retour gegeben wird oder lass es so? (consistency)
     5. int für deckid in userDB is bad - siehe protocol problem 7)
-
+    6. GAME:
+        - in battleService wird das game in der DB angelegt, dort auch gestartet?
+        - eigene Ordnerstruktur für das game, wo kommt das genau hin?
+        - THREADING
+        - wait() wenn neues game gestartet für 30 sek?
 
     x. Threads
 
