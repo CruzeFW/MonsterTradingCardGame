@@ -38,3 +38,5 @@ finished stats, commented and pushed; will be reused in scoreboard
 added scoreboard controller/service/repo
 added user constructor with id/username/elo
 finished scoreboard, tested/commented/pushed
+added battles controller/service/repo and entity
+finished battles route, linking to game logic is missing but already prepared
