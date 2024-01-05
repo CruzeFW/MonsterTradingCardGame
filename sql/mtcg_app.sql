@@ -7,6 +7,7 @@ CREATE DATABASE mtcg_db;
     DROP TABLE cards CASCADE;
     DROP TABLE battles;
     DROP TABLE transactions;
+    DROP TABLE trading;
 
 
 
@@ -83,6 +84,19 @@ CREATE TABLE IF NOT EXISTS transactions (
         REFERENCES packages(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS trading (
+    id VARCHAR(255) PRIMARY KEY,
+    cardToTrade VARCHAR(255),
+    type VARCHAR(255),
+    minDamage FLOAT,
+    completed boolean,
+    CONSTRAINT fk_cards
+        FOREIGN KEY (cardToTrade)
+            REFERENCES cards(id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
 );
 
 

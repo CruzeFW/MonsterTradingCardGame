@@ -42,7 +42,7 @@ public class DeckService {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.valueToTree(foundDeck);
             String jsonString = objectMapper.writeValueAsString(jsonNode);
-            arr[1]= jsonString;
+            arr[1] = jsonString;
         }catch(JsonProcessingException e){
             throw new RuntimeException(e);
         }
