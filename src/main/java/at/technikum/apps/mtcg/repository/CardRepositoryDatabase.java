@@ -18,6 +18,7 @@ public class CardRepositoryDatabase {
     private final String FIND_ONE = "SELECT * FROM cards WHERE id = ?";
     private final String SAVE_CARD = "INSERT INTO cards(id, name, damage, packageid) VALUES(?, ?, ?, ?)";
     private final String FIND_ALL_CARDS = "SELECT * FROM cards WHERE owner = ?";
+    private final String UPDATE_OWNER = "UPDATE cards SET owner = ? WHERE id = ?";
 
 
     // find card by its id, returns found one or a optional.empty()
@@ -92,5 +93,20 @@ public class CardRepositoryDatabase {
             e.getErrorCode();
         }
         return cardList;
+    }
+
+    // update owner after trade is completed
+    public void updateOwner(Card card){
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(UPDATE_OWNER);
+        ) {
+            pstmt.setString(1, card.getOwner());
+            pstmt.setString(2, card.getId());
+
+            pstmt.execute();
+        }catch (SQLException e){
+            e.getErrorCode();
+        }
     }
 }

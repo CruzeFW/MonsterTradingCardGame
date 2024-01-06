@@ -25,6 +25,7 @@ public class MtcgApp implements ServerApplication {
         controllers.add(new StatsController());
         controllers.add(new ScoreboardController());
         controllers.add(new BattleController());
+        controllers.add(new TradingController());
 
         //TODO decide if this is the correct place for that
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
