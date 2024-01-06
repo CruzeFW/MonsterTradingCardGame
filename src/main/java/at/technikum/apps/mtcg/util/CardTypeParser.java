@@ -6,6 +6,7 @@ import at.technikum.apps.mtcg.entity.Card;
 public class CardTypeParser {
     public CardTypeParser(){}
 
+    // get pell or monster type from card name
     public String getTypeFromCard(Card card){
         String name = card.getName();
         if(name.contains("Spell")){
@@ -15,6 +16,7 @@ public class CardTypeParser {
         }
     }
 
+    // get element from card name
     public String getElementFromCard(Card card){
         String name = card.getName();
         if(name.contains("Fire")){
@@ -25,8 +27,4 @@ public class CardTypeParser {
             return null;
         }
     }
-
-
-
-
 }

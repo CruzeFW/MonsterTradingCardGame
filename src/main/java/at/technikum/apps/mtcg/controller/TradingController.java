@@ -16,6 +16,8 @@ public class TradingController extends Controller {
     public TradingController(){
         this.tradingService = new TradingService(new UserRepositoryDatabase(), new TradingRepositoryDatabase(), new CardRepositoryDatabase());
     }
+
+    // supports /tradings or /tradings/<UUID>
     @Override
     public boolean supports(String route) {
         return route.equals("/tradings") || route.matches("^/tradings/[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$");

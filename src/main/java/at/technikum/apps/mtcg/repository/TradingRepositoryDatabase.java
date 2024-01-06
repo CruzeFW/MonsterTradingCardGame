@@ -17,7 +17,7 @@ public class TradingRepositoryDatabase {
 
     private final String FIND_ALL_TRADES = "SELECT * FROM trading";
     private final String CHECK_ASSOCIATION = "SELECT * FROM cards WHERE id = ? AND owner = ? AND deckid IS NULL";
-    private final String ADD_NEW_TRADE = "INSERT INTO trading(id, cardtotrade, type, mindamage) VALUES (?, ?, ?, ?)";
+    private final String ADD_NEW_TRADE = "INSERT INTO trading(id, cardtotrade, type, mindamage, completed) VALUES (?, ?, ?, ?, ?)";
     private final String GET_TRADE = "SELECT * FROM trading WHERE id = ?";
     private final String DELETE_TRADE = "DELETE FROM trading WHERE id = ?";
     private final String SET_TRADE_TO_COMPLETED = "UPDATE trading SET completed = ? WHERE id = ?";
@@ -131,6 +131,7 @@ public class TradingRepositoryDatabase {
         }
     }
 
+    // update boolean in trade to true
     public void setTradeToCompleted(Trade trade){
         try(
                 Connection con = database.getConnection();

@@ -265,10 +265,10 @@ echo.
 pause
 
 REM --------------------------------------------------
-echo 17) battle
-start /b "kienboec battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer kienboec-mtcgToken"
-start /b "altenhof battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer altenhof-mtcgToken"
-ping localhost -n 10 >NUL 2>NUL
+REM echo 17) battle
+REM start /b "kienboec battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer kienboec-mtcgToken"
+REM start /b "altenhof battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer altenhof-mtcgToken"
+REM ping localhost -n 10 >NUL 2>NUL
 
 pause
 
@@ -317,6 +317,7 @@ echo 21) check trading deals
 curl -X GET http://localhost:10001/tradings  --header "Authorization: Bearer kienboec-mtcgToken"
 echo.
 curl -X POST http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Bearer kienboec-mtcgToken" -d "{\"id\": \"6cd85277-4590-49d4-b0cf-ba0a921faad0\", \"cardToTrade\": \"1cb6ab86-bdb2-47e5-b6e4-68c5ab389334\", \"type\": \"monster\", \"minDamage\": 15}"
+echo.
 echo check trading deals
 curl -X GET http://localhost:10001/tradings  --header "Authorization: Bearer kienboec-mtcgToken"
 echo.

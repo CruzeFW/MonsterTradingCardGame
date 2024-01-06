@@ -69,15 +69,12 @@ public class TradingService {
         }
 
         // check if tradingUser owns the card he wants to trade and if it's not in a deck
-        boolean isAvailable = tradingRepositoryDatabase.checkUserCardAssociation(tradingUser, trade);
-        if(!isAvailable){
+        if(!tradingRepositoryDatabase.checkUserCardAssociation(tradingUser, trade)){
             return 2;                        // user not owner of card or card in deck
         }
 
         // add trade to DB, if it doesn't exist
-        //TODO teste das!
-        boolean success = tradingRepositoryDatabase.addTrade(trade);
-        if(!success){
+        if(!tradingRepositoryDatabase.addTrade(trade)){
             return 3;                       // id already exists
         }
 
@@ -91,59 +88,61 @@ public class TradingService {
             return 1;                    // user not logged in/doesn't exist
         }
         User foundUser = user.get();
+
         Trade tradeOnlyId = new Trade();
         tradeOnlyId.setId(request.getRoute().split("/")[2]);
         Optional<Trade> trade = tradingRepositoryDatabase.getTradeWithId(tradeOnlyId);
-
         if(trade.isEmpty()){
             return 3;                   // id/trade not found
         }
+
         Trade foundTrade = trade.get();
-        if(!tradingRepositoryDatabase.checkUserCardAssociation(foundUser, foundTrade)){
-            return 2;                   // card doesn't belong to user (or is in deck)
-        }
         if(foundTrade.isCompleted()){
             return 4;                   // trade is already finished
         }
+        if(!tradingRepositoryDatabase.checkUserCardAssociation(foundUser, foundTrade)){
+            return 2;                   // card doesn't belong to user (or is in deck)
+        }
+
         tradingRepositoryDatabase.deleteTrade(foundTrade);
         return 0;                       // successfully deleted
     }
 
-
-    //TODO HIER WEITER MACHEN clean up this mess
+    // fulfills all needed checks and trades card in the end
     public Integer carryOutTrade(Request request){
-                // check if user is legit
         Optional<User> user = checkToken(request);
         if(user.isEmpty()){
             return 1;                    // user not logged in/doesn't exist
         }
         User foundUser = user.get();
-                // check if requested trade is in DB
         Trade tradeWithId = new Trade();
         tradeWithId.setId(request.getRoute().split("/")[2]);
         Optional<Trade> trade = tradingRepositoryDatabase.getTradeWithId(tradeWithId);
         if(trade.isEmpty()){
             return 3;                   // id/trade not found
         }
-        Trade foundTrade = trade.get();
 
+        Trade foundTrade = trade.get();
+        if(tradingRepositoryDatabase.checkUserCardAssociation(foundUser, foundTrade)){
+            return 2;                   // card in trade belongs to user who wants to trade (or is in a deck) - can't trade with yourself
+        }
+
+        // TODO QUESTION: effective method to export those if's ? Problem: need both cards + the return value at the end for the trade - maybe Object[] ?
         Optional<Card> cardInBody = getCardFromDB(request);
         if(cardInBody.isEmpty()){
-            return 2;                   // card does not exist --- should not happen but what if..
+            return 2;                   // check if offered card exist
         }
         Card offeredCard = cardInBody.get();
-
         if(!cardBelongsToUser(foundUser, offeredCard)){
-            return 2;                   // offered card doesn't belong to user
+            return 2;                   // offered card doesn't belong to user who wants to trade
         }
-
         if(offeredCard.getDeckid() == 1){
             return 2;                   // card is in deck
         }
 
         Optional<Card> foundCardInTrade = getCardFromTradeInDB(foundTrade);
         if(foundCardInTrade.isEmpty()){
-            return 2;                   // card does not exist --- should not happen but what if..
+            return 2;                   // check if card in trade exist
         }
         Card cardFromTrade = foundCardInTrade.get();
 
@@ -151,9 +150,9 @@ public class TradingService {
             return 2;                   // requirements don't allow deal
         }
 
-        tradeCards(offeredCard, cardFromTrade);
+        tradeCards(offeredCard, cardFromTrade);                 // change owner of cards in DB as well as in the local cards
 
-        foundTrade = setTradeToComplete(foundTrade);
+        foundTrade = setTradeToComplete(foundTrade);            // update trade to be completed
 
         return 0;
     }
@@ -176,6 +175,7 @@ public class TradingService {
         }
     }
 
+    // maps id to card and calls cardRepositoryDatabase and gets the optional card
     private Optional<Card> getCardFromDB(Request request){
         Card card;
         try {
@@ -187,16 +187,19 @@ public class TradingService {
         return cardRepositoryDatabase.find(card);
     }
 
+    // checks if user id and card owner are equal
     private boolean cardBelongsToUser(User user, Card card){
         return user.getId().equals(card.getOwner());
     }
 
+    // gets optional card from cardRepositoryDatabase
     private Optional<Card> getCardFromTradeInDB(Trade trade){
         Card card = new Card();
         card.setId(trade.getCardToTrade());
         return cardRepositoryDatabase.find(card);
     }
 
+    // compares the required trade values (minDamage and type)
     private boolean checkTradingRequirements(Card offeredCard, Trade trade){
         CardTypeParser cardTypeParser = new CardTypeParser();
         String cardType = cardTypeParser.getTypeFromCard(offeredCard);
@@ -207,12 +210,16 @@ public class TradingService {
         }
     }
 
+    // change local variables and call cardRepositoryDatabase to change owners in the DB
     private void tradeCards(Card offeredCard, Card cardFromTrade){
         String temp = offeredCard.getOwner();
         offeredCard.setOwner(cardFromTrade.getOwner());
         cardFromTrade.setOwner(temp);
+        cardRepositoryDatabase.updateOwner(offeredCard);
+        cardRepositoryDatabase.updateOwner(cardFromTrade);
     }
 
+    // change boolean in trade and calls cardRepositoryDatabase to change it there aswell
     private Trade setTradeToComplete(Trade trade){
         trade.setCompleted(true);
         tradingRepositoryDatabase.setTradeToCompleted(trade);
