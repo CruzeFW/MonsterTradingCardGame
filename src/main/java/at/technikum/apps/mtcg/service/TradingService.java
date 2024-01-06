@@ -6,6 +6,7 @@ import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.CardRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.TradingRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
+import at.technikum.apps.mtcg.util.CardTypeParser;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,9 +19,11 @@ public class TradingService {
 
     private final UserRepositoryDatabase userRepositoryDatabase;
     private final TradingRepositoryDatabase tradingRepositoryDatabase;
-    public TradingService(UserRepositoryDatabase userRepositoryDatabase, TradingRepositoryDatabase tradingRepositoryDatabase){
+    private final CardRepositoryDatabase cardRepositoryDatabase;
+    public TradingService(UserRepositoryDatabase userRepositoryDatabase, TradingRepositoryDatabase tradingRepositoryDatabase, CardRepositoryDatabase cardRepositoryDatabase){
         this.userRepositoryDatabase = userRepositoryDatabase;
         this.tradingRepositoryDatabase = tradingRepositoryDatabase;
+        this.cardRepositoryDatabase = cardRepositoryDatabase;
     }
 
     // find all trades in the trading table
@@ -88,73 +91,69 @@ public class TradingService {
             return 1;                    // user not logged in/doesn't exist
         }
         User foundUser = user.get();
-        Trade trade = new Trade();
-        trade.setId(request.getRoute().split("/")[2]); // TODO check if the split works correct
-        if(!tradingRepositoryDatabase.findTradeWithId(trade)){
-            return 3;                   // id not found
+        Trade tradeOnlyId = new Trade();
+        tradeOnlyId.setId(request.getRoute().split("/")[2]);
+        Optional<Trade> trade = tradingRepositoryDatabase.getTradeWithId(tradeOnlyId);
+
+        if(trade.isEmpty()){
+            return 3;                   // id/trade not found
         }
-        trade = tradingRepositoryDatabase.getTradeWithId(trade);
-        if(!tradingRepositoryDatabase.checkUserCardAssociation(foundUser, trade)){
+        Trade foundTrade = trade.get();
+        if(!tradingRepositoryDatabase.checkUserCardAssociation(foundUser, foundTrade)){
             return 2;                   // card doesn't belong to user (or is in deck)
         }
-        if(trade.isCompleted()){
+        if(foundTrade.isCompleted()){
             return 4;                   // trade is already finished
         }
-        tradingRepositoryDatabase.deleteTrade(trade);
+        tradingRepositoryDatabase.deleteTrade(foundTrade);
         return 0;                       // successfully deleted
     }
 
 
     //TODO HIER WEITER MACHEN clean up this mess
     public Integer carryOutTrade(Request request){
+                // check if user is legit
         Optional<User> user = checkToken(request);
         if(user.isEmpty()){
             return 1;                    // user not logged in/doesn't exist
         }
         User foundUser = user.get();
-        Trade trade = new Trade();
-        trade.setId(request.getRoute().split("/")[2]); // TODO check if the split works correct
-        if(!tradingRepositoryDatabase.findTradeWithId(trade)){
-            return 3;                   // id not found
+                // check if requested trade is in DB
+        Trade tradeWithId = new Trade();
+        tradeWithId.setId(request.getRoute().split("/")[2]);
+        Optional<Trade> trade = tradingRepositoryDatabase.getTradeWithId(tradeWithId);
+        if(trade.isEmpty()){
+            return 3;                   // id/trade not found
+        }
+        Trade foundTrade = trade.get();
+
+        Optional<Card> cardInBody = getCardFromDB(request);
+        if(cardInBody.isEmpty()){
+            return 2;                   // card does not exist --- should not happen but what if..
+        }
+        Card offeredCard = cardInBody.get();
+
+        if(!cardBelongsToUser(foundUser, offeredCard)){
+            return 2;                   // offered card doesn't belong to user
         }
 
-        // check if card in trade belongs to user
-        trade = tradingRepositoryDatabase.getTradeWithId(trade);
-        if(!tradingRepositoryDatabase.checkUserCardAssociation(foundUser, trade)){
-            return 2;                   // card doesn't belong to user (or is in deck)
+        if(offeredCard.getDeckid() == 1){
+            return 2;                   // card is in deck
         }
 
-        // create Card from the UUID in the body
-        Card offeredCard;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            offeredCard = objectMapper.readValue(request.getBody(), Card.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        Optional<Card> foundCardInTrade = getCardFromTradeInDB(foundTrade);
+        if(foundCardInTrade.isEmpty()){
+            return 2;                   // card does not exist --- should not happen but what if..
         }
-        CardRepositoryDatabase cardRepositoryDatabase = new CardRepositoryDatabase();
-        Optional<Card> foundCard = cardRepositoryDatabase.find(offeredCard);
-        if(foundCard.isEmpty()){
-            return 2;                   // card is not in db (shouldn't happen?)
-        }
-        offeredCard = foundCard.get();
+        Card cardFromTrade = foundCardInTrade.get();
 
-        // create Card that is inside the trade
-        Card cardInsideTrade = new Card(trade.getCardToTrade());
-        Optional<Card> foundCard2 = cardRepositoryDatabase.find();       // card from trade
-        if(foundCard2.isEmpty()){
-            return 2;                   // card is not in db (shouldn't happen?)
-        }
-        Card cardFromTrade = foundCard2.get();
-        if(foundUser.getId().equals(cardFromTrade.getOwner())){
-            return 2;                   // card is property of trader
+        if(!checkTradingRequirements(offeredCard, foundTrade)){
+            return 2;                   // requirements don't allow deal
         }
 
+        tradeCards(offeredCard, cardFromTrade);
 
-
-        compareValues(offeredCard, cardFromTrade);
-
-
+        foundTrade = setTradeToComplete(foundTrade);
 
         return 0;
     }
@@ -177,4 +176,47 @@ public class TradingService {
         }
     }
 
+    private Optional<Card> getCardFromDB(Request request){
+        Card card;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            card = objectMapper.readValue(request.getBody(), Card.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return cardRepositoryDatabase.find(card);
+    }
+
+    private boolean cardBelongsToUser(User user, Card card){
+        return user.getId().equals(card.getOwner());
+    }
+
+    private Optional<Card> getCardFromTradeInDB(Trade trade){
+        Card card = new Card();
+        card.setId(trade.getCardToTrade());
+        return cardRepositoryDatabase.find(card);
+    }
+
+    private boolean checkTradingRequirements(Card offeredCard, Trade trade){
+        CardTypeParser cardTypeParser = new CardTypeParser();
+        String cardType = cardTypeParser.getTypeFromCard(offeredCard);
+        if(offeredCard.getDamage() < trade.getMinDamage()){
+            return false;
+        }else{
+            return cardType.equals(trade.getType());
+        }
+    }
+
+    private void tradeCards(Card offeredCard, Card cardFromTrade){
+        String temp = offeredCard.getOwner();
+        offeredCard.setOwner(cardFromTrade.getOwner());
+        cardFromTrade.setOwner(temp);
+    }
+
+    private Trade setTradeToComplete(Trade trade){
+        trade.setCompleted(true);
+        tradingRepositoryDatabase.setTradeToCompleted(trade);
+
+        return trade;
+    }
 }

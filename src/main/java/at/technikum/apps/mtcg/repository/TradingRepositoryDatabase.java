@@ -18,9 +18,9 @@ public class TradingRepositoryDatabase {
     private final String FIND_ALL_TRADES = "SELECT * FROM trading";
     private final String CHECK_ASSOCIATION = "SELECT * FROM cards WHERE id = ? AND owner = ? AND deckid IS NULL";
     private final String ADD_NEW_TRADE = "INSERT INTO trading(id, cardtotrade, type, mindamage) VALUES (?, ?, ?, ?)";
-    private final String FIND_WITH_ID = "SELECT * FROM trading WHERE id = ?";
     private final String GET_TRADE = "SELECT * FROM trading WHERE id = ?";
     private final String DELETE_TRADE = "DELETE FROM trading WHERE id = ?";
+    private final String SET_TRADE_TO_COMPLETED = "UPDATE trading SET completed = ? WHERE id = ?";
 
     // find all existing trades
     public Optional<ArrayList<Trade>> findAllTrades(){
@@ -92,25 +92,9 @@ public class TradingRepositoryDatabase {
         }
     }
 
-    // find a single trade with its id
-    public boolean findTradeWithId(Trade trade){
-        try(
-                Connection con = database.getConnection();
-                PreparedStatement pstmt = con.prepareStatement(FIND_WITH_ID)
-            ){
-                pstmt.setString(1, trade.getId());
-                ResultSet rs = pstmt.executeQuery();
-                if(rs.next()){
-                    return true;
-                }
-        }catch (SQLException e){
-            e.getErrorCode();
-        }
-        return false;
-    }
-
-    // get the rest of the values from the DB when the id is given
-    public Trade getTradeWithId(Trade trade){
+    // get trade from the DB when the id is given
+    public Optional<Trade> getTradeWithId(Trade trade){
+        Optional<Trade> tradeNotFound = Optional.empty();
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(GET_TRADE)
@@ -118,15 +102,19 @@ public class TradingRepositoryDatabase {
             pstmt.setString(1, trade.getId());
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                trade.setCardToTrade(rs.getString("cardtotrade"));
-                trade.setCardToTrade(rs.getString("type"));
-                trade.setMinDamage(rs.getFloat("mindamage"));
-                trade.setCompleted(rs.getBoolean("completed"));
+                Trade foundTrade = new Trade(
+                        rs.getString("id"),
+                        rs.getString("cardtotrade"),
+                        rs.getString("type"),
+                        rs.getFloat("mindamage"),
+                        rs.getBoolean("completed")
+                        );
+                return Optional.of(foundTrade);
             }
         }catch (SQLException e){
             e.getErrorCode();
         }
-        return trade;
+        return tradeNotFound;
     }
 
     // delete a trade with the given id
@@ -142,4 +130,19 @@ public class TradingRepositoryDatabase {
             e.getErrorCode();
         }
     }
+
+    public void setTradeToCompleted(Trade trade){
+        try(
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(SET_TRADE_TO_COMPLETED)
+        ){
+            pstmt.setBoolean(1, trade.isCompleted());
+            pstmt.setString(2, trade.getId());
+            pstmt.execute();
+
+        }catch (SQLException e){
+            e.getErrorCode();
+        }
+    }
+
 }
