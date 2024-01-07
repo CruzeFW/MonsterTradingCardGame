@@ -72,7 +72,7 @@ public class TradingRepositoryDatabase {
     }
 
     // add new trade to db, throw error if id already exists
-    public boolean addTrade(Trade trade){
+    public void addTrade(Trade trade){
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(ADD_NEW_TRADE)
@@ -85,10 +85,8 @@ public class TradingRepositoryDatabase {
 
                 pstmt.execute();
 
-                return true;
         }catch(SQLException e){
             e.getErrorCode();
-            return false;
         }
     }
 

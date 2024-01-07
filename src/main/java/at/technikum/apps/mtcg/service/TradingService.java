@@ -73,9 +73,13 @@ public class TradingService {
             return 2;                        // user not owner of card or card in deck
         }
 
-        // add trade to DB, if it doesn't exist
-        if(!tradingRepositoryDatabase.addTrade(trade)){
-            return 3;                       // id already exists
+        // check if trade exists
+        Optional<Trade> foundTrade = tradingRepositoryDatabase.getTradeWithId(trade);
+        if(foundTrade.isPresent()){
+            return 3;                       // trade already exists
+        }else{
+            // add trade to DB, if it doesn't exist
+            tradingRepositoryDatabase.addTrade(trade);
         }
 
         return 0;                           // added new trade to trading table
