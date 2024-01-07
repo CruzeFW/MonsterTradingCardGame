@@ -34,7 +34,6 @@ public class MemoryTaskRepository implements TaskRepository {
 
     @Override
     public Task delete(Task task) {
-        // TODO
         return task;
     }
 }

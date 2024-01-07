@@ -123,3 +123,5 @@ UPDATE users SET elo = 400 WHERE id = '25e2906a-ee48-4009-991f-9e3c458204e7';
 UPDATE trading SET completed = false WHERE id = '6cd85277-4590-49d4-b0cf-ba0a921faad0';
 
 SELECT * FROM cards WHERE id = '951e886a-0fbf-425d-8df5-af2ee4830d85';
+
+UPDATE packages SET bought = true WHERE id = 'c225160f-95b2-46ec-a1da-3f0a4df970de';

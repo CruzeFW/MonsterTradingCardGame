@@ -30,14 +30,7 @@ public class TransactionService {
         }
 
         Optional<Package> pack = findAvailablePackage();
-        //das sollte klappen aber tuts nicht weil kein optional returned wird (siehe TransRepoDB todo l 26)
         if(pack.isEmpty()){
-            arr[0] = 3;             // no package available/
-            return arr;
-        }
-        //current workaround...
-        Package newPack = pack.get();
-        if(newPack.getPackageId() == null){
             arr[0] = 3;             // no package available/
             return arr;
         }

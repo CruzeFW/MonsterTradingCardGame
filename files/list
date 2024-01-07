@@ -2,9 +2,8 @@ Current todos:
     1. battlelogic
     2. threading
     3. packages anlegen wenn sie nur < 5 karten sind? muss beim kauf dann auch weniger kosten -> kaufen überarbeiten
-    4. responses zentralisieren
-    5. parser zentralisieren
-    6. try catch error handling überarbeiten
+    4. parser zentralisieren
+    5. try catch error handling überarbeiten
 
     x. Delete all TODO "NOT_ACCEPTABLE" response uses or change to "NOT_ALLOWED" or something
 

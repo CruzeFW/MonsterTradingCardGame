@@ -23,20 +23,23 @@ public class TransactionRepositoryDatabase {
     // finds first Package where bought = false
     //TODO QUESTION: how do i return a real optional, because here every time i return foundPack is the bool = false and so it is not optional
     public Optional<Package> findAvailablePackage(){
-        Package foundPack = new Package();
+        Optional<Package> pack = Optional.empty();
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(FIND_ALL_AVAILABLE);
                 ResultSet rs = pstmt.executeQuery()
             ){
                 while(rs.next()){
+                    Package foundPack = new Package();
                     foundPack.setPackageId(rs.getString("id"));
                     foundPack.setBought(rs.getBoolean("bought"));
+
+                    return Optional.of(foundPack);
                 }
             }catch(SQLException e){
                 e.getErrorCode();
             }
-        return Optional.of(foundPack);
+        return pack;
     }
 
     // set user id and package id in cards DB
