@@ -27,38 +27,25 @@ public class PackageController extends Controller{
         if(request.getMethod().equals("POST")){
             return create(request);
         }
-
-        //TODO delete this response, code should never come here
-        Response response = new Response();
-        response.setStatus(HttpStatus.NOT_ACCEPTABLE);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("End of PackageController response handle reached");
-        return response;
+        return responseCreator.createResponse(HttpStatus.METHOD_NOT_ALLOWED, HttpContentType.TEXT_PLAIN, "Method not allowed.");
     }
 
     // create new package
     private Response create(Request request){
         int responseType = packageService.postMethodCalled(request);
 
-        Response response = new Response();
         if(responseType == 0){
-            response.setStatus(HttpStatus.CREATED);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Package and cards successfully created.");
+            return responseCreator.createResponse(HttpStatus.CREATED, HttpContentType.TEXT_PLAIN, "Package and cards successfully created.");
+
         } else if (responseType == 1) {
-            response.setStatus(HttpStatus.UNAUTHORIZED);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Unauthorized request");
+            return responseCreator.createResponse(HttpStatus.UNAUTHORIZED, HttpContentType.TEXT_PLAIN, "Unauthorized request");
         } else if (responseType == 2) {
-            response.setStatus(HttpStatus.FORBIDDEN);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Provided user is not admin");
+            return responseCreator.createResponse(HttpStatus.FORBIDDEN, HttpContentType.TEXT_PLAIN, "Provided user is not admin");
+
         }else {
-            response.setStatus(HttpStatus.CONFLICT);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("At least one card in the package already exists.");       // the other ones got added to the DB
+            // the other ones got added to the DB
+            return responseCreator.createResponse(HttpStatus.CONFLICT, HttpContentType.TEXT_PLAIN, "At least one card in the package already exists.");
         }
 
-        return response;
     }
 }
