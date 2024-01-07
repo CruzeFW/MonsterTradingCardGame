@@ -10,7 +10,6 @@ public class CustomExceptions extends Throwable{
     public CustomExceptions(String message, Throwable cause) {
         super(message, cause);
     }
-
     public CustomExceptions(Throwable cause) {
         super(cause);
     }
