@@ -24,40 +24,23 @@ public class TransactionController extends Controller{
         if(request.getMethod().equals("POST")){
             return acquire(request);
         }
-
-        //TODO delete this response, code should never come here
-        Response response = new Response();
-        response.setStatus(HttpStatus.NOT_ACCEPTABLE);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("End of TransactionController response handle reached");
-        return response;
+        return responseCreator.createResponse(HttpStatus.METHOD_NOT_ALLOWED, HttpContentType.TEXT_PLAIN, "Method not allowed.");
     }
 
     // create new transaction and add packages to user
     public Response acquire(Request request){
         Object[] arr =  transactionService.acquire(request);
 
-        Response response = new Response();
         if(arr[0].equals(0)){
-            response.setStatus(HttpStatus.OK);
-            response.setContentType(HttpContentType.APPLICATION_JSON);
-            response.setBody((String) arr[1]); // prints cards as the response body
+            // prints cards as the response body
+            return responseCreator.createResponse(HttpStatus.OK, HttpContentType.APPLICATION_JSON, (String) arr[1]);
         }else if(arr[0].equals(1)){
-            response.setStatus(HttpStatus.UNAUTHORIZED);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Unauthorized request");
+            return responseCreator.createResponse(HttpStatus.UNAUTHORIZED, HttpContentType.TEXT_PLAIN, "Unauthorized request");
         } else if (arr[0].equals(2)) {
-            response.setStatus(HttpStatus.FORBIDDEN);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Not enough money for buying a card package.");
+            return responseCreator.createResponse(HttpStatus.FORBIDDEN, HttpContentType.TEXT_PLAIN, "Not enough money for buying a card package.");
         }else {
-            response.setStatus(HttpStatus.NOT_FOUND);
-            response.setContentType(HttpContentType.APPLICATION_JSON);
-            response.setBody("No card package available for buying.");
+            return responseCreator.createResponse(HttpStatus.NOT_FOUND, HttpContentType.TEXT_PLAIN, "No card package available for buying.");
         }
-        return response;
-
     }
-
 
 }

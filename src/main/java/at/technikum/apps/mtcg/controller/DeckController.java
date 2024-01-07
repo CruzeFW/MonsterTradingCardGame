@@ -8,8 +8,6 @@ import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
-import java.util.GregorianCalendar;
-
 public class DeckController extends Controller{
 
     private final DeckService deckService;
@@ -30,65 +28,41 @@ public class DeckController extends Controller{
         }else if(request.getMethod().equals("PUT")) {
             return updateDeck(request);
         }
-
-        //TODO delete this response, code should never come here
-        Response response = new Response();
-        response.setStatus(HttpStatus.NOT_ACCEPTABLE);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("End of DeckController response handle reached");
-        return response;
+        return responseCreator.createResponse(HttpStatus.METHOD_NOT_ALLOWED, HttpContentType.TEXT_PLAIN, "Method not allowed.");
     }
 
     // creates response to GET call on /deck or /deck?format=plain
     public Response showDeck(Request request){
         Object[] arr = deckService.getDeck(request);
 
-        Response response = new Response();
         if(arr[0].equals(0)){
             if(request.getRoute().equals("/deck")) {
-                response.setStatus(HttpStatus.OK);
-                response.setContentType(HttpContentType.APPLICATION_JSON);
-                response.setBody((String) arr[1]); // prints deck as the response body
+                return responseCreator.createResponse(HttpStatus.OK, HttpContentType.APPLICATION_JSON, (String) arr[1]);
             }else{
-                response.setStatus(HttpStatus.OK);
-                response.setContentType(HttpContentType.TEXT_PLAIN);
-                response.setBody(deckService.parseBody(arr)); // prints deck in plain format as the response body
+                // prints deck in plain format as the response body
+                return responseCreator.createResponse(HttpStatus.OK, HttpContentType.TEXT_PLAIN, deckService.parseBody(arr));
             }
         }else if(arr[0].equals(1)){
-            response.setStatus(HttpStatus.UNAUTHORIZED);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Unauthorized request.");
+            return responseCreator.createResponse(HttpStatus.UNAUTHORIZED, HttpContentType.TEXT_PLAIN, "Unauthorized request.");
         } else {
-            response.setStatus(HttpStatus.BAD_REQUEST);             //TODO QUESTION: if I use NO_CONTENT then the printed response is empty...
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("The request was fine, but the deck doesn't have any cards.");
+            //TODO QUESTION: if I use NO_CONTENT then the printed response is empty...
+            return responseCreator.createResponse(HttpStatus.BAD_REQUEST, HttpContentType.TEXT_PLAIN, "The request was fine, but the deck doesn't have any cards.");
         }
-        return response;
     }
 
     // creates response for PUT on /deck
     public Response updateDeck(Request request){
         int responseType = deckService.createDeck(request);
 
-        Response response = new Response();
         if(responseType == 0){
-            response.setStatus(HttpStatus.OK);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("The deck has been successfully configured.");
+            return responseCreator.createResponse(HttpStatus.OK, HttpContentType.TEXT_PLAIN, "The deck has been successfully configured.");
         } else if (responseType == 1) {
-            response.setStatus(HttpStatus.BAD_REQUEST);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("The provided deck did not include the required amount of cards.");
+            return responseCreator.createResponse(HttpStatus.BAD_REQUEST, HttpContentType.TEXT_PLAIN, "The provided deck did not include the required amount of cards.");
         } else if (responseType == 2) {
-            response.setStatus(HttpStatus.FORBIDDEN);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("At least one of the provided cards does not belong to the user or is not available.");
+            return responseCreator.createResponse(HttpStatus.FORBIDDEN, HttpContentType.TEXT_PLAIN, "At least one of the provided cards does not belong to the user or is not available.");
         } else {
-            response.setStatus(HttpStatus.UNAUTHORIZED);
-            response.setContentType(HttpContentType.TEXT_PLAIN);
-            response.setBody("Unauthorized request.");
+            return responseCreator.createResponse(HttpStatus.UNAUTHORIZED, HttpContentType.TEXT_PLAIN, "Unauthorized request.");
         }
-        return response;
     }
 
 }

@@ -25,25 +25,13 @@ public class BattleController extends Controller{
     public Response handle(Request request) {
         if(request.getMethod().equals("POST")){
             Object[] arr = battleService.startBattle(request);
-
-            Response response = new Response();
             if(arr[0].equals(0)){
-                response.setStatus(HttpStatus.OK);
-                response.setContentType(HttpContentType.TEXT_PLAIN);
-                response.setBody((String) arr[1]);
+                return responseCreator.createResponse(HttpStatus.OK, HttpContentType.APPLICATION_JSON, (String) arr[1]);
             } else {
-                response.setStatus(HttpStatus.UNAUTHORIZED);
-                response.setContentType(HttpContentType.TEXT_PLAIN);
-                response.setBody("Unauthorized request.");
+                return responseCreator.createResponse(HttpStatus.UNAUTHORIZED, HttpContentType.TEXT_PLAIN, "Unauthorized request.");
             }
-            return response;
         }
 
-        //TODO delete this response, code should never come here
-        Response response = new Response();
-        response.setStatus(HttpStatus.NOT_ACCEPTABLE);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("End of StatsController response handle reached");
-        return response;
+        return responseCreator.createResponse(HttpStatus.METHOD_NOT_ALLOWED, HttpContentType.TEXT_PLAIN, "Method not allowed.");
     }
 }
