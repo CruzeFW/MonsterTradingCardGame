@@ -44,4 +44,5 @@ added trading controller/service/repo, struggled with the correct implementation
 added CardTypeParser to get element and type from card name
 finished trading and reworked CardTypeParser, commented + tested
 changed todolist into list because the file was corrupt?
-started game logic
+reworked responses and added util.ResponseCreator (centralised response creation)
+reworked sessions logic and controller/service
