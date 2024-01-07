@@ -157,6 +157,7 @@ public class UserService {
 
     // jaaaa keine ahnung ob die das macht was ich will, soll true returnen wenn beide gleich sind oder wenns der admin is,
     // könnte aber mit dem code davor schon bissl fucked sein..
+    //TODO what is this?
     public boolean checkIfAuthorized(User user, User foundUser){
         if(user.getAuthorization().equals(foundUser.getAuthorization())){
             return true;
