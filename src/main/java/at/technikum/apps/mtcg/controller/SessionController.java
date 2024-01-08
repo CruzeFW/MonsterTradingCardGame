@@ -7,6 +7,8 @@ import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
+import java.sql.SQLException;
+
 public class SessionController extends Controller{
 
     private final SessionService sessionService;
@@ -22,7 +24,7 @@ public class SessionController extends Controller{
 
     // handle POST requests on /sessions
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws SQLException {
         if(request.getMethod().equals("POST")) {
             int responseType = sessionService.postMethodCalled(request);
             if(responseType == 0){

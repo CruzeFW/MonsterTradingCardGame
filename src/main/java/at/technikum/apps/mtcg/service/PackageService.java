@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class PackageService {
@@ -23,7 +24,7 @@ public class PackageService {
     }
 
     // add new package with all cards into DB; if one card already exists, it is skipped
-    public Integer postMethodCalled(Request request){
+    public Integer postMethodCalled(Request request) throws SQLException {
         int i = checkToken(request);
         if( i == 1){                // no token
             return 1;
@@ -70,7 +71,7 @@ public class PackageService {
     }
 
     // check if a token is given and if it's the admin token
-    private Integer checkToken(Request request) {
+    private Integer checkToken(Request request) throws SQLException {
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
         if (request.getAuthorization() == null) {
             return 1;           // no token

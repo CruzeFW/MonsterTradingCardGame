@@ -9,6 +9,7 @@ import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class ScoreboardService {
     }
 
     // gets all users, then creates a scoreboard of their stats, sorts it and returns it
-    public Object[] getMethodCalled(Request request){
+    public Object[] getMethodCalled(Request request) throws SQLException {
         Object[] arr = new Object[2];
         if(checkToken(request).isEmpty()){
             arr[0] = 1;
@@ -52,7 +53,7 @@ public class ScoreboardService {
 
     // check if a given token is connected to a user
     //TODO maybe auslagern? quintet in CardService + StatsService + DeckService + BattleService
-    private Optional<User> checkToken(Request request) {
+    private Optional<User> checkToken(Request request) throws SQLException {
         Optional<User> foundUser = Optional.empty();
         if (request.getAuthorization() == null) {
             return foundUser;           // no token
@@ -69,7 +70,7 @@ public class ScoreboardService {
     }
 
     // creates stats for each given user, adds them to the scoreboard
-    private ArrayList<Stats> createScoreboard(ArrayList<User> users){
+    private ArrayList<Stats> createScoreboard(ArrayList<User> users) throws SQLException {
         ArrayList<Stats> scoreboard = new ArrayList<>();
         for(User user : users){
             Stats stats = new Stats();

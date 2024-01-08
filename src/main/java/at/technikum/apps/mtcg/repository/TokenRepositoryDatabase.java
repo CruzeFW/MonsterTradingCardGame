@@ -50,7 +50,7 @@ public class TokenRepositoryDatabase {
 //    }
 
     //find one user given by its username
-    public boolean find(TokenRequest tokenRequest) {
+    public boolean find(TokenRequest tokenRequest) throws SQLException {
         boolean found = false;
         try(
                 Connection con = database.getConnection();
@@ -68,12 +68,12 @@ public class TokenRepositoryDatabase {
             rs.close();
 
         } catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return found;
     }
 
-    public void addToken(Token token, TokenRequest tokenRequest){
+    public void addToken(Token token, TokenRequest tokenRequest) throws SQLException {
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(ADD_TOKEN);
@@ -84,7 +84,7 @@ public class TokenRepositoryDatabase {
 
             pstmt.execute();
         } catch(SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 

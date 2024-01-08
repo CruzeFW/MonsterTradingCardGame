@@ -6,6 +6,7 @@ import at.technikum.apps.mtcg.repository.BattleRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.server.http.Request;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class BattleService {
@@ -18,7 +19,7 @@ public class BattleService {
     }
 
     // checks user authentication and then opens or joins a game
-    public Object[] startBattle(Request request){
+    public Object[] startBattle(Request request) throws SQLException {
         Object[] arr = new Object[2];
         Optional<User> user = checkToken(request);
         if(user.isEmpty()){                // no token | user not found/not logged in
@@ -26,7 +27,7 @@ public class BattleService {
             return arr;
         }
         User foundUser = user.get();
-        int waitOrStart = openBattle(foundUser, request);
+        int waitOrStart = openBattle(foundUser);
         // TODO BATTLELOGIC enter lobby and either wait or start game
         if(waitOrStart == 0){
             // openGame();
@@ -43,7 +44,7 @@ public class BattleService {
 
     // check if a given token is connected to a user
     //TODO maybe auslagern? quintet in CardService + DeckService + ScoreboardService + StatsController
-    private Optional<User> checkToken(Request request) {
+    private Optional<User> checkToken(Request request) throws SQLException {
         Optional<User> foundUser = Optional.empty();
         if (request.getAuthorization() == null) {
             return foundUser;           // no token
@@ -60,7 +61,7 @@ public class BattleService {
     }
 
     // searches for an open battle; starts a new one or joins an open one
-    private Integer openBattle(User user, Request request){
+    private Integer openBattle(User user) throws SQLException {
         Optional<Battle> battle = battleRepositoryDatabase.findOpenBattle(user);
         if(battle.isEmpty()){
             battleRepositoryDatabase.startNewBattle(user);

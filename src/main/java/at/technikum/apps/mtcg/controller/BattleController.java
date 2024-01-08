@@ -8,6 +8,8 @@ import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
+import java.sql.SQLException;
+
 public class BattleController extends Controller{
 
     private final BattleService battleService;
@@ -22,7 +24,7 @@ public class BattleController extends Controller{
 
     // handle POST request on /battles
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws SQLException {
         if(request.getMethod().equals("POST")){
             Object[] arr = battleService.startBattle(request);
             if(arr[0].equals(0)){
@@ -31,7 +33,6 @@ public class BattleController extends Controller{
                 return responseCreator.createResponse(HttpStatus.UNAUTHORIZED, HttpContentType.TEXT_PLAIN, "Unauthorized request.");
             }
         }
-
         return responseCreator.createResponse(HttpStatus.METHOD_NOT_ALLOWED, HttpContentType.TEXT_PLAIN, "Method not allowed.");
     }
 }

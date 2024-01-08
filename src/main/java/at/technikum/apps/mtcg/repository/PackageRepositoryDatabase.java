@@ -16,7 +16,7 @@ public class PackageRepositoryDatabase {
     private final String DELETE_PACKAGE = "DELETE FROM packages WHERE id = ?";
 
     // save package with its id
-    public void save(String packageId){
+    public void save(String packageId) throws SQLException {
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(SAVE_PACKAGE);
@@ -26,12 +26,12 @@ public class PackageRepositoryDatabase {
 
             pstmt.execute();
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 
     // delete package with id
-    public void delete(String packageId){
+    public void delete(String packageId) throws SQLException {
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(DELETE_PACKAGE);
@@ -40,7 +40,7 @@ public class PackageRepositoryDatabase {
 
             pstmt.execute();
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 }

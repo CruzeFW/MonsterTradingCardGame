@@ -49,7 +49,7 @@ public class UserRepositoryDatabase {
 //    }
 
     // find user by its username
-    public Optional<User> find(User user) {
+    public Optional<User> find(User user) throws SQLException {
         User userToReturn = new User();
         try (
                 Connection con = database.getConnection();
@@ -70,14 +70,14 @@ public class UserRepositoryDatabase {
                 return Optional.of(userToReturn);
             }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
 
         return Optional.empty();
     }
 
     // find user by its token
-    public Optional<User> findWithToken(User user) {
+    public Optional<User> findWithToken(User user) throws SQLException {
         User userToReturn = new User();
         try (
                 Connection con = database.getConnection();
@@ -99,13 +99,13 @@ public class UserRepositoryDatabase {
                 return Optional.of(userToReturn);
             }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return Optional.empty();
     }
 
     // creates a new user with custom values id, username and password, as well as default elo and default coins
-    public User save(User user) {
+    public User save(User user) throws SQLException {
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(SAVE_SQL)
@@ -119,8 +119,7 @@ public class UserRepositoryDatabase {
 
             pstmt.execute();
         } catch (SQLException e) {
-            // THOUGHT: how do i handle exceptions (hint: look at the TaskApp)
-            e.getErrorCode();
+            throw new SQLException();
         }
 
         return user;
@@ -132,7 +131,7 @@ public class UserRepositoryDatabase {
 //    }
 
     //deletes token in database for all users
-    public void deleteToken(){
+    public void deleteToken() throws SQLException {
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(DELETE_TOKEN)
@@ -140,13 +139,13 @@ public class UserRepositoryDatabase {
             pstmt.execute();
 
         } catch (SQLException e) {
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 
     // update user in DB
     //TODO maybe change return type, see other todo in usage
-    public User update(User user){
+    public User update(User user) throws SQLException {
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(UPDATE)
@@ -160,7 +159,7 @@ public class UserRepositoryDatabase {
             pstmt.execute();
 
         } catch (SQLException e) {
-            e.getErrorCode();
+            throw new SQLException();
         }
         return user;
     }

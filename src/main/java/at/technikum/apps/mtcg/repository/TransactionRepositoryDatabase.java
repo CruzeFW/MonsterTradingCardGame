@@ -14,7 +14,7 @@ public class TransactionRepositoryDatabase {
 
     private final Database database = new Database();
     private final String FIND_ALL_AVAILABLE = "SELECT * FROM packages WHERE bought = false LIMIT 1";
-    private final String ASSIGN_CARDS_TO_USER = "UPDATE cards SET owner = ? WHERE packageid = ?";
+    private final String ASSIGN_CARDS_TO_USER = "UPDATE cards SET owner = ? WHERE packageid = ? RETURNING id";
     private final String SET_BOUGHT_TO_TRUE = "UPDATE packages SET bought = true WHERE id = ?";
     private final String SET_COINS = "UPDATE users SET coins = ? WHERE id = ?";
     private final String FIND_ALL_CARDS_IN_ONE_PACKAGE = "SELECT * FROM cards WHERE packageid = ? AND owner = ?";
@@ -22,7 +22,7 @@ public class TransactionRepositoryDatabase {
 
     // finds first Package where bought = false
     //TODO QUESTION: how do i return a real optional, because here every time i return foundPack is the bool = false and so it is not optional
-    public Optional<Package> findAvailablePackage(){
+    public Optional<Package> findAvailablePackage() throws SQLException {
         Optional<Package> pack = Optional.empty();
         try(
                 Connection con = database.getConnection();
@@ -37,30 +37,29 @@ public class TransactionRepositoryDatabase {
                     return Optional.of(foundPack);
                 }
             }catch(SQLException e){
-                e.getErrorCode();
+                throw new SQLException();
             }
         return pack;
     }
 
     // set user id and package id in cards DB
-    public boolean assignCardsToUser(User foundUser, Package foundPack){
+    public boolean assignCardsToUser(User foundUser, Package foundPack) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(ASSIGN_CARDS_TO_USER)
         ){
             pstmt.setString(1, foundUser.getId());
             pstmt.setString(2, foundPack.getPackageId());
-            pstmt.execute();
-
+            try(ResultSet rs = pstmt.executeQuery()){
+                return rs.next();
+            }
         }catch(SQLException e){
-            e.getErrorCode();
-            return false;
+            throw new SQLException();
         }
-        return true;
     }
 
     // set boolean to true
-    public void packageIsBought(Package foundPack){
+    public void packageIsBought(Package foundPack) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(SET_BOUGHT_TO_TRUE)
@@ -69,12 +68,12 @@ public class TransactionRepositoryDatabase {
             pstmt.execute();
 
         }catch(SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 
     // deduct coins of user for transaction
-    public void removeCoins(User foundUser){
+    public void removeCoins(User foundUser) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(SET_COINS)
@@ -84,12 +83,12 @@ public class TransactionRepositoryDatabase {
             pstmt.execute();
 
         }catch(SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 
     // find all cards in one package, returns a Card[]
-    public Card[] getAllCardsFromOnePackage(User foundUser, String packageId) {
+    public Card[] getAllCardsFromOnePackage(User foundUser, String packageId) throws SQLException {
         Card[] cards = new Card[5];
 
         try (
@@ -116,13 +115,13 @@ public class TransactionRepositoryDatabase {
                 counter++;
             }
         } catch (SQLException e) {
-            e.getErrorCode();
+            throw new SQLException();
         }
         return cards;
     }
 
     // add transaction into transaction table
-    public void saveTransaction(User foundUser, String packageid){
+    public void saveTransaction(User foundUser, String packageid) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(SET_TRANSACTION)
@@ -132,7 +131,7 @@ public class TransactionRepositoryDatabase {
             pstmt.execute();
 
         }catch(SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 

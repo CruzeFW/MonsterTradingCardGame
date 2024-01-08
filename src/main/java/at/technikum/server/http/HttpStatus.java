@@ -12,7 +12,8 @@ public enum HttpStatus {
     METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
     //primarily thought to be a debug info, delete before hand-in
     NOT_ACCEPTABLE(406, "Not Acceptable"),
-    CONFLICT(409, "Conflict");
+    CONFLICT(409, "Conflict"),
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error");
 
     private final int code;
     private final String message;

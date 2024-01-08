@@ -16,7 +16,7 @@ public class ScoreboardRepositoryDatabase {
     private final String FIND_ALL_USERS_EXCEPT_ADMIN = "SELECT * FROM users WHERE username != ?";
 
     // gets the id/username/elo from users that are not the admin
-    public ArrayList<User> getAllUsers(){
+    public ArrayList<User> getAllUsers() throws SQLException {
         ArrayList<User> users = new ArrayList<>();
         try(
                 Connection con = database.getConnection();
@@ -33,7 +33,7 @@ public class ScoreboardRepositoryDatabase {
                 users.add(user);
             }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return users;
     }

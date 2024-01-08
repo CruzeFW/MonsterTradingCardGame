@@ -18,7 +18,7 @@ public class StatsRepositoryDatabase {
 
 
     // returns stats entity with username and elo for the provided user
-    public Stats getNameAndElo(User user){
+    public Stats getNameAndElo(User user) throws SQLException {
         Stats stats = new Stats();
         try(
                 Connection con = database.getConnection();
@@ -32,13 +32,13 @@ public class StatsRepositoryDatabase {
                     stats.setElo(rs.getInt("elo"));
                 }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return stats;
     }
 
     // gets the sum of all wins for the provided user
-    public Integer calculateWins(User user){
+    public Integer calculateWins(User user) throws SQLException {
         int wins = 0;
         try(
                 Connection con = database.getConnection();
@@ -51,13 +51,13 @@ public class StatsRepositoryDatabase {
                     wins = rs.getInt("wins");
                 }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return wins;
     }
 
     // gets the sum of all losses for the provided user
-    public Integer calculateLosses(User user){
+    public Integer calculateLosses(User user) throws SQLException {
         int losses = 0;
         try(
                 Connection con = database.getConnection();
@@ -70,7 +70,7 @@ public class StatsRepositoryDatabase {
                 losses = rs.getInt("losses");
             }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return losses;
     }

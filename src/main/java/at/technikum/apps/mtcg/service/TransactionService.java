@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class TransactionService {
@@ -20,7 +21,7 @@ public class TransactionService {
     }
 
     // creates array with response regarding the outcome of the transaction
-    public Object[] acquire(Request request){
+    public Object[] acquire(Request request) throws SQLException {
         Object[] arr = new Object[2];
         // check if user is in logged in/exists
         Optional<User> user = validateUser(request);
@@ -67,7 +68,7 @@ public class TransactionService {
     }
 
     // search for User in userRepositoryDatabase and return Optional<User>
-    private Optional<User> validateUser(Request request){
+    private Optional<User> validateUser(Request request) throws SQLException {
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
         Optional<User> foundUser;
         User user = new User();
@@ -79,12 +80,12 @@ public class TransactionService {
     }
 
     // calls transactionRepositoryDatabase and returns Package
-    private Optional <Package> findAvailablePackage(){
+    private Optional <Package> findAvailablePackage() throws SQLException {
         return transactionRepositoryDatabase.findAvailablePackage();
     }
 
     // calls transactionRepositoryDatabase and returns Card[]
-    private Card[] getAllCardsFromOnePackage(User foundUser, String packageId){
+    private Card[] getAllCardsFromOnePackage(User foundUser, String packageId) throws SQLException {
         return transactionRepositoryDatabase.getAllCardsFromOnePackage(foundUser, packageId);
     }
 }

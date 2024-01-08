@@ -10,6 +10,7 @@ import at.technikum.apps.mtcg.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class UserController extends Controller {
 
     // check for the route and method, call the correct next function
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws SQLException {
 
         if(request.getRoute().equals("/users")) {
             if(request.getMethod().equals("POST")) {
@@ -44,7 +45,7 @@ public class UserController extends Controller {
     }
 
     // create a user in the database and checks if it doesn't already exist
-    public Response create(Request request) {
+    public Response create(Request request) throws SQLException {
         int responseType = userService.postMethodCalled(request);
 
         if(responseType == 1){
@@ -55,7 +56,7 @@ public class UserController extends Controller {
     }
 
     // searches for user in database
-    public Response searchForUser(Request request) {
+    public Response searchForUser(Request request) throws SQLException {
         Object[] arr = userService.getMethodCalled(request);
 
         if(arr[0].equals(0)){
@@ -69,7 +70,7 @@ public class UserController extends Controller {
     }
 
     // update user in database
-    public Response update(Request request){
+    public Response update(Request request) throws SQLException {
         int responseType = userService.putMethodCalled(request);
 
         if(responseType == 0) {
