@@ -22,7 +22,7 @@ public class CardRepositoryDatabase {
 
 
     // find card by its id, returns found one or a optional.empty()
-    public Optional<Card> find(Card card){
+    public Optional<Card> find(Card card) throws SQLException {
         Optional<Card> optionalCardToReturn = Optional.empty();
         try (
                 Connection con = database.getConnection();
@@ -42,13 +42,13 @@ public class CardRepositoryDatabase {
                 return Optional.of(cardToReturn);
             }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return optionalCardToReturn;
     }
 
     // creates a new card in the DB with card id, name, damage, and packageid
-    public void save(Card card, String packageId){
+    public void save(Card card, String packageId) throws SQLException {
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(SAVE_CARD);
@@ -60,12 +60,12 @@ public class CardRepositoryDatabase {
 
             pstmt.execute();
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 
     // search for cards in DB, returns Optional<ArrayList<Card>>
-    public Optional<ArrayList<Card>> findAllCards(User user){
+    public Optional<ArrayList<Card>> findAllCards(User user) throws SQLException {
         Optional<ArrayList<Card>> cardList = Optional.empty();
         try (
                 Connection con = database.getConnection();
@@ -90,13 +90,13 @@ public class CardRepositoryDatabase {
                 return Optional.of(foundCards);
             }
         } catch (SQLException e) {
-            e.getErrorCode();
+            throw new SQLException();
         }
         return cardList;
     }
 
     // update owner after trade is completed
-    public void updateOwner(Card card){
+    public void updateOwner(Card card) throws SQLException {
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(UPDATE_OWNER);
@@ -106,7 +106,7 @@ public class CardRepositoryDatabase {
 
             pstmt.execute();
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class StatsService {
@@ -21,7 +22,7 @@ public class StatsService {
     }
 
     // check user credentials, returns stats to found user
-    public Object[] getMethodCalled(Request request){
+    public Object[] getMethodCalled(Request request) throws SQLException {
         Object[] arr = new Object[3];
         Optional<User> user = checkToken(request);
         if(user.isEmpty()){                // no token | user not found/not logged in
@@ -46,7 +47,7 @@ public class StatsService {
 
     // check if a given token is connected to a user
     //TODO maybe auslagern? quintet in CardService + DeckService + ScoreboardService + BattleController
-    private Optional<User> checkToken(Request request) {
+    private Optional<User> checkToken(Request request) throws SQLException {
         Optional<User> foundUser = Optional.empty();
         if (request.getAuthorization() == null) {
             return foundUser;           // no token
@@ -63,7 +64,7 @@ public class StatsService {
     }
 
     // call db to fill Stats entity with values
-    public Stats getStats(User user){
+    public Stats getStats(User user) throws SQLException {
         Stats stats = statsRepositoryDatabase.getNameAndElo(user);
         stats.setWins(statsRepositoryDatabase.calculateWins(user));
         stats.setLosses(statsRepositoryDatabase.calculateLosses(user));

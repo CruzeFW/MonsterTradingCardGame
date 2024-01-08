@@ -7,6 +7,8 @@ import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.SQLException;
+
 
 public class SessionService {
 
@@ -18,7 +20,7 @@ public class SessionService {
         this.token = new Token();
     }
 
-    public Integer postMethodCalled(Request request) {
+    public Integer postMethodCalled(Request request) throws SQLException {
         ObjectMapper objectMapper = new ObjectMapper();
         TokenRequest tokenRequest = null;
         try {
@@ -37,11 +39,11 @@ public class SessionService {
         return 1;
     }
 
-    public boolean validateToken(TokenRequest tokenRequest){
+    public boolean validateToken(TokenRequest tokenRequest) throws SQLException {
         return tokenRepositoryDatabase.find(tokenRequest);
     }
 
-    public void addTokenToUser(Token token, TokenRequest tokenRequest){
+    public void addTokenToUser(Token token, TokenRequest tokenRequest) throws SQLException {
         tokenRepositoryDatabase.addToken(token, tokenRequest);
     }
 

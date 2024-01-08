@@ -10,6 +10,8 @@ import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
+import java.sql.SQLException;
+
 public class ScoreboardController extends Controller{
 
     private final ScoreboardService scoreboardService;
@@ -24,7 +26,7 @@ public class ScoreboardController extends Controller{
 
     // handle GET requests on /scoreboard
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws SQLException {
         if(request.getMethod().equals("GET")){
             Object[] arr = scoreboardService.getMethodCalled(request);
             if(arr[0].equals(0)){

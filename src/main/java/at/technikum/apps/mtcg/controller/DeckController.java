@@ -8,6 +8,8 @@ import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
+import java.sql.SQLException;
+
 public class DeckController extends Controller{
 
     private final DeckService deckService;
@@ -22,7 +24,7 @@ public class DeckController extends Controller{
     }
 
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws SQLException {
         if(request.getMethod().equals("GET")){
             return showDeck(request);
         }else if(request.getMethod().equals("PUT")) {
@@ -32,7 +34,7 @@ public class DeckController extends Controller{
     }
 
     // creates response to GET call on /deck or /deck?format=plain
-    public Response showDeck(Request request){
+    public Response showDeck(Request request) throws SQLException {
         Object[] arr = deckService.getDeck(request);
 
         if(arr[0].equals(0)){
@@ -51,7 +53,7 @@ public class DeckController extends Controller{
     }
 
     // creates response for PUT on /deck
-    public Response updateDeck(Request request){
+    public Response updateDeck(Request request) throws SQLException {
         int responseType = deckService.createDeck(request);
 
         if(responseType == 0){

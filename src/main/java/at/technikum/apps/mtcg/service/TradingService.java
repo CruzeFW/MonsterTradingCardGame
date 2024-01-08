@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class TradingService {
     }
 
     // find all trades in the trading table
-    public Object[] getCurrentTrades(Request request){
+    public Object[] getCurrentTrades(Request request) throws SQLException {
         Object[] arr = new Object[2];
         if(checkToken(request).isEmpty()){
             arr[0] = 1;
@@ -53,7 +54,7 @@ public class TradingService {
     }
 
     // create a new Trade if the user is allowed to, the trade doesn't already exist and the user owns the card to trade
-    public Integer createNewTrade(Request request){
+    public Integer createNewTrade(Request request) throws SQLException {
         Optional<User> user = checkToken(request);
         if(user.isEmpty()){
             return 1;                    // user not logged in/doesn't exist
@@ -86,7 +87,7 @@ public class TradingService {
     }
 
     // checks if the deal exists, if the card belongs to the user or if the deal is already finished
-    public Integer deleteTrade(Request request){
+    public Integer deleteTrade(Request request) throws SQLException {
         Optional<User> user = checkToken(request);
         if(user.isEmpty()){
             return 1;                    // user not logged in/doesn't exist
@@ -113,7 +114,7 @@ public class TradingService {
     }
 
     // fulfills all needed checks and trades card in the end
-    public Integer carryOutTrade(Request request){
+    public Integer carryOutTrade(Request request) throws SQLException {
         Optional<User> user = checkToken(request);
         if(user.isEmpty()){
             return 1;                    // user not logged in/doesn't exist
@@ -163,7 +164,7 @@ public class TradingService {
 
     // check if a given token is connected to a user
     //TODO maybe auslagern? sextet in CardService + StatsService + DeckService + BattleService + ScoreboardService
-    private Optional<User> checkToken(Request request) {
+    private Optional<User> checkToken(Request request) throws SQLException {
         Optional<User> foundUser = Optional.empty();
         if (request.getAuthorization() == null) {
             return foundUser;           // no token
@@ -180,7 +181,7 @@ public class TradingService {
     }
 
     // maps id to card and calls cardRepositoryDatabase and gets the optional card
-    private Optional<Card> getCardFromDB(Request request){
+    private Optional<Card> getCardFromDB(Request request) throws SQLException {
         Card card;
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -197,7 +198,7 @@ public class TradingService {
     }
 
     // gets optional card from cardRepositoryDatabase
-    private Optional<Card> getCardFromTradeInDB(Trade trade){
+    private Optional<Card> getCardFromTradeInDB(Trade trade) throws SQLException {
         Card card = new Card();
         card.setId(trade.getCardToTrade());
         return cardRepositoryDatabase.find(card);
@@ -215,7 +216,7 @@ public class TradingService {
     }
 
     // change local variables and call cardRepositoryDatabase to change owners in the DB
-    private void tradeCards(Card offeredCard, Card cardFromTrade){
+    private void tradeCards(Card offeredCard, Card cardFromTrade) throws SQLException {
         String temp = offeredCard.getOwner();
         offeredCard.setOwner(cardFromTrade.getOwner());
         cardFromTrade.setOwner(temp);
@@ -224,7 +225,7 @@ public class TradingService {
     }
 
     // change boolean in trade and calls cardRepositoryDatabase to change it there aswell
-    private Trade setTradeToComplete(Trade trade){
+    private Trade setTradeToComplete(Trade trade) throws SQLException {
         trade.setCompleted(true);
         tradingRepositoryDatabase.setTradeToCompleted(trade);
 

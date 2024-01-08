@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class CardService {
     }
 
     // checks for user credentials and then for all cards connected to that user
-    public Object[] showAllAcquiredCards(Request request){
+    public Object[] showAllAcquiredCards(Request request) throws SQLException {
         Object[] arr = new Object[2];
         Optional<User> user = checkToken(request);
         if(user.isEmpty()){                // no token | user not found/not logged in
@@ -53,7 +54,7 @@ public class CardService {
 
     // check if a given token is connected to a user
     //TODO maybe auslagern? quintet in DeckService + StatsService + ScoreboardService + BattleService
-    private Optional<User> checkToken(Request request) {
+    private Optional<User> checkToken(Request request) throws SQLException {
         Optional<User> foundUser = Optional.empty();
         if (request.getAuthorization() == null) {
             return foundUser;           // no token

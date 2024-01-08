@@ -6,6 +6,7 @@ import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ public class UserService {
     }
 
     // reform request and send it to next function to save it, checks if it doesn't already exist
-    public Integer postMethodCalled(Request request){
+    public Integer postMethodCalled(Request request) throws SQLException {
         ObjectMapper objectMapper = new ObjectMapper();
         User user;
         try {
@@ -37,13 +38,13 @@ public class UserService {
     }
 
     // call DB to find user by username
-    public Optional<User> find(User user) {
+    public Optional<User> find(User user) throws SQLException {
         return userRepositoryDatabase.find(user);
     }
 
     // get user data from DB
     //TODO QUESTION: ADD ADMIN ACCESS / ASK PROF
-    public Object[] getMethodCalled(Request request){
+    public Object[] getMethodCalled(Request request) throws SQLException {
         Object[] arr = new Object[2];
         ObjectMapper objectMapper = new ObjectMapper();
         User user = new User();
@@ -78,12 +79,12 @@ public class UserService {
     }
 
     // call DB to find user by token
-    public Optional<User> findWithToken(User user) {
+    public Optional<User> findWithToken(User user) throws SQLException {
         return userRepositoryDatabase.findWithToken(user);
     }
 
     // call DB to save user
-    public User save(User user){
+    public User save(User user) throws SQLException {
         user.setId(UUID.randomUUID().toString());
         //maybe add coins and elo here? need variables in User though
         return userRepositoryDatabase.save(user);
@@ -91,7 +92,7 @@ public class UserService {
 
     // update user data in DB
     //TODO QUESTION: ADD ADMIN ACCESS / ASK PROF
-    public Integer putMethodCalled(Request request){
+    public Integer putMethodCalled(Request request) throws SQLException {
         ObjectMapper objectMapper = new ObjectMapper();
         User user = new User();
 
@@ -114,7 +115,6 @@ public class UserService {
                 finalUser.setAuthorization(user.getAuthorization());
                 finalUser = update(finalUser);
 
-                //TODO QUESTION: do i need the data of the user here? laut api nicht
                 return 0;   // successfully updated
             }else{
                 return 1;   // user not found
@@ -146,7 +146,7 @@ public class UserService {
     }
 
     // call DB to perform user update
-    public User update(User updatedUser) {
+    public User update(User updatedUser) throws SQLException {
         return userRepositoryDatabase.update(updatedUser);
     }
 

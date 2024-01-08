@@ -23,7 +23,7 @@ public class TradingRepositoryDatabase {
     private final String SET_TRADE_TO_COMPLETED = "UPDATE trading SET completed = ? WHERE id = ?";
 
     // find all existing trades
-    public Optional<ArrayList<Trade>> findAllTrades(){
+    public Optional<ArrayList<Trade>> findAllTrades() throws SQLException {
         Optional<ArrayList<Trade>> trades = Optional.empty();
         try(
                 Connection con = database.getConnection();
@@ -46,13 +46,13 @@ public class TradingRepositoryDatabase {
                 return Optional.of(foundTrades);
             }
         }catch(SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return trades;
     }
 
     // checks if user owns the card and if the card is not in a deck
-    public boolean checkUserCardAssociation(User tradingUser, Trade trade){
+    public boolean checkUserCardAssociation(User tradingUser, Trade trade) throws SQLException {
         boolean isAvailable = false;
             try(
                     Connection con = database.getConnection();
@@ -66,13 +66,13 @@ public class TradingRepositoryDatabase {
                     isAvailable = true;
                 }
             }catch(SQLException e){
-                e.getErrorCode();
+                throw new SQLException();
             }
         return isAvailable;
     }
 
     // add new trade to db, throw error if id already exists
-    public void addTrade(Trade trade){
+    public void addTrade(Trade trade) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(ADD_NEW_TRADE)
@@ -86,12 +86,12 @@ public class TradingRepositoryDatabase {
                 pstmt.execute();
 
         }catch(SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 
     // get trade from the DB when the id is given
-    public Optional<Trade> getTradeWithId(Trade trade){
+    public Optional<Trade> getTradeWithId(Trade trade) throws SQLException {
         Optional<Trade> tradeNotFound = Optional.empty();
         try(
                 Connection con = database.getConnection();
@@ -110,13 +110,13 @@ public class TradingRepositoryDatabase {
                 return Optional.of(foundTrade);
             }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return tradeNotFound;
     }
 
     // delete a trade with the given id
-    public void deleteTrade(Trade trade){
+    public void deleteTrade(Trade trade) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(DELETE_TRADE)
@@ -125,12 +125,12 @@ public class TradingRepositoryDatabase {
             pstmt.execute();
 
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 
     // update boolean in trade to true
-    public void setTradeToCompleted(Trade trade){
+    public void setTradeToCompleted(Trade trade) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(SET_TRADE_TO_COMPLETED)
@@ -140,7 +140,7 @@ public class TradingRepositoryDatabase {
             pstmt.execute();
 
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 

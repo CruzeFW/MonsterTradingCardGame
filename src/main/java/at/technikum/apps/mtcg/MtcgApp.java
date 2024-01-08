@@ -7,13 +7,16 @@ import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
+import at.technikum.apps.mtcg.util.ResponseCreator;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MtcgApp implements ServerApplication {
 
     private List<Controller> controllers = new ArrayList<>();
+    private ResponseCreator responseCreator;
 
     public MtcgApp() {
         controllers.add(new UserController());
@@ -27,9 +30,15 @@ public class MtcgApp implements ServerApplication {
         controllers.add(new BattleController());
         controllers.add(new TradingController());
 
+        this.responseCreator = new ResponseCreator();
+
         //TODO decide if this is the correct place for that
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
-        userRepositoryDatabase.deleteToken();
+        try{
+            userRepositoryDatabase.deleteToken();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -39,15 +48,14 @@ public class MtcgApp implements ServerApplication {
             if (!controller.supports(request.getRoute())) {
                 continue;
             }
-
-            return controller.handle(request);
+            try{
+                return controller.handle(request);
+            }catch(SQLException e){
+                e.printStackTrace();
+                return responseCreator.createResponse(HttpStatus.INTERNAL_SERVER_ERROR, HttpContentType.TEXT_PLAIN, "Internal Server Error.");
+            }
         }
 
-        Response response = new Response();
-        response.setStatus(HttpStatus.NOT_FOUND);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("Route " + request.getRoute() + " not found in app!");
-
-        return response;
+        return responseCreator.createResponse(HttpStatus.INTERNAL_SERVER_ERROR, HttpContentType.TEXT_PLAIN, "Route " + request.getRoute() + " not found in app!");
     }
 }

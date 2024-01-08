@@ -19,7 +19,7 @@ public class DeckRepositoryDatabase {
     private final String ADD_CARD_TO_DECK= "UPDATE cards SET deckid = ? WHERE owner = ? AND id = ?";
 
     // finds deck for user and returns it (or an optional empty list)
-    public Optional<ArrayList<Card>> findDeck(User user){
+    public Optional<ArrayList<Card>> findDeck(User user) throws SQLException {
         Optional<ArrayList<Card>> posDeck = Optional.empty();
         try(
                 Connection con = database.getConnection();
@@ -43,13 +43,13 @@ public class DeckRepositoryDatabase {
                 return Optional.of(deck);
             }
         }catch(SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return posDeck;
     }
 
     // checks if the card is linked to the given user
-    public Optional<Card> checkCardAssociation(Card checkForAssociation, User foundUser){
+    public Optional<Card> checkCardAssociation(Card checkForAssociation, User foundUser) throws SQLException {
         Optional<Card> card = Optional.empty();
         try(
                 Connection con = database.getConnection();
@@ -71,13 +71,13 @@ public class DeckRepositoryDatabase {
                 return Optional.of(foundCard);
             }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return card;
     }
 
     // adds the card to the user
-    public void addToDeck(Card addCard, User foundUser){
+    public void addToDeck(Card addCard, User foundUser) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(ADD_CARD_TO_DECK)
@@ -88,7 +88,7 @@ public class DeckRepositoryDatabase {
 
                 pstmt.execute();
         }catch(SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 }

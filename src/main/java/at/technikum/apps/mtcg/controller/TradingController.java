@@ -9,6 +9,8 @@ import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
+import java.sql.SQLException;
+
 public class TradingController extends Controller {
 
     private final TradingService tradingService;
@@ -25,7 +27,7 @@ public class TradingController extends Controller {
 
     // handle requests on /tradings or /tradings/<UUID>
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws SQLException {
         if(request.getRoute().equals("/tradings")) {
             if (request.getMethod().equals("GET")) {
                 Object[] arr = tradingService.getCurrentTrades(request);

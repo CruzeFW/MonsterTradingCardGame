@@ -8,6 +8,8 @@ import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
+import java.sql.SQLException;
+
 public class StatsController extends Controller{
 
     private final StatsService statsService;
@@ -21,7 +23,7 @@ public class StatsController extends Controller{
 
     // handle GET requests on /stats
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws SQLException {
         if(request.getMethod().equals("GET")) {
             Object[] arr = statsService.getMethodCalled(request);
 

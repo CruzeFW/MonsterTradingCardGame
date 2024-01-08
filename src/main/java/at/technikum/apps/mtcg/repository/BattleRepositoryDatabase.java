@@ -19,7 +19,7 @@ public class BattleRepositoryDatabase {
     private final String JOIN_BATTLE = "UPDATE battles SET user2 = ? WHERE id = ?";
 
     // search for a battle in the DB and returns an Optional
-    public Optional<Battle> findOpenBattle(User user){
+    public Optional<Battle> findOpenBattle(User user) throws SQLException {
         Optional<Battle> battle = Optional.empty();
         try(
                 Connection con = database.getConnection();
@@ -35,13 +35,13 @@ public class BattleRepositoryDatabase {
                     return Optional.of(foundBattle);
                 }
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
         return battle;
     }
 
     // insert a new battle into the DB with the given user
-    public void startNewBattle(User user){
+    public void startNewBattle(User user) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(START_BATTLE)
@@ -50,12 +50,12 @@ public class BattleRepositoryDatabase {
 
             pstmt.execute();
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 
     // join a already found battle with the new user
-    public void joinOpenBattle(User user, Battle foundBattle){
+    public void joinOpenBattle(User user, Battle foundBattle) throws SQLException {
         try(
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(JOIN_BATTLE)
@@ -65,7 +65,7 @@ public class BattleRepositoryDatabase {
 
             pstmt.execute();
         }catch (SQLException e){
-            e.getErrorCode();
+            throw new SQLException();
         }
     }
 }

@@ -4,6 +4,8 @@ import at.technikum.apps.mtcg.util.ResponseCreator;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
+import java.sql.SQLException;
+
 public abstract class Controller {
 
     protected final ResponseCreator responseCreator;
@@ -12,7 +14,7 @@ public abstract class Controller {
     }
     public abstract boolean supports(String route);
 
-    public abstract Response handle(Request request);
+    public abstract Response handle(Request request) throws SQLException;
 
     //TODO add Responses here?
 }

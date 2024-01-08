@@ -8,6 +8,8 @@ import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
+import java.sql.SQLException;
+
 public class CardController extends Controller{
 
     private final CardService cardService;
@@ -22,7 +24,7 @@ public class CardController extends Controller{
 
     // show all cards a user has
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws SQLException {
         if(request.getMethod().equals("GET")){
             Object[] arr = cardService.showAllAcquiredCards(request);
 
