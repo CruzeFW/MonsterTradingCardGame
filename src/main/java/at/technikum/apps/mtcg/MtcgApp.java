@@ -16,21 +16,11 @@ import java.util.List;
 public class MtcgApp implements ServerApplication {
 
     private List<Controller> controllers = new ArrayList<>();
-    private ResponseCreator responseCreator;
 
     public MtcgApp() {
-        controllers.add(new UserController());
-        controllers.add(new SessionController());
-        controllers.add(new PackageController());
-        controllers.add(new TransactionController());
-        controllers.add(new CardController());
-        controllers.add(new DeckController());
-        controllers.add(new StatsController());
-        controllers.add(new ScoreboardController());
-        controllers.add(new BattleController());
-        controllers.add(new TradingController());
+        Injector injector = new Injector();
+        this.controllers = injector.createController();
 
-        this.responseCreator = new ResponseCreator();
 
         //TODO decide if this is the correct place for that
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
@@ -43,7 +33,7 @@ public class MtcgApp implements ServerApplication {
 
     @Override
     public Response handle(Request request) {
-
+        ResponseCreator responseCreator = new ResponseCreator();
         for (Controller controller: controllers) {
             if (!controller.supports(request.getRoute())) {
                 continue;
@@ -55,7 +45,6 @@ public class MtcgApp implements ServerApplication {
                 return responseCreator.createResponse(HttpStatus.INTERNAL_SERVER_ERROR, HttpContentType.TEXT_PLAIN, "Internal Server Error.");
             }
         }
-
         return responseCreator.createResponse(HttpStatus.INTERNAL_SERVER_ERROR, HttpContentType.TEXT_PLAIN, "Route " + request.getRoute() + " not found in app!");
     }
 }

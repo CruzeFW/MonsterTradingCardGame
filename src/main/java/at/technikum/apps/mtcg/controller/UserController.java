@@ -17,8 +17,8 @@ import java.util.Optional;
 public class UserController extends Controller {
 
     private final UserService userService;
-    public UserController(){
-        this.userService = new UserService(new UserRepositoryDatabase());
+    public UserController(UserService userService){
+        this.userService = userService;
     }
     @Override
     public boolean supports(String route) {

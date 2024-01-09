@@ -15,8 +15,8 @@ public class PackageController extends Controller{
 
     private final PackageService packageService;
 
-    public PackageController(){
-        this.packageService = new PackageService(new PackageRepositoryDatabase(), new CardRepositoryDatabase());
+    public PackageController(PackageService packageService){
+        this.packageService = packageService;
     }
     @Override
     public boolean supports(String route) {

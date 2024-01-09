@@ -15,8 +15,8 @@ public class TradingController extends Controller {
 
     private final TradingService tradingService;
 
-    public TradingController(){
-        this.tradingService = new TradingService(new UserRepositoryDatabase(), new TradingRepositoryDatabase(), new CardRepositoryDatabase());
+    public TradingController(TradingService tradingService){
+        this.tradingService = tradingService;
     }
 
     // supports /tradings or /tradings/<UUID>

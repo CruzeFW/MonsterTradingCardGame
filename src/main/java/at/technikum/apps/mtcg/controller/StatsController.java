@@ -13,8 +13,8 @@ import java.sql.SQLException;
 public class StatsController extends Controller{
 
     private final StatsService statsService;
-    public StatsController(){
-        this.statsService = new StatsService(new StatsRepositoryDatabase(), new UserRepositoryDatabase());
+    public StatsController(StatsService statsService){
+        this.statsService = statsService;
     };
     @Override
     public boolean supports(String route) {

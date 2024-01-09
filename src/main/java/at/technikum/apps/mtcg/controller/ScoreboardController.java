@@ -15,8 +15,8 @@ import java.sql.SQLException;
 public class ScoreboardController extends Controller{
 
     private final ScoreboardService scoreboardService;
-    public ScoreboardController(){
-        this.scoreboardService = new ScoreboardService(new StatsRepositoryDatabase(), new UserRepositoryDatabase(), new ScoreboardRepositoryDatabase());
+    public ScoreboardController(ScoreboardService scoreboardService){
+        this.scoreboardService = scoreboardService;
     };
 
     @Override

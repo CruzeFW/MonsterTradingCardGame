@@ -13,8 +13,8 @@ public class SessionController extends Controller{
 
     private final SessionService sessionService;
 
-    public SessionController(){
-        this.sessionService = new SessionService(new TokenRepositoryDatabase());
+    public SessionController(SessionService sessionService){
+        this.sessionService = sessionService;
     }
 
     @Override
