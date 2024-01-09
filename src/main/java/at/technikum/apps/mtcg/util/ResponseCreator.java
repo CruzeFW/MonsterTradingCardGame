@@ -6,8 +6,6 @@ import at.technikum.server.http.Response;
 
 public class ResponseCreator {
 
-    public ResponseCreator(){};
-
     public Response createResponse(HttpStatus httpStatus, HttpContentType contentType, String message){
         Response response = new Response();
         response.setStatus(httpStatus);
