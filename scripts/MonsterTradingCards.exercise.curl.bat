@@ -151,6 +151,21 @@ echo.
 pause
 
 REM --------------------------------------------------
+echo CUSTOM FEATURE) show transaction history altenhof
+curl -X GET http://localhost:10001/transactions --header "Authorization: Bearer altenhof-mtcgToken"
+echo.
+echo.
+
+pause
+
+REM --------------------------------------------------
+echo CUSTOM FEATURE) show transaction history kienboec
+curl -X GET http://localhost:10001/transactions --header "Authorization: Bearer kienboec-mtcgToken"
+echo.
+echo.
+
+pause
+REM --------------------------------------------------
 echo 10) show unconfigured deck
 curl -X GET http://localhost:10001/deck --header "Authorization: Bearer kienboec-mtcgToken"
 echo.

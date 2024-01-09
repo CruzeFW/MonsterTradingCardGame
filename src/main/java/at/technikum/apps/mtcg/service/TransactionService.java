@@ -2,6 +2,7 @@ package at.technikum.apps.mtcg.service;
 
 import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.Package;
+import at.technikum.apps.mtcg.entity.Transaction;
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.TransactionRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class TransactionService {
@@ -64,6 +66,35 @@ public class TransactionService {
             }
         }
         arr[0] = 2;                     // not enough coins
+        return arr;
+    }
+
+    // shows transaction history for requested user
+    public Object[] getRequestCalled(Request request) throws SQLException {
+        Object[] arr = new Object[2];
+        // check if user is in logged in/exists
+        Optional<User> user = validateUser(request);
+        if(user.isEmpty()){
+            arr[0] = 1;                 // user not found
+            return arr;
+        }
+        User foundUser = user.get();
+
+        Optional<ArrayList<Transaction>> transactions = transactionRepositoryDatabase.findTransactionHistory(foundUser);
+        if(transactions.isEmpty()){
+            arr[0] = 2;             // no package available/
+            return arr;
+        }
+        ArrayList<Transaction> foundTransactions = transactions.get();
+        arr[0] = 0;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.valueToTree(foundTransactions);
+            String jsonString = objectMapper.writeValueAsString(jsonNode);
+            arr[1]= jsonString;
+        }catch(JsonProcessingException e){
+            throw new RuntimeException(e);
+        }
         return arr;
     }
 

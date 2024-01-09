@@ -2,12 +2,14 @@ package at.technikum.apps.mtcg.repository;
 import at.technikum.apps.mtcg.data.Database;
 import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.Package;
+import at.technikum.apps.mtcg.entity.Transaction;
 import at.technikum.apps.mtcg.entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class TransactionRepositoryDatabase {
@@ -19,6 +21,7 @@ public class TransactionRepositoryDatabase {
     private final String SET_COINS = "UPDATE users SET coins = ? WHERE id = ?";
     private final String FIND_ALL_CARDS_IN_ONE_PACKAGE = "SELECT * FROM cards WHERE packageid = ? AND owner = ?";
     private final String SET_TRANSACTION = "INSERT INTO transactions(buyer, packageid) VALUES (?,?)";
+    private final String GET_USER_TRANSACTIONS = "SELECT * FROM transactions WHERE buyer = ?";
 
     // finds first Package where bought = false
     //TODO QUESTION: how do i return a real optional, because here every time i return foundPack is the bool = false and so it is not optional
@@ -133,6 +136,33 @@ public class TransactionRepositoryDatabase {
         }catch(SQLException e){
             throw new SQLException();
         }
+    }
+
+    // get all transactions from one user
+    public Optional<ArrayList<Transaction>> findTransactionHistory(User foundUser) throws SQLException {
+        Optional<ArrayList<Transaction>> transactions = Optional.empty();
+        try(
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(GET_USER_TRANSACTIONS)
+        ){
+            pstmt.setString(1, foundUser.getId());
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                ArrayList<Transaction> foundTransactions = new ArrayList<>();
+                do
+                {
+                    Transaction foundTransaction = new Transaction(
+                            rs.getInt("id"),
+                            rs.getString("buyer"),
+                            rs.getString("packageid")
+                    );
+                }while(rs.next());
+            }
+
+        }catch(SQLException e){
+            throw new SQLException();
+        }
+        return transactions;
     }
 
 }
