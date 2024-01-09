@@ -6,6 +6,13 @@ Current todos:
     5. parser zentralisieren
 //    6. try catch error handling überarbeiten
 
+CURL:
+    x. add create package where one card is already in db,
+    x1. add optional user
+    x2. show stats
+    x3. buy package with less coins
+    x4. show stats
+
 
 
 Think about it:
@@ -33,11 +40,20 @@ Fragen:
         - performance relevant?
 
 
-    API:
+    API:  TODO anpassungen von hier implementieren
         - Zeile 51: response + data? was soll ausgegeben werden?
+            -> Data ausgeben!
         - Z. 104: soll wirklich bei der fehlerhaften die response ausführlich sein?
-        - Z. 138: soll das dann erstellt werden oder nicht?
+            -> Token returnen
         - Z. 222: sollte eigentlich nicht gehen weil der username neu ist?
-        - Z. 205-210: was soll dann die response sein?
-        - Z. 514: siehe to do in DeckController Z. 56
-        - Z. 365: delete trade - id already exists? habs geändert auf "deal wurde schon durchgeführt"
+
+
+
+Threads:
+    private synchronized void foo(){
+    wait();
+    }
+
+    private synchronized void bar(){
+    notify();
+    }

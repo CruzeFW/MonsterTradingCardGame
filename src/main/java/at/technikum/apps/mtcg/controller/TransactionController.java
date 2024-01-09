@@ -20,7 +20,7 @@ public class TransactionController extends Controller{
         return route.equals("/transactions/packages") || route.equals("/transactions");
     }
 
-    // handle POST request on /transactions/packages
+    // handles POST request on /transactions/packages and GET requests on /transactions
     @Override
     public Response handle(Request request) throws SQLException {
         if (request.getRoute().equals("/transactions/packages")) {

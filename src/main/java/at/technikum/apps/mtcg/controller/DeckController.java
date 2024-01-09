@@ -47,7 +47,7 @@ public class DeckController extends Controller{
         }else if(arr[0].equals(1)){
             return responseCreator.createResponse(HttpStatus.UNAUTHORIZED, HttpContentType.TEXT_PLAIN, "Unauthorized request.");
         } else {
-            //TODO QUESTION: if I use NO_CONTENT then the printed response is empty...
+            // HttpStatus should be NO_CONTENT, but I wanted to return the body
             return responseCreator.createResponse(HttpStatus.BAD_REQUEST, HttpContentType.TEXT_PLAIN, "The request was fine, but the deck doesn't have any cards.");
         }
     }
@@ -59,6 +59,7 @@ public class DeckController extends Controller{
         if(responseType == 0){
             return responseCreator.createResponse(HttpStatus.OK, HttpContentType.TEXT_PLAIN, "The deck has been successfully configured.");
         } else if (responseType == 1) {
+            // HttpStatus should be NO_CONTENT, but I wanted to return the body
             return responseCreator.createResponse(HttpStatus.BAD_REQUEST, HttpContentType.TEXT_PLAIN, "The provided deck did not include the required amount of cards.");
         } else if (responseType == 2) {
             return responseCreator.createResponse(HttpStatus.FORBIDDEN, HttpContentType.TEXT_PLAIN, "At least one of the provided cards does not belong to the user or is not available.");

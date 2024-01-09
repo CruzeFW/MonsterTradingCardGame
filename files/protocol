@@ -52,4 +52,5 @@ started threads..
 started features/optionalFeatures
     - TransactionHistory
     - buy packages for less coins if there are less cards inside
-finished TransactionHistory (needs testing)
+completed TransactionHistory (needs testing)
+finished TransactionHistory (commented and tested)

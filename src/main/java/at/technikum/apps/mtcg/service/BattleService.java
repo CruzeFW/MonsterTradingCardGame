@@ -62,6 +62,8 @@ public class BattleService {
 
     // searches for an open battle; starts a new one or joins an open one
     private Integer openBattle(User user) throws SQLException {
+
+        // TODO THREAD HANDLING HERE
         Optional<Battle> battle = battleRepositoryDatabase.findOpenBattle(user);
         if(battle.isEmpty()){
             battleRepositoryDatabase.startNewBattle(user);

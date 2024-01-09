@@ -148,7 +148,7 @@ public class TransactionRepositoryDatabase {
             pstmt.setString(1, foundUser.getId());
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                ArrayList<Transaction> foundTransactions = new ArrayList<>();
+                ArrayList<Transaction> foundTransactionsList = new ArrayList<>();
                 do
                 {
                     Transaction foundTransaction = new Transaction(
@@ -156,7 +156,9 @@ public class TransactionRepositoryDatabase {
                             rs.getString("buyer"),
                             rs.getString("packageid")
                     );
+                    foundTransactionsList.add(foundTransaction);
                 }while(rs.next());
+                return Optional.of(foundTransactionsList);
             }
 
         }catch(SQLException e){
