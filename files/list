@@ -2,8 +2,9 @@ Current todos:
     1. battlelogic
     2. threading
     3. packages anlegen wenn sie nur < 5 karten sind? muss beim kauf dann auch weniger kosten -> kaufen überarbeiten
-    4. parser zentralisieren
-//    5. try catch error handling überarbeiten
+    4. transaction history ausgeben
+    5. parser zentralisieren
+//    6. try catch error handling überarbeiten
 
 
 

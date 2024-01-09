@@ -10,6 +10,7 @@ import java.util.List;
 public class Injector {
 
     public List<Controller> createController() {
+        // Repositories
         BattleRepositoryDatabase battleRepositoryDatabase = new BattleRepositoryDatabase();
         CardRepositoryDatabase cardRepositoryDatabase = new CardRepositoryDatabase();
         DeckRepositoryDatabase deckRepositoryDatabase = new DeckRepositoryDatabase();
@@ -21,7 +22,7 @@ public class Injector {
         TransactionRepositoryDatabase transactionRepositoryDatabase = new TransactionRepositoryDatabase();
         UserRepositoryDatabase userRepositoryDatabase = new UserRepositoryDatabase();
 
-
+        //Services
         BattleService battleService = new BattleService(userRepositoryDatabase, battleRepositoryDatabase);
         CardService cardService = new CardService(userRepositoryDatabase, cardRepositoryDatabase);
         DeckService deckService = new DeckService(deckRepositoryDatabase, userRepositoryDatabase);
@@ -33,7 +34,7 @@ public class Injector {
         TransactionService transactionService = new TransactionService(transactionRepositoryDatabase);
         UserService userService = new UserService(userRepositoryDatabase);
 
-
+        // Controller
         List<Controller> controllerList = new ArrayList<>();
         controllerList.add(new BattleController(battleService));
         controllerList.add(new CardController(cardService));
