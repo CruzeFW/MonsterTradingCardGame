@@ -14,8 +14,8 @@ public class DeckController extends Controller{
 
     private final DeckService deckService;
 
-    public DeckController(){
-        this.deckService = new DeckService(new DeckRepositoryDatabase(), new UserRepositoryDatabase());
+    public DeckController(DeckService deckService){
+        this.deckService = deckService;
     }
 
     @Override

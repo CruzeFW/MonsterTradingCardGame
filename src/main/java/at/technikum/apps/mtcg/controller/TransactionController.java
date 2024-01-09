@@ -12,8 +12,8 @@ import java.sql.SQLException;
 public class TransactionController extends Controller{
 
     private final TransactionService transactionService;
-    public TransactionController(){
-        this.transactionService = new TransactionService(new TransactionRepositoryDatabase());
+    public TransactionController(TransactionService transactionService){
+        this.transactionService = transactionService;
     }
     @Override
     public boolean supports(String route) {

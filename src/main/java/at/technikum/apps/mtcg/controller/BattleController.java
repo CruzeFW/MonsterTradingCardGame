@@ -14,8 +14,8 @@ public class BattleController extends Controller{
 
     private final BattleService battleService;
 
-    public BattleController(){
-        this.battleService = new BattleService(new UserRepositoryDatabase(), new BattleRepositoryDatabase());
+    public BattleController(BattleService battleService){
+        this.battleService = battleService;
     }
     @Override
     public boolean supports(String route) {

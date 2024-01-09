@@ -16,5 +16,4 @@ public abstract class Controller {
 
     public abstract Response handle(Request request) throws SQLException;
 
-    //TODO add Responses here?
 }

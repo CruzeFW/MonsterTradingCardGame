@@ -46,3 +46,4 @@ changed todolist into list because the file was corrupt?
 reworked responses and added util.ResponseCreator (centralised response creation)
 reworked sessions logic and controller/service
 finished some todos
+reworked tryCatch to throw to the MtcgApp

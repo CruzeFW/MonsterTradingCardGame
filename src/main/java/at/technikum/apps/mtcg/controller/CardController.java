@@ -14,8 +14,8 @@ public class CardController extends Controller{
 
     private final CardService cardService;
 
-    public CardController(){
-        this.cardService = new CardService(new UserRepositoryDatabase(), new CardRepositoryDatabase());
+    public CardController(CardService cardService){
+        this.cardService = cardService;
     }
     @Override
     public boolean supports(String route) {
