@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS battles (
     user2 VARCHAR(255),
     winner VARCHAR(255),
     loser VARCHAR(255),
-    log VARCHAR(255),
+    log VARCHAR,
     CONSTRAINT fk_user1
         FOREIGN KEY (user1)
         REFERENCES users(id)
