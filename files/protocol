@@ -54,6 +54,7 @@ started features/optionalFeatures
     - buy packages for less coins if there are less cards inside
 completed TransactionHistory (needs testing)
 finished TransactionHistory (commented and tested)
+added Arena and (hopefully) finished threads
 
 
 

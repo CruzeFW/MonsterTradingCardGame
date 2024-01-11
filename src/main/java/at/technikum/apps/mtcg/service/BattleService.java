@@ -5,6 +5,7 @@ import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.BattleRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.server.http.Request;
+import at.technikum.apps.mtcg.game.Arena;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -27,13 +28,9 @@ public class BattleService {
             return arr;
         }
         User foundUser = user.get();
-        int waitOrStart = openBattle(foundUser);
-        // TODO BATTLELOGIC enter lobby and either wait or start game
-        if(waitOrStart == 0){
-            // openGame();
-        }else{
-            // joinGame();
-        }
+
+        // TODO BATTLELOGIC enter lobby
+        openBattle(foundUser);
 
         // write into log...
 
@@ -61,17 +58,23 @@ public class BattleService {
     }
 
     // searches for an open battle; starts a new one or joins an open one
-    private Integer openBattle(User user) throws SQLException {
+    private synchronized void openBattle(User user) throws SQLException {
 
         // TODO THREAD HANDLING HERE
         Optional<Battle> battle = battleRepositoryDatabase.findOpenBattle(user);
         if(battle.isEmpty()){
             battleRepositoryDatabase.startNewBattle(user);
-            return 0;
+            try {
+                wait();                                 // wartet bis das battle aus is?!
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         } else {
             Battle foundBattle = battle.get();
             battleRepositoryDatabase.joinOpenBattle(user, foundBattle);
-            return 1;
+            Arena.startBattle(foundBattle.getId());                // hier alles mitgeben was das battle braucht (Deck, user etc)
+            notify();
         }
     }
 }

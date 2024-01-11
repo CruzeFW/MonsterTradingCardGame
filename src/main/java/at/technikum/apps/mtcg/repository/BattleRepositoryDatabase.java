@@ -54,7 +54,7 @@ public class BattleRepositoryDatabase {
         }
     }
 
-    // join a already found battle with the new user
+    // join an already found battle with the new user
     public void joinOpenBattle(User user, Battle foundBattle) throws SQLException {
         try(
                 Connection con = database.getConnection();
