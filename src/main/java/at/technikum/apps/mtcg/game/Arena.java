@@ -43,6 +43,8 @@ public class Arena {
 
             Card loser = fight(player1Card, player2Card);
 
+            // enter more code here :)
+
             counter++;
         }
 
@@ -83,23 +85,30 @@ public class Arena {
         String elementCard2 = cardTypeParser.getElementFromCard(player2Card);
 
         if(typeCard1.equals("monster") && typeCard2.equals("monster")){
-            return compareEqualDamage(player1Card, player2Card);
+            return compareEqualTypeDamage(player1Card, player2Card);
         }else{
+            // TODO HIER WEITERMACHEN
+            // compareElements(player1Card, player2Card);
             if(elementCard1.equals("normal") && elementCard2.equals("normal")){
-                return compareEqualDamage(player1Card, player2Card);
+                return compareEqualTypeDamage(player1Card, player2Card);
             } else if (elementCard1.equals("normal") && elementCard2.equals("water")) {
-                // TODO HIER WEITERMACHEN
+
             }
         }
         return null;
     }
 
 
-    private Card compareEqualDamage(Card player1Card, Card player2Card){
+    private Card compareEqualTypeDamage(Card player1Card, Card player2Card){
         if(player1Card.getDamage() > player2Card.getDamage()){
             return player2Card;
         }else{
             return player1Card;
         }
+    }
+    private void compareElements(Card player1Card, Card player2Card){
+
+
+
     }
 }
