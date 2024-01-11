@@ -73,7 +73,8 @@ public class BattleService {
         } else {
             Battle foundBattle = battle.get();
             battleRepositoryDatabase.joinOpenBattle(user, foundBattle);
-            Arena.startBattle(foundBattle.getId());                // hier alles mitgeben was das battle braucht (Deck, user etc)
+            Arena arena = new Arena();
+            arena.prepareArena(foundBattle.getId());           // hier alles mitgeben was das battle braucht (Deck, user etc)
             notify();
         }
     }

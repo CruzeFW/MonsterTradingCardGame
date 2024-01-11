@@ -24,7 +24,7 @@ public class CardTypeParser {
         }else if(name.contains("Water")){
             return "water";
         } else{
-            return null;
+            return "normal";
         }
     }
 }
