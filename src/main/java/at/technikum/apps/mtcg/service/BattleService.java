@@ -5,6 +5,7 @@ import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.BattleRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.server.http.Request;
+import at.technikum.apps.mtcg.game.Arena;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -13,9 +14,11 @@ public class BattleService {
 
     private final UserRepositoryDatabase userRepositoryDatabase;
     private final BattleRepositoryDatabase battleRepositoryDatabase;
+    private String log;
     public BattleService(UserRepositoryDatabase userRepositoryDatabase, BattleRepositoryDatabase battleRepositoryDatabase){
         this.userRepositoryDatabase = userRepositoryDatabase;
         this.battleRepositoryDatabase = battleRepositoryDatabase;
+        this.log = "";
     }
 
     // checks user authentication and then opens or joins a game
@@ -27,18 +30,10 @@ public class BattleService {
             return arr;
         }
         User foundUser = user.get();
-        int waitOrStart = openBattle(foundUser);
-        // TODO BATTLELOGIC enter lobby and either wait or start game
-        if(waitOrStart == 0){
-            // openGame();
-        }else{
-            // joinGame();
-        }
-
-        // write into log...
 
         arr[0] = 0;
-        arr[1] = "aaaaaa";
+        arr[1] = "\n" + foundUser.getUsername() + "'s thread: \n" + openBattle(foundUser);
+
         return arr;
     }
 
@@ -61,17 +56,31 @@ public class BattleService {
     }
 
     // searches for an open battle; starts a new one or joins an open one
-    private Integer openBattle(User user) throws SQLException {
-
-        // TODO THREAD HANDLING HERE
+    private synchronized String openBattle(User user) throws SQLException {
         Optional<Battle> battle = battleRepositoryDatabase.findOpenBattle(user);
         if(battle.isEmpty()){
             battleRepositoryDatabase.startNewBattle(user);
-            return 0;
+            try {
+                wait();                                 // waits till the user stops the process
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         } else {
             Battle foundBattle = battle.get();
             battleRepositoryDatabase.joinOpenBattle(user, foundBattle);
-            return 1;
+            Arena arena = new Arena();
+            log = arena.prepareArena(foundBattle.getId());           // start of arena, log is returned when finished
+            notify();
         }
+        return getReturnLog(log);
+    }
+
+    // returning error if string is empty
+    private String getReturnLog(String log) throws SQLException {
+        if(log.isEmpty()){
+            return "Opsie daysie WHAT THE FUCK IS HAPPENING HERE";          // TODO error handling :>
+        }
+        return log;
     }
 }

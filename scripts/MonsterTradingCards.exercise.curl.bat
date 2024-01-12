@@ -151,6 +151,14 @@ echo.
 pause
 
 REM --------------------------------------------------
+echo CUSTOM FEATURE) show transaction history kienboec
+curl -X GET http://localhost:10001/transactions --header "Authorization: Bearer kienboec-mtcgToken"
+echo.
+echo.
+
+pause
+
+REM --------------------------------------------------
 echo CUSTOM FEATURE) show transaction history altenhof
 curl -X GET http://localhost:10001/transactions --header "Authorization: Bearer altenhof-mtcgToken"
 echo.
@@ -158,13 +166,8 @@ echo.
 
 pause
 
-REM --------------------------------------------------
-echo CUSTOM FEATURE) show transaction history kienboec
-curl -X GET http://localhost:10001/transactions --header "Authorization: Bearer kienboec-mtcgToken"
-echo.
-echo.
 
-pause
+
 REM --------------------------------------------------
 echo 10) show unconfigured deck
 curl -X GET http://localhost:10001/deck --header "Authorization: Bearer kienboec-mtcgToken"
@@ -280,10 +283,10 @@ echo.
 pause
 
 REM --------------------------------------------------
-REM echo 17) battle
-REM start /b "kienboec battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer kienboec-mtcgToken"
-REM start /b "altenhof battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer altenhof-mtcgToken"
-REM ping localhost -n 10 >NUL 2>NUL
+echo 17) battle
+start /b "kienboec battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer kienboec-mtcgToken"
+start /b "altenhof battle" curl -X POST http://localhost:10001/battles --header "Authorization: Bearer altenhof-mtcgToken"
+ping localhost -n 10 >NUL 2>NUL
 
 pause
 

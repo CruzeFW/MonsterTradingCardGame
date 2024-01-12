@@ -8,6 +8,7 @@ Problems:
     - using int is not intuitive for someone reading the DB and needs to be hard coded in the service..
     - still using int for now..
    -> decided to keep int, using it like a bool so if a card is in a deck it's deckid is 1 -> stupid but works atm
+7) returning of logs from both threads -> workaround with variable in class battleService
 
 x) reusability and centering of some functions.. need to rewrite a lot of code i think (~ 8 days in .. >.>)
 
@@ -54,6 +55,9 @@ started features/optionalFeatures
     - buy packages for less coins if there are less cards inside
 completed TransactionHistory (needs testing)
 finished TransactionHistory (commented and tested)
+added Arena and (hopefully) finished threads
+finished and commented and tested arena
+added and finished battleLog
 
 
 
@@ -63,3 +67,8 @@ Things done that are not like the script:
 - package with less then 5 cards can be created if one card or more are already known
 - changed logic on delete tradings/<UUID> for last response (added bool to indicate if trade has been finished)
 - added TransactionHistory into CURL
+- arena:
+    -cards are removed from a user after they get defeated and are added to the winner of the battle
+        - if it's a draw they are not removed
+        - optional remove elo for draw implemented but disabled
+

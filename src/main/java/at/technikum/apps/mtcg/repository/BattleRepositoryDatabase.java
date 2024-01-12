@@ -17,6 +17,8 @@ public class BattleRepositoryDatabase {
     private final String FIND_OPEN_BATTLE = "SELECT * FROM battles WHERE user1 != ? AND user2 IS NULL LIMIT 1";
     private final String START_BATTLE = "INSERT INTO battles (user1) VALUES (?)";
     private final String JOIN_BATTLE = "UPDATE battles SET user2 = ? WHERE id = ?";
+    private final String FIND_BATTLE_WITH_ID = "SELECT * FROM battles WHERE id = ?";
+    private final String UPDATE_AFTER_BATTLE = "UPDATE battles SET winner = ?, loser = ?, log = ? WHERE id = ?";
 
     // search for a battle in the DB and returns an Optional
     public Optional<Battle> findOpenBattle(User user) throws SQLException {
@@ -54,7 +56,7 @@ public class BattleRepositoryDatabase {
         }
     }
 
-    // join a already found battle with the new user
+    // join an already found battle with the new user
     public void joinOpenBattle(User user, Battle foundBattle) throws SQLException {
         try(
                 Connection con = database.getConnection();
@@ -68,4 +70,47 @@ public class BattleRepositoryDatabase {
             throw new SQLException();
         }
     }
+
+    // get all values from a started battle
+    public Battle findBattleWithId(Integer id) throws SQLException {
+        try(
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(FIND_BATTLE_WITH_ID)
+        ){
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                 Battle battle = new Battle(
+                         rs.getInt("id"),
+                         rs.getString("user1"),
+                         rs.getString("user2"),
+                         rs.getString("winner"),
+                         rs.getString("loser"),
+                         rs.getString("log")
+                 );
+                 return battle;
+            }
+        }catch (SQLException e){
+            throw new SQLException();
+        }
+        return null;
+    }
+
+    // update winner, loser, log after battle
+    public void updateAfterBattle(Battle battle, String winner, String loser, String log) throws SQLException {
+        try(
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(UPDATE_AFTER_BATTLE)
+        ){
+            pstmt.setString(1, winner);
+            pstmt.setString(2, loser);
+            pstmt.setString(3, log);
+            pstmt.setInt(4, battle.getId());
+
+            pstmt.execute();
+        }catch (SQLException e){
+            throw new SQLException();
+        }
+    }
+
 }

@@ -1,11 +1,13 @@
 Current todos:
-    1. battlelogic
-    2. threading
+    1.
+    2.
     3. packages anlegen wenn sie nur < 5 karten sind? muss beim kauf dann auch weniger kosten -> kaufen überarbeiten
     4. parser zentralisieren
-    5.
+    5. überall wo list returned wird muss ich kein optional machen weil die liste dann einfach leer ist
+    6.
 
     X. try catch error handling überarbeiten
+    X1. do NOT return Object[], bad style
 
 CURL:
     x. add create package where one card is already in db,
@@ -48,13 +50,3 @@ Fragen:
             -> Token returnen
         - Z. 222: sollte eigentlich nicht gehen weil der username neu ist?
 
-
-
-Threads:
-    private synchronized void foo(){
-    wait();
-    }
-
-    private synchronized void bar(){
-    notify();
-    }
