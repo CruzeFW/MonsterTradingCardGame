@@ -52,11 +52,13 @@ Fragen:
 
 
 
-Threads:
-    private synchronized void foo(){
-    wait();
-    }
-
-    private synchronized void bar(){
-    notify();
-    }
+Arena:
+Monster vs Monster -> normaler dmg vergleich, der mit mehr gewinnt
+Monster vs Spell:
+    - beide normal -> normaler dmg vergleich
+    - eines nicht normal: dmg nach effectivnes vergleichen
+höherer schaden = winner;
+loser wird dem gegner zugewiesen;
+wenn gleicher schaden -> nichts passiert
+max 100 runden
+extra specials!

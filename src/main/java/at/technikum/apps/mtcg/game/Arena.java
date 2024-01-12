@@ -1,5 +1,6 @@
 package at.technikum.apps.mtcg.game;
 
+import at.technikum.apps.mtcg.dto.FightingCard;
 import at.technikum.apps.mtcg.entity.Battle;
 import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.User;
@@ -9,8 +10,8 @@ import at.technikum.apps.mtcg.util.CardTypeParser;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
-import java.util.Random;
 
 public class Arena {
 
@@ -37,18 +38,35 @@ public class Arena {
     public void startArena() throws SQLException {
         System.out.println("in arena logic");
         int counter = 0;
-        while(!deckUser1.isEmpty() || !deckUser2.isEmpty() || counter < 100 ){
+        while(!deckUser1.isEmpty() && !deckUser2.isEmpty() && counter < 100 ){
             Card player1Card = chooseRandom(deckUser1);
             Card player2Card = chooseRandom(deckUser2);
+            FightingCard p1 = new FightingCard(
+                    player1Card.getName(),
+                    player1Card.getOwner(),
+                    user1.getUsername(),
+                    player1Card.getDamage(),
+                    player1Card.getDamage(),
+                    cardTypeParser.getTypeFromCard(player1Card),
+                    cardTypeParser.getElementFromCard(player1Card),
+                    "");
+            FightingCard p2 = new FightingCard(
+                    player2Card.getName(),
+                    player2Card.getOwner(),
+                    user2.getUsername(),
+                    player2Card.getDamage(),
+                    player2Card.getDamage(),
+                    cardTypeParser.getTypeFromCard(player2Card),
+                    cardTypeParser.getElementFromCard(player2Card),
+                    "");
 
-            Card loser = fight(player1Card, player2Card);
+            FightingCard loser = fight(p1, p2);
+
 
             // enter more code here :)
 
             counter++;
         }
-
-
 
     }
 
@@ -71,44 +89,91 @@ public class Arena {
 
     // randomizer to get a random card from the deck
     private Card chooseRandom(ArrayList<Card> deck){
-        Random random = new Random();
-        int chosenCard = random.nextInt(deck.size());
-
-        return deck.get(chosenCard);
+        Collections.shuffle(deck);
+        return deck.getFirst();
     }
 
-    //
-    private Card fight(Card player1Card, Card player2Card){
-        String typeCard1 = cardTypeParser.getTypeFromCard(player1Card);
-        String typeCard2 = cardTypeParser.getTypeFromCard(player2Card);
-        String elementCard1 = cardTypeParser.getElementFromCard(player1Card);
-        String elementCard2 = cardTypeParser.getElementFromCard(player2Card);
+    // fight me AMK
+    private FightingCard fight(FightingCard p1, FightingCard p2){
 
-        if(typeCard1.equals("monster") && typeCard2.equals("monster")){
-            return compareEqualTypeDamage(player1Card, player2Card);
+        p1.setSpecial(checkSpecial(p1, p2));
+        p2.setSpecial(checkSpecial(p2, p1));
+
+        // check if there is a special condition set
+        if(!p1.getSpecial().isEmpty() || !p2.getSpecial().isEmpty()){
+            p1.setCurrentDamage(p1.getCurrentDamage() * adaptDamageWithSpecial(p1, p2));
+            p2.setCurrentDamage(p2.getCurrentDamage() * adaptDamageWithSpecial(p2, p1));
+            return calculateDamage(p1, p2);
+        }
+
+        // pure monster fight
+        if(p1.getType().equals("monster") && p2.getType().equals("monster")){
+            return calculateDamage(p1, p2);
         }else{
+            // mixed fights
             // TODO HIER WEITERMACHEN
-            // compareElements(player1Card, player2Card);
-            if(elementCard1.equals("normal") && elementCard2.equals("normal")){
-                return compareEqualTypeDamage(player1Card, player2Card);
-            } else if (elementCard1.equals("normal") && elementCard2.equals("water")) {
+             return compareTypes(p1, p2);
 
-            }
+        }
+    }
+
+    private String checkSpecial(FightingCard card, FightingCard otherCard){
+        if(card.getName().equals("Dragon") && otherCard.getName().equals("FireElf")){
+            return "miss";
+        }
+        if(card.getName().contains("Goblin") && otherCard.getName().equals("Dragon")){
+            return "afraid";
+        }
+        if(card.getName().equals("WaterSpell") && otherCard.getName().equals("Knight")){
+            return "maxDmg";
+        }
+        if(card.getType().equals("spell") && otherCard.getName().equals("Kraken")){
+            return "noDmg";
+        }
+        return "";
+    }
+
+    private float adaptDamageWithSpecial(FightingCard card, FightingCard other){
+        switch (card.getSpecial()){
+            case "miss", "afraid", "noDmg":
+                return 0;
+            case "maxDmg":
+                return 100;
+            default:
+                return 1;
+        }
+    }
+
+    private FightingCard calculateDamage(FightingCard p1, FightingCard p2){
+        if(p1.getCurrentDamage() > p2.getCurrentDamage()){
+            return p2;
+        }else{
+            return p1;
+        }
+    }
+
+    private FightingCard compareTypes(FightingCard p1, FightingCard p2){
+        switch (p1.getType()){
+            case "monster":
+                if(p2.getType().equals("monster")){
+                    return calculateDamage(p1, p2);
+                }else {
+                    return checkEffectiveness(p1, p2);
+                }
+            case "spell":
+                return checkEffectiveness(p1, p2);
         }
         return null;
     }
 
-
-    private Card compareEqualTypeDamage(Card player1Card, Card player2Card){
-        if(player1Card.getDamage() > player2Card.getDamage()){
-            return player2Card;
-        }else{
-            return player1Card;
+    private FightingCard checkEffectiveness(FightingCard p1, FightingCard p2){
+        switch (p1.getElement()){
+            case "fire":
+                //if(p2.)
         }
-    }
-    private void compareElements(Card player1Card, Card player2Card){
 
 
 
+        return calculateDamage(p1, p2);
     }
 }
