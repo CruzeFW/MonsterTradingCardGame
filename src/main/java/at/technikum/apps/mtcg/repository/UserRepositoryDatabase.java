@@ -1,6 +1,5 @@
 package at.technikum.apps.mtcg.repository;
 
-import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.data.Database;
 
@@ -10,43 +9,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class UserRepositoryDatabase {
 
     private final Database database = new Database();
-    //private final String FIND_ALL_SQL = "SELECT * FROM users";
+
     private final String FIND_ONE = "SELECT * FROM users WHERE username = ?";
     private final String FIND_ONE_TOKEN = "SELECT * FROM users WHERE token = ?";
     private final String SAVE_SQL = "INSERT INTO users(id, username, password, elo, coins) VALUES(?, ?, ?, ?, ?)";
     private final String DELETE_TOKEN = "UPDATE users SET token = NULL";
     private final String UPDATE = "UPDATE users SET username = ?, password = ?, bio = ?, image = ? WHERE token = ?";
-
-
-//    public List<User> findAll() {
-//        List<User> users = new ArrayList<>();
-//
-//        try (
-//                Connection con = database.getConnection();
-//                PreparedStatement pstmt = con.prepareStatement(FIND_ALL_SQL);
-//                ResultSet rs = pstmt.executeQuery()
-//        ) {
-//            while (rs.next()) {
-//                User user = new User(
-//                        rs.getString("id"),
-//                        rs.getString("username"),
-//                        rs.getString("password")
-//                );
-//                users.add(user);
-//            }
-//
-//            return users;
-//        } catch (SQLException e) {
-//            return users;
-//        }
-//    }
+    private final String GET_USERNAME_AND_ELO = "SELECT username, elo FROM users WHERE id = ?";
+    private final String UPDATE_ELO = "UPDATE users SET elo = ? WHERE id = ?";
 
     // find user by its username
     public Optional<User> find(User user) throws SQLException {
@@ -72,7 +47,6 @@ public class UserRepositoryDatabase {
         }catch (SQLException e){
             throw new SQLException();
         }
-
         return Optional.empty();
     }
 
@@ -116,21 +90,14 @@ public class UserRepositoryDatabase {
             pstmt.setInt(4, 500);
             pstmt.setInt(5, 20);
 
-
             pstmt.execute();
         } catch (SQLException e) {
             throw new SQLException();
         }
-
         return user;
     }
 
-    //NOT IN USE
-//    public User delete(User user) {
-//        return null;
-//    }
-
-    //deletes token in database for all users
+    // deletes token in database for all users
     public void deleteToken() throws SQLException {
         try (
                 Connection con = database.getConnection();
@@ -162,6 +129,40 @@ public class UserRepositoryDatabase {
             throw new SQLException();
         }
         return user;
+    }
+
+    // returns username and elo of given user
+    public User getUserAndEloWithId(User user) throws SQLException{
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(GET_USERNAME_AND_ELO)
+        ) {
+            pstmt.setString(1, user.getId());
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                user.setUsername(rs.getString("username"));
+                user.setElo(rs.getInt("elo"));
+            }
+        } catch (SQLException e) {
+            throw new SQLException();
+        }
+        return user;
+    }
+
+    // update elo of given user
+    public void updateElo(User user) throws SQLException {
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(UPDATE_ELO)
+        ) {
+            pstmt.setInt(1, user.getElo());
+            pstmt.setString(2, user.getId());
+
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new SQLException();
+        }
     }
 
 }

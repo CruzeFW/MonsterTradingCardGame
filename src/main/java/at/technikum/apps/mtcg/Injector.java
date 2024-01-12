@@ -33,8 +33,6 @@ public class Injector {
         TradingService tradingService = new TradingService(userRepositoryDatabase, tradingRepositoryDatabase, cardRepositoryDatabase);
         TransactionService transactionService = new TransactionService(transactionRepositoryDatabase);
         UserService userService = new UserService(userRepositoryDatabase);
-        // TODO delete this
-        PlayerService playerService = new PlayerService(userRepositoryDatabase, deckRepositoryDatabase);
 
         // Controller
         List<Controller> controllerList = new ArrayList<>();

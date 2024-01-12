@@ -27,10 +27,16 @@ public class FightingCard {
     public void setName(String name) {
         this.name = name;
     }
+    public String getOwnerName() {
+        return ownerName;
+    }
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
     public String getOwnerId() {
         return ownerId;
     }
-    public void setOwnerId(String owner) {
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
     public float getDamage() {

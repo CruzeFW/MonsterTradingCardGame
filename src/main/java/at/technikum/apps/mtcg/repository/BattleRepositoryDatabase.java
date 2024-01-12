@@ -18,6 +18,7 @@ public class BattleRepositoryDatabase {
     private final String START_BATTLE = "INSERT INTO battles (user1) VALUES (?)";
     private final String JOIN_BATTLE = "UPDATE battles SET user2 = ? WHERE id = ?";
     private final String FIND_BATTLE_WITH_ID = "SELECT * FROM battles WHERE id = ?";
+    private final String UPDATE_AFTER_BATTLE = "UPDATE battles SET winner = ?, loser = ?, log = ? WHERE id = ?";
 
     // search for a battle in the DB and returns an Optional
     public Optional<Battle> findOpenBattle(User user) throws SQLException {
@@ -94,4 +95,22 @@ public class BattleRepositoryDatabase {
         }
         return null;
     }
+
+    // update winner, loser, log after battle
+    public void updateAfterBattle(Battle battle, String winner, String loser, String log) throws SQLException {
+        try(
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(UPDATE_AFTER_BATTLE)
+        ){
+            pstmt.setString(1, winner);
+            pstmt.setString(2, loser);
+            pstmt.setString(3, log);
+            pstmt.setInt(4, battle.getId());
+
+            pstmt.execute();
+        }catch (SQLException e){
+            throw new SQLException();
+        }
+    }
+
 }

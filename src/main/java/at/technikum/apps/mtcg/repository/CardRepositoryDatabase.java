@@ -18,7 +18,7 @@ public class CardRepositoryDatabase {
     private final String FIND_ONE = "SELECT * FROM cards WHERE id = ?";
     private final String SAVE_CARD = "INSERT INTO cards(id, name, damage, packageid) VALUES(?, ?, ?, ?)";
     private final String FIND_ALL_CARDS = "SELECT * FROM cards WHERE owner = ?";
-    private final String UPDATE_OWNER = "UPDATE cards SET owner = ? WHERE id = ?";
+    private final String UPDATE_OWNER = "UPDATE cards SET owner = ? , deckid = NULL WHERE id = ?";
 
 
     // find card by its id, returns found one or a optional.empty()
