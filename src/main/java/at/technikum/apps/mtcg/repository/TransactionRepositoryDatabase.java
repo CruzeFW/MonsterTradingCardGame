@@ -24,7 +24,6 @@ public class TransactionRepositoryDatabase {
     private final String GET_USER_TRANSACTIONS = "SELECT * FROM transactions WHERE buyer = ?";
 
     // finds first Package where bought = false
-    //TODO QUESTION: how do i return a real optional, because here every time i return foundPack is the bool = false and so it is not optional
     public Optional<Package> findAvailablePackage() throws SQLException {
         Optional<Package> pack = Optional.empty();
         try(

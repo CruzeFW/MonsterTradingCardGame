@@ -6,9 +6,6 @@ import at.technikum.apps.mtcg.repository.StatsRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.apps.mtcg.util.ResponseParser;
 import at.technikum.server.http.Request;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -36,15 +33,6 @@ public class StatsService {
         arr[0] = 0;
         ResponseParser responseParser = new ResponseParser();
         arr[1] = responseParser.statsToString(stats);
-
-//        String statsJson;
-//        try {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            statsJson = objectMapper.writeValueAsString(stats);
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//        arr[1] = statsJson;
 
         return arr;
     }

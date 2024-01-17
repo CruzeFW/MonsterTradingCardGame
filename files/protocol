@@ -1,3 +1,16 @@
+Design:
+    - OOP rules followed
+    - Server and application are seperated
+    - the Server alters HTTP requests and sends them to the app, where the further logic is based
+    - under the circumstance that the request is a correct:
+        - the corresponding controller takes the request and sends decides which part of its service is called
+        - the service does all the needed "logic" inside the app and sends requests or gets answers from the database
+        - the received response or its corresponding response code is send back to the controller
+        - the controller calls the response creator who creates a valid http response
+        - the response is send back to the server
+        - the user gets his/her response
+
+
 Problems:
 1) Problems with token: unsure where to save, how to persist, security kinda bad if its saved in db, currently no threading so not possible to save locally
 2) Added a function into the constructor of the mtcgApp to remove all tokens inside the db so it can be simulated that users login
@@ -7,12 +20,10 @@ Problems:
 6) deckid in user DB: unsure about value, if I use a bool i have the same problem as with the package that i can't initialize a null object of a card as a bool is always false/true
     - using int is not intuitive for someone reading the DB and needs to be hard coded in the service..
     - still using int for now..
-   -> decided to keep int, using it like a bool so if a card is in a deck it's deckid is 1 -> stupid but works atm
+   -> decided to keep int, using it like a bool so if a card is in a deck its deckid is 1 -> not ideal but works
 7) returning of logs from both threads -> workaround with variable in class battleService
 
-x) reusability and centering of some functions.. need to rewrite a lot of code i think (~ 8 days in .. >.>)
-
-
+History:
 added user route: /users implemented, /users/ not yet
 added token: added random UUID and boolean to create custom token, created validateToken function, thought about tokenRequest and tokenResponse
 adapted httpMapper to take "Authorize:.. "-Header
@@ -70,13 +81,13 @@ started refactoring:
         - /scoreboard
         - /trading
         - /transaction + custom feature
+unittests
 
 
 
 
 Things done that are not like the script:
 - no 204 httpStatus returned -> Bad Request instead to print response body
-- changing username instead of name in changing in further steps -> TODO maybe rework user edit
 - package with less then 5 cards can be created if one card or more are already known
 - changed logic on delete tradings/<UUID> for last response (added bool to indicate if trade has been finished)
 - added TransactionHistory into CURL

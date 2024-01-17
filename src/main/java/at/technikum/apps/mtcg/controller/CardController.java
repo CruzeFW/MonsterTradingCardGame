@@ -1,7 +1,5 @@
 package at.technikum.apps.mtcg.controller;
 
-import at.technikum.apps.mtcg.repository.CardRepositoryDatabase;
-import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.apps.mtcg.service.CardService;
 import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;

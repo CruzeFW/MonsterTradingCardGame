@@ -62,13 +62,6 @@ public class UserService {
                 boolean authorized = checkIfAuthorized(user, foundUser);        //that's kinda wonky
                 if (authorized) {
                     ResponseParser responseParser = new ResponseParser();
-                    // reworked to responseParser TODO delete this or centralize
-//                    String userJson;
-//                    try {
-//                        userJson = objectMapper.writeValueAsString(foundUser);
-//                    } catch (JsonProcessingException e) {
-//                        throw new RuntimeException(e);
-//                    }
                     arr[0] = 0;
                     arr[1] = responseParser.userDataParser(foundUser);  // user found
                 }
@@ -152,9 +145,7 @@ public class UserService {
         return request.getRoute().split("/")[2].equals(request.getAuthorization().split("-")[0]);
     }
 
-    // jaaaa keine ahnung ob die das macht was ich will, soll true returnen wenn beide gleich sind oder wenns der admin is,
-    // könnte aber mit dem code davor schon bissl fucked sein..
-    //TODO what is this?
+    //TODO rethink that
     public boolean checkIfAuthorized(User user, User foundUser){
         if(user.getAuthorization().equals(foundUser.getAuthorization())){
             return true;

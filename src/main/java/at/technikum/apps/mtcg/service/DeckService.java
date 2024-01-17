@@ -47,15 +47,6 @@ public class DeckService {
             arr[1] = responseParser.outro(responseParser.cardArrayToString(foundDeck, responseParser.intro("Deck of ", foundUser)), "--- end of deck ---");
         }
 
-        // remove this or centralize TODO centralize
-//        try {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            JsonNode jsonNode = objectMapper.valueToTree(foundDeck);
-//            String jsonString = objectMapper.writeValueAsString(jsonNode);
-//            arr[1] = jsonString;
-//        }catch(JsonProcessingException e){
-//            throw new RuntimeException(e);
-//        }
         return arr;
     }
 
