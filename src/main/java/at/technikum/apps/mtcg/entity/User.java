@@ -18,11 +18,18 @@ public class User {
         this.username = username;
         this.elo = elo;
     }
-//    public User(String id, String username, String password) {
-//        this.id = id;
-//        this.username = username;
-//        this.password = password;
-//    }
+
+    public User(String id, String username, String password, String name, String authorization, String bio, String image, int elo, int coins) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.authorization = authorization;
+        this.bio = bio;
+        this.image = image;
+        this.elo = elo;
+        this.coins = coins;
+    }
 
     public String getId() {
         return id;

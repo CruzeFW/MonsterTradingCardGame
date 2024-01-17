@@ -1,6 +1,5 @@
 package at.technikum.apps.mtcg.entity;
 
-import at.technikum.apps.mtcg.controller.TransactionController;
 
 public class Transaction {
     public Transaction(){}

@@ -39,7 +39,7 @@ public class BattleService {
 
     // check if a given token is connected to a user
     //TODO maybe auslagern? quintet in CardService + DeckService + ScoreboardService + StatsController
-    private Optional<User> checkToken(Request request) throws SQLException {
+    protected Optional<User> checkToken(Request request) throws SQLException {
         Optional<User> foundUser = Optional.empty();
         if (request.getAuthorization() == null) {
             return foundUser;           // no token
@@ -79,7 +79,7 @@ public class BattleService {
     // returning error if string is empty
     private String getReturnLog(String log) throws SQLException {
         if(log.isEmpty()){
-            return "Opsie daysie WHAT THE FUCK IS HAPPENING HERE";          // TODO error handling :>
+            return "Opsie daysie, shouldn't be here";          // TODO error handling :>
         }
         return log;
     }

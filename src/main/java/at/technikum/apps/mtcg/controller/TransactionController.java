@@ -1,6 +1,5 @@
 package at.technikum.apps.mtcg.controller;
 
-import at.technikum.apps.mtcg.repository.TransactionRepositoryDatabase;
 import at.technikum.apps.mtcg.service.TransactionService;
 import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;

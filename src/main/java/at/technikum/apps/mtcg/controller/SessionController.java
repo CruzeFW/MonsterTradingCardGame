@@ -1,6 +1,5 @@
 package at.technikum.apps.mtcg.controller;
 
-import at.technikum.apps.mtcg.repository.TokenRepositoryDatabase;
 import at.technikum.apps.mtcg.service.SessionService;
 import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;

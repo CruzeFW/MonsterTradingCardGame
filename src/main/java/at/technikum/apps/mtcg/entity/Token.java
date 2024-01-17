@@ -1,6 +1,5 @@
 package at.technikum.apps.mtcg.entity;
 
-import java.util.UUID;
 
 public class Token {
 

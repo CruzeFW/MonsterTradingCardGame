@@ -8,9 +8,6 @@ import at.technikum.apps.mtcg.repository.TransactionRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.apps.mtcg.util.ResponseParser;
 import at.technikum.server.http.Request;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -56,16 +53,6 @@ public class TransactionService {
                 if(!cards.isEmpty()){
                     ResponseParser responseParser = new ResponseParser();
                     arr[1] = responseParser.outro(responseParser.cardArrayToString(cards, responseParser.intro("Package of ", foundUser)), "--- end of package ---");
-
-                    // remove this or centralize TODO centralize
-//                    try {
-//                        ObjectMapper objectMapper = new ObjectMapper();
-//                        JsonNode jsonNode = objectMapper.valueToTree(cards);
-//                        String jsonString = objectMapper.writeValueAsString(jsonNode);
-//                        arr[1]= jsonString;
-//                    }catch(JsonProcessingException e){
-//                        throw new RuntimeException(e);
-//                    }
                     return arr;
                 }
             }
@@ -95,15 +82,6 @@ public class TransactionService {
         ResponseParser responseParser = new ResponseParser();
         arr[1] = responseParser.transactionsToString(foundTransactions, foundUser);
 
-        // remove this or centralize TODO centralize
-//        try {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            JsonNode jsonNode = objectMapper.valueToTree(foundTransactions);
-//            String jsonString = objectMapper.writeValueAsString(jsonNode);
-//            arr[1]= jsonString;
-//        }catch(JsonProcessingException e){
-//            throw new RuntimeException(e);
-//        }
         return arr;
     }
 
