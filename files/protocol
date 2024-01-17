@@ -1,6 +1,11 @@
+GitRepo:
+https://github.com/CruzeFW/MonsterTradingCardGame
+
 Design:
     - OOP rules followed
     - Server and application are seperated
+    - Injector for centralised dependencyinjection
+    - reusable classes for multiuse in different methods
     - the Server alters HTTP requests and sends them to the app, where the further logic is based
     - under the circumstance that the request is a correct:
         - the corresponding controller takes the request and sends decides which part of its service is called
@@ -10,6 +15,9 @@ Design:
         - the response is send back to the server
         - the user gets his/her response
 
+Unittests:
+These unittest where chosen because of the TDD, where every outcome of a method should be tested. These tests are very basic
+but build a solid base for further tests. Because of limited time in the end, no further (useful) tests where included.
 
 Problems:
 1) Problems with token: unsure where to save, how to persist, security kinda bad if its saved in db, currently no threading so not possible to save locally
@@ -22,6 +30,11 @@ Problems:
     - still using int for now..
    -> decided to keep int, using it like a bool so if a card is in a deck its deckid is 1 -> not ideal but works
 7) returning of logs from both threads -> workaround with variable in class battleService
+
+Lessons learned:
+- Time management is essential on such big projects.
+- Use unittests already while writing your code.
+- GitHub can be your friend, but doesn't have to...
 
 History:
 added user route: /users implemented, /users/ not yet
@@ -81,10 +94,7 @@ started refactoring:
         - /scoreboard
         - /trading
         - /transaction + custom feature
-unittests
-
-
-
+created unittests
 
 Things done that are not like the script:
 - no 204 httpStatus returned -> Bad Request instead to print response body
@@ -96,3 +106,8 @@ Things done that are not like the script:
         - if it's a draw they are not removed
         - optional remove elo for draw implemented but disabled
 
+Unique feature:
+My unique feature is a transaction history. Each user can access his/her history on "curl -X GET http://localhost:10001/transactions --header "Authorization: Bearer altenhof-mtcgToken""
+with a GET request on /transactions and the corresponding token
+
+Time spent: 114h
