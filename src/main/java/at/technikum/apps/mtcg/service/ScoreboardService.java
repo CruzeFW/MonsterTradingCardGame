@@ -5,6 +5,7 @@ import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.ScoreboardRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.StatsRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
+import at.technikum.apps.mtcg.util.ResponseParser;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,14 +41,18 @@ public class ScoreboardService {
         Collections.sort(scoreboard);
 
         arr[0] = 0;
-        String statsJson;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            statsJson = objectMapper.writeValueAsString(scoreboard);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        arr[1] = statsJson;
+
+        ResponseParser responseParser = new ResponseParser();
+        arr[1] = responseParser.statsListToString(scoreboard);
+        // remove this or centralize TODO centralize
+//        String statsJson;
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            statsJson = objectMapper.writeValueAsString(scoreboard);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//        arr[1] = statsJson;
         return arr;
     }
 

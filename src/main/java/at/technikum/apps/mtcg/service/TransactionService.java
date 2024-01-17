@@ -6,6 +6,7 @@ import at.technikum.apps.mtcg.entity.Transaction;
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.TransactionRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
+import at.technikum.apps.mtcg.util.ResponseParser;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -50,17 +51,21 @@ public class TransactionService {
                 transactionRepositoryDatabase.saveTransaction(foundUser, foundPack.getPackageId());     // create transaction in DB
                 // set response and cards in arr to return
                 arr[0] = 0;
-                Card[] cards = getAllCardsFromOnePackage(foundUser, foundPack.getPackageId());
-                //check if first element returned is not default constructor
-                if(cards[0] != null){   //nicht schön aber sonst muss ich ein optinal array zurück geben and i don't want to
-                    try {
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        JsonNode jsonNode = objectMapper.valueToTree(cards);
-                        String jsonString = objectMapper.writeValueAsString(jsonNode);
-                        arr[1]= jsonString;
-                    }catch(JsonProcessingException e){
-                        throw new RuntimeException(e);
-                    }
+                ArrayList<Card> cards = getAllCardsFromOnePackage(foundUser, foundPack.getPackageId());
+                //check if cards has elements
+                if(!cards.isEmpty()){
+                    ResponseParser responseParser = new ResponseParser();
+                    arr[1] = responseParser.outro(responseParser.cardArrayToString(cards, responseParser.intro("Package of ", foundUser)), "--- end of package ---");
+
+                    // remove this or centralize TODO centralize
+//                    try {
+//                        ObjectMapper objectMapper = new ObjectMapper();
+//                        JsonNode jsonNode = objectMapper.valueToTree(cards);
+//                        String jsonString = objectMapper.writeValueAsString(jsonNode);
+//                        arr[1]= jsonString;
+//                    }catch(JsonProcessingException e){
+//                        throw new RuntimeException(e);
+//                    }
                     return arr;
                 }
             }
@@ -87,14 +92,18 @@ public class TransactionService {
         }
         ArrayList<Transaction> foundTransactions = transactions.get();
         arr[0] = 0;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.valueToTree(foundTransactions);
-            String jsonString = objectMapper.writeValueAsString(jsonNode);
-            arr[1]= jsonString;
-        }catch(JsonProcessingException e){
-            throw new RuntimeException(e);
-        }
+        ResponseParser responseParser = new ResponseParser();
+        arr[1] = responseParser.transactionsToString(foundTransactions, foundUser);
+
+        // remove this or centralize TODO centralize
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            JsonNode jsonNode = objectMapper.valueToTree(foundTransactions);
+//            String jsonString = objectMapper.writeValueAsString(jsonNode);
+//            arr[1]= jsonString;
+//        }catch(JsonProcessingException e){
+//            throw new RuntimeException(e);
+//        }
         return arr;
     }
 
@@ -116,7 +125,7 @@ public class TransactionService {
     }
 
     // calls transactionRepositoryDatabase and returns Card[]
-    private Card[] getAllCardsFromOnePackage(User foundUser, String packageId) throws SQLException {
+    private ArrayList<Card> getAllCardsFromOnePackage(User foundUser, String packageId) throws SQLException {
         return transactionRepositoryDatabase.getAllCardsFromOnePackage(foundUser, packageId);
     }
 }

@@ -4,6 +4,7 @@ import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.DeckRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
+import at.technikum.apps.mtcg.util.ResponseParser;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,7 +25,7 @@ public class DeckService {
 
     // get the deck for a user if it exists
     public Object[] getDeck(Request request) throws SQLException {
-        Object[] arr = new Object[2];
+        Object[] arr = new Object[3];
         Optional<User> user = checkToken(request);
         if(user.isEmpty()){                // no token | user not found/not logged in
             arr[0] = 1;
@@ -39,14 +40,22 @@ public class DeckService {
 
         ArrayList<Card> foundDeck = deck.get();
         arr[0] = 0;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.valueToTree(foundDeck);
-            String jsonString = objectMapper.writeValueAsString(jsonNode);
-            arr[1] = jsonString;
-        }catch(JsonProcessingException e){
-            throw new RuntimeException(e);
+        ResponseParser responseParser = new ResponseParser();
+        if(!request.getRoute().equals("/deck")){
+            arr[1] = responseParser.alternativeDeckDisplay(foundDeck);
+        }else{
+            arr[1] = responseParser.outro(responseParser.cardArrayToString(foundDeck, responseParser.intro("Deck of ", foundUser)), "--- end of deck ---");
         }
+
+        // remove this or centralize TODO centralize
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            JsonNode jsonNode = objectMapper.valueToTree(foundDeck);
+//            String jsonString = objectMapper.writeValueAsString(jsonNode);
+//            arr[1] = jsonString;
+//        }catch(JsonProcessingException e){
+//            throw new RuntimeException(e);
+//        }
         return arr;
     }
 
@@ -108,25 +117,4 @@ public class DeckService {
         }
     }
 
-    // for /deck?format=plain response, parses cards into custom string
-    public String parseBody(Object[] arr){
-        StringBuilder responseBody;
-        // get values from request into one Card array
-        ObjectMapper objectMapper = new ObjectMapper();
-        Card[] cards;
-        try {
-            JsonNode jsonNode = objectMapper.readTree(arr[1].toString());
-            cards = objectMapper.treeToValue(jsonNode, Card[].class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        responseBody = new StringBuilder("Owner: " + cards[0].getOwner() + "\r\n");
-        for(Card card : cards){
-            responseBody.append("  + CardId: ").append(card.getId()).append("\r\n");
-            responseBody.append("      - Name: ").append(card.getName()).append("\r\n");
-            responseBody.append("      - Damage: ").append(card.getDamage()).append("\r\n");
-        }
-
-        return responseBody.toString();
-    }
 }

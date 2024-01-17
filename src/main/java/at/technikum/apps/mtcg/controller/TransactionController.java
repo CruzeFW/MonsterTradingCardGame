@@ -26,7 +26,6 @@ public class TransactionController extends Controller{
         if (request.getRoute().equals("/transactions/packages")) {
             if (request.getMethod().equals("POST")) {
                 Object[] arr = transactionService.acquire(request);
-
                 if (arr[0].equals(0)) {
                     // prints cards as the response body
                     return responseCreator.createResponse(HttpStatus.OK, HttpContentType.APPLICATION_JSON, (String) arr[1]);
