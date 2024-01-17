@@ -7,6 +7,7 @@ import at.technikum.apps.mtcg.repository.CardRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.TradingRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
 import at.technikum.apps.mtcg.util.CardTypeParser;
+import at.technikum.apps.mtcg.util.ResponseParser;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,14 +43,18 @@ public class TradingService {
         ArrayList<Trade> foundTrades = trades.get();
 
         arr[0] = 0;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.valueToTree(foundTrades);
-            String jsonString = objectMapper.writeValueAsString(jsonNode);
-            arr[1] = jsonString;
-        }catch(JsonProcessingException e){
-            throw new RuntimeException(e);
-        }
+        ResponseParser responseParser = new ResponseParser();
+        arr[1] = responseParser.tradeListToString(foundTrades);
+
+    // remove this or centralize TODO centralize
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            JsonNode jsonNode = objectMapper.valueToTree(foundTrades);
+//            String jsonString = objectMapper.writeValueAsString(jsonNode);
+//            arr[1] = jsonString;
+//        }catch(JsonProcessingException e){
+//            throw new RuntimeException(e);
+//        }
         return arr;
     }
 

@@ -42,7 +42,7 @@ public class DeckController extends Controller{
                 return responseCreator.createResponse(HttpStatus.OK, HttpContentType.APPLICATION_JSON, (String) arr[1]);
             }else{
                 // prints deck in plain format as the response body
-                return responseCreator.createResponse(HttpStatus.OK, HttpContentType.TEXT_PLAIN, deckService.parseBody(arr));
+                return responseCreator.createResponse(HttpStatus.OK, HttpContentType.TEXT_PLAIN, (String) arr[1]);
             }
         }else if(arr[0].equals(1)){
             return responseCreator.createResponse(HttpStatus.UNAUTHORIZED, HttpContentType.TEXT_PLAIN, "Unauthorized request.");

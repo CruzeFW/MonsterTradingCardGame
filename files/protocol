@@ -58,6 +58,19 @@ finished TransactionHistory (commented and tested)
 added Arena and (hopefully) finished threads
 finished and commented and tested arena
 added and finished battleLog
+started refactoring:
+    - changed userData output
+    - added "user" field to User (DB and rest of code)
+    - added CardParser
+    - reworked response output
+        - /transaction (if a package is bought)
+        - /user
+        - /deck
+        - /stats
+        - /scoreboard
+        - /trading
+        - /transaction + custom feature
+
 
 
 

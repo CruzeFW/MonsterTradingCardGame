@@ -91,8 +91,8 @@ public class TransactionRepositoryDatabase {
     }
 
     // find all cards in one package, returns a Card[]
-    public Card[] getAllCardsFromOnePackage(User foundUser, String packageId) throws SQLException {
-        Card[] cards = new Card[5];
+    public ArrayList<Card> getAllCardsFromOnePackage(User foundUser, String packageId) throws SQLException {
+        ArrayList<Card> cards = new ArrayList<>();
 
         try (
                 Connection con = database.getConnection();
@@ -104,7 +104,6 @@ public class TransactionRepositoryDatabase {
 
             ResultSet rs = pstmt.executeQuery();
 
-            int counter = 0;
             while (rs.next()) {
                 Card card = new Card(
                         rs.getString("id"),
@@ -114,8 +113,7 @@ public class TransactionRepositoryDatabase {
                         rs.getString("packageid"),
                         rs.getInt("deckid")
                 );
-                cards[counter] = card;
-                counter++;
+                cards.add(card);
             }
         } catch (SQLException e) {
             throw new SQLException();

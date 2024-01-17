@@ -4,6 +4,7 @@ import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.CardRepositoryDatabase;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
+import at.technikum.apps.mtcg.util.ResponseParser;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -41,14 +42,19 @@ public class CardService {
 
         ArrayList<Card> foundCards = cards.get();
         arr[0] = 0;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.valueToTree(foundCards);
-            String jsonString = objectMapper.writeValueAsString(jsonNode);
-            arr[1]= jsonString;
-        }catch(JsonProcessingException e){
-            throw new RuntimeException(e);
-        }
+        ResponseParser responseParser = new ResponseParser();
+        // ja sorry, don't know why
+        arr[1] = responseParser.outro(responseParser.cardArrayToString(foundCards, responseParser.intro("All cards of ", foundUser)), "--- end of cards for user ---");
+
+        // remove this or centralize TODO centralize
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            JsonNode jsonNode = objectMapper.valueToTree(foundCards);
+//            String jsonString = objectMapper.writeValueAsString(jsonNode);
+//            arr[1]= jsonString;
+//        }catch(JsonProcessingException e){
+//            throw new RuntimeException(e);
+//        }
         return arr;
     }
 

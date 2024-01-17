@@ -16,7 +16,8 @@ public class BattleLog {
     }
 
     public void addRoundCounter(Integer counter){
-        log += "Round " + counter+1 + ":\n";
+
+        log += "Round " + (counter+1) + ":\n";
     }
 
     public void addCards(FightingCard p1, FightingCard p2){

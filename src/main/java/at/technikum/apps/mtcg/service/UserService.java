@@ -2,6 +2,7 @@ package at.technikum.apps.mtcg.service;
 
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.repository.UserRepositoryDatabase;
+import at.technikum.apps.mtcg.util.ResponseParser;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +47,7 @@ public class UserService {
     //TODO QUESTION: ADD ADMIN ACCESS / ASK PROF
     public Object[] getMethodCalled(Request request) throws SQLException {
         Object[] arr = new Object[2];
-        ObjectMapper objectMapper = new ObjectMapper();
+        // ObjectMapper objectMapper = new ObjectMapper();
         User user = new User();
 
         // check if token and path are corresponding
@@ -60,14 +61,16 @@ public class UserService {
                 User foundUser = returnedUser.get();
                 boolean authorized = checkIfAuthorized(user, foundUser);        //that's kinda wonky
                 if (authorized) {
-                    String userJson;
-                    try {
-                        userJson = objectMapper.writeValueAsString(foundUser);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
+                    ResponseParser responseParser = new ResponseParser();
+                    // reworked to responseParser TODO delete this or centralize
+//                    String userJson;
+//                    try {
+//                        userJson = objectMapper.writeValueAsString(foundUser);
+//                    } catch (JsonProcessingException e) {
+//                        throw new RuntimeException(e);
+//                    }
                     arr[0] = 0;
-                    arr[1] = userJson;  // user found
+                    arr[1] = responseParser.userDataParser(foundUser);  // user found
                 }
             }else{
                 arr[0] = 1; // not found
@@ -86,7 +89,6 @@ public class UserService {
     // call DB to save user
     public User save(User user) throws SQLException {
         user.setId(UUID.randomUUID().toString());
-        //maybe add coins and elo here? need variables in User though
         return userRepositoryDatabase.save(user);
     }
 
@@ -112,9 +114,7 @@ public class UserService {
             if(returnedUser.isPresent()){
                 User finalUser = returnedUser.get();
                 finalUser = setDataForUpdate(finalUser, user);
-                finalUser.setAuthorization(user.getAuthorization());
                 finalUser = update(finalUser);
-
                 return 0;   // successfully updated
             }else{
                 return 1;   // user not found
@@ -129,11 +129,8 @@ public class UserService {
         if(user.getId() != null){
             finalUser.setId(user.getId());
         }
-        if(user.getUsername() != null){
-            finalUser.setUsername(user.getUsername());
-        }
-        if(user.getPassword() != null){
-            finalUser.setPassword(user.getPassword());
+        if(user.getName() != null){
+            finalUser.setName(user.getName());
         }
         if(user.getBio() != null){
             finalUser.setBio(user.getBio());
@@ -141,7 +138,7 @@ public class UserService {
         if(user.getImage() != null){
             finalUser.setImage(user.getImage());
         }
-
+        finalUser.setAuthorization(user.getAuthorization());
         return finalUser;
     }
 

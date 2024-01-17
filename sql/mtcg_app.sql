@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     token VARCHAR(255),
+    name VARCHAR(255),
     bio VARCHAR(255),
     image VARCHAR(255),
     elo INT NOT NULL,
