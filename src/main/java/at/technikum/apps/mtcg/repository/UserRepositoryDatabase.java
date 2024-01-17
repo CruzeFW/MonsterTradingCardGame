@@ -19,7 +19,7 @@ public class UserRepositoryDatabase {
     private final String FIND_ONE_TOKEN = "SELECT * FROM users WHERE token = ?";
     private final String SAVE_SQL = "INSERT INTO users(id, username, password, elo, coins) VALUES(?, ?, ?, ?, ?)";
     private final String DELETE_TOKEN = "UPDATE users SET token = NULL";
-    private final String UPDATE = "UPDATE users SET username = ?, password = ?, bio = ?, image = ? WHERE token = ?";
+    private final String UPDATE = "UPDATE users SET name = ?, bio = ?, image = ? WHERE token = ?";
     private final String GET_USERNAME_AND_ELO = "SELECT username, elo FROM users WHERE id = ?";
     private final String UPDATE_ELO = "UPDATE users SET elo = ? WHERE id = ?";
 
@@ -66,6 +66,7 @@ public class UserRepositoryDatabase {
                 userToReturn.setUsername(rs.getString("username"));
                 userToReturn.setPassword(rs.getString("password"));
                 userToReturn.setAuthorization(rs.getString("token"));
+                userToReturn.setName((rs.getString("name")));
                 userToReturn.setBio(rs.getString("bio"));
                 userToReturn.setImage(rs.getString("image"));
                 userToReturn.setElo((rs.getInt("elo")));
@@ -111,17 +112,15 @@ public class UserRepositoryDatabase {
     }
 
     // update user in DB
-    //TODO maybe change return type, see other todo in usage
     public User update(User user) throws SQLException {
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(UPDATE)
         ) {
-            pstmt.setString(1, user.getUsername());
-            pstmt.setString(2, user.getPassword());
-            pstmt.setString(3, user.getBio());
-            pstmt.setString(4, user.getImage());
-            pstmt.setString(5, user.getAuthorization());
+            pstmt.setString(1, user.getName());
+            pstmt.setString(2, user.getBio());
+            pstmt.setString(3, user.getImage());
+            pstmt.setString(4, user.getAuthorization());
 
             pstmt.execute();
 

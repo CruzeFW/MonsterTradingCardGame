@@ -4,6 +4,7 @@ public class User {
     private String id;
     private String username;
     private String password;
+    private String name;
     private String authorization;
     private String bio;
     private String image;
@@ -17,11 +18,11 @@ public class User {
         this.username = username;
         this.elo = elo;
     }
-    public User(String id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
+//    public User(String id, String username, String password) {
+//        this.id = id;
+//        this.username = username;
+//        this.password = password;
+//    }
 
     public String getId() {
         return id;
@@ -37,6 +38,12 @@ public class User {
     }
     public String getPassword() {
         return password;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
     public void setPassword(String password) {
         this.password = password;

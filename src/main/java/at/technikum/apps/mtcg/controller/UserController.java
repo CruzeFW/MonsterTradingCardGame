@@ -60,7 +60,6 @@ public class UserController extends Controller {
         Object[] arr = userService.getMethodCalled(request);
 
         if(arr[0].equals(0)){
-            //TODO ask Prof wegen der "Description" in der API
             return responseCreator.createResponse(HttpStatus.OK, HttpContentType.APPLICATION_JSON, (String) arr[1]);
         } else if (arr[0].equals(1)){
             return responseCreator.createResponse(HttpStatus.NOT_FOUND, HttpContentType.TEXT_PLAIN, "User not found.");
